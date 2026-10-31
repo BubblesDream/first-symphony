@@ -1,0 +1,29 @@
+[
+  {
+    "id": "demo-leader-1",
+    "nickname": "示範・行板",
+    "member_id": "demo-andante",
+    "term_start": "2020-03",
+    "term_end": "2022-05",
+    "note": "創團會長（示範）",
+    "is_demo": true
+  },
+  {
+    "id": "demo-leader-2",
+    "nickname": "示範・小步舞曲",
+    "member_id": "",
+    "term_start": "2022-06",
+    "term_end": "2023-12",
+    "note": "已離團的示範成員",
+    "is_demo": true
+  },
+  {
+    "id": "demo-leader-3",
+    "nickname": "示範・快板",
+    "member_id": "demo-allegro",
+    "term_start": "2024-01",
+    "term_end": "",
+    "note": "",
+    "is_demo": true
+  }
+]

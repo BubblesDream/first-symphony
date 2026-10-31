@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>影片回顧｜第一交響樂團</title>
+  <meta name="description" content="第一交響樂團的歷年影片回顧，可依年份或遊戲篩選。">
+  <link rel="icon" href="assets/images/lyre.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/videos.js"></script>
+</head>
+<body data-page="videos">
+  <header id="site-header" class="site-header"></header>
+  <main id="main" tabindex="-1">
+    <div class="page-head container">
+      <h1 class="page-title">影片回顧</h1>
+      <p class="page-lead">點一下縮圖才會開始播放。</p>
+    </div>
+
+    <section class="section section--tight container" aria-label="影片列表">
+      <div class="toolbar">
+        <label class="filter">
+          <span class="filter__label">年份</span>
+          <select id="video-year">
+            <option value="all">全部年份</option>
+          </select>
+        </label>
+        <label class="filter">
+          <span class="filter__label">遊戲</span>
+          <select id="video-game">
+            <option value="all">全部</option>
+            <option value="mabinogi_m" data-game>瑪奇 M</option>
+            <option value="mabinogi_pc" data-game>瑪奇（PC）</option>
+          </select>
+        </label>
+        <p id="video-count" class="toolbar__count" aria-live="polite"></p>
+      </div>
+      <div id="video-list" class="video-grid">
+        <p class="loading">影片載入中…</p>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+</body>
+</html>

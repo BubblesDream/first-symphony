@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="佔位圖：影片縮圖 16:9">
+<rect width="1280" height="720" fill="#c9ccd2"/>
+<circle cx="947" cy="216" r="65" fill="#f4ecdc" opacity="0.8"/>
+<path d="M0 518 Q 256 396 538 490 T 1280 446 V 720 H 0 Z" fill="#adb2bb"/>
+<path d="M0 612 Q 384 533 768 605 T 1280 576 V 720 H 0 Z" fill="#8d939e"/>
+<rect x="375" y="278" width="530" height="163" rx="15" fill="#fbf8f1" opacity="0.88"/>
+<text x="640" y="352" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="51" fill="#3b2a1e" font-weight="700">佔位圖</text>
+<text x="640" y="411" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="32" fill="#6b5544">影片縮圖 16:9</text>
+</svg>

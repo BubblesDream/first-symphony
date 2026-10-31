@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>公會故事｜第一交響樂團</title>
+  <meta name="description" content="第一交響樂團的創立緣由、名稱由來、歷年大事與歷任會長。">
+  <link rel="icon" href="assets/images/lyre.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/story.js"></script>
+</head>
+<body data-page="story">
+  <header id="site-header" class="site-header"></header>
+  <main id="main" tabindex="-1">
+    <div class="page-head container">
+      <h1 class="page-title">公會故事</h1>
+      <p class="page-lead">從一場即興合奏開始，一路走到現在。</p>
+    </div>
+
+    <div class="container story-layout">
+      <section class="story-block" aria-labelledby="origin-title">
+        <h2 id="origin-title" class="section__title">創立緣由 <span class="js-site-demo"></span></h2>
+        <p id="story-origin" class="prose-text">載入中…</p>
+      </section>
+      <section class="story-block" aria-labelledby="name-title">
+        <h2 id="name-title" class="section__title">名稱由來</h2>
+        <p id="story-name" class="prose-text">載入中…</p>
+      </section>
+      <section class="story-block" aria-labelledby="era-title">
+        <h2 id="era-title" class="section__title">不同遊戲時期</h2>
+        <div class="era-grid">
+          <div class="era">
+            <h3 class="era__title">瑪奇（PC）</h3>
+            <p id="era-pc" class="prose-text">載入中…</p>
+          </div>
+          <div class="era">
+            <h3 class="era__title">瑪奇 M</h3>
+            <p id="era-m" class="prose-text">載入中…</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="section container" aria-labelledby="timeline-title">
+      <div class="section__head">
+        <h2 id="timeline-title" class="section__title">歷年大事</h2>
+        <label class="filter">
+          <span class="filter__label">遊戲時期</span>
+          <select id="timeline-filter">
+            <option value="all">全部</option>
+            <option value="mabinogi_pc" data-game>瑪奇（PC）</option>
+            <option value="mabinogi_m" data-game>瑪奇 M</option>
+          </select>
+        </label>
+      </div>
+      <ol id="timeline" class="timeline">
+        <li class="loading">載入中…</li>
+      </ol>
+    </section>
+
+    <section class="section container" aria-labelledby="leaders-title">
+      <div class="section__head">
+        <h2 id="leaders-title" class="section__title">歷任會長</h2>
+      </div>
+      <ol id="leaders" class="leaders">
+        <li class="loading">載入中…</li>
+      </ol>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+</body>
+</html>

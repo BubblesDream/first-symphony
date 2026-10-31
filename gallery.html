@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>紀念館｜第一交響樂團</title>
+  <meta name="description" content="第一交響樂團的相簿與經典語錄，可依年份或分類瀏覽。">
+  <link rel="icon" href="assets/images/lyre.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/gallery.js"></script>
+</head>
+<body data-page="gallery">
+  <header id="site-header" class="site-header"></header>
+  <main id="main" tabindex="-1">
+    <div class="page-head container">
+      <h1 class="page-title">紀念館</h1>
+      <p class="page-lead">點一下照片可以放大，看看當時的故事。</p>
+    </div>
+
+    <section class="section section--tight container" aria-labelledby="album-title">
+      <h2 id="album-title" class="visually-hidden">相簿</h2>
+      <div class="toolbar">
+        <label class="filter">
+          <span class="filter__label">年份</span>
+          <select id="photo-year">
+            <option value="all">全部年份</option>
+          </select>
+        </label>
+        <label class="filter">
+          <span class="filter__label">分類</span>
+          <select id="photo-category">
+            <option value="all">全部分類</option>
+          </select>
+        </label>
+        <p id="photo-count" class="toolbar__count" aria-live="polite"></p>
+      </div>
+      <div id="photo-list" class="photo-grid">
+        <p class="loading">照片載入中…</p>
+      </div>
+    </section>
+
+    <section class="section container" aria-labelledby="quotes-title">
+      <div class="section__head">
+        <h2 id="quotes-title" class="section__title">經典語錄</h2>
+      </div>
+      <ul id="quote-list" class="quotes">
+        <li class="loading">載入中…</li>
+      </ul>
+    </section>
+
+    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-labelledby="lightbox-title" hidden>
+      <div class="lightbox__stage">
+        <figure id="lightbox-figure" class="lightbox__figure"></figure>
+      </div>
+      <button id="lightbox-close" class="lightbox__btn lightbox__close" type="button" aria-label="關閉">✕</button>
+      <button id="lightbox-prev" class="lightbox__btn lightbox__prev" type="button" aria-label="上一張">‹</button>
+      <button id="lightbox-next" class="lightbox__btn lightbox__next" type="button" aria-label="下一張">›</button>
+    </div>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+</body>
+</html>

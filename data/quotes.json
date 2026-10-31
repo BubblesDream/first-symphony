@@ -1,0 +1,34 @@
+[
+  {
+    "id": "demo-quote-1",
+    "text": "再一場就好，真的最後一場。",
+    "speaker": "示範・急板",
+    "date": "2024-03",
+    "context": "示範語錄：凌晨兩點的副本",
+    "is_demo": true
+  },
+  {
+    "id": "demo-quote-2",
+    "text": "大家站好，我數到三喔！",
+    "speaker": "示範・夜曲",
+    "date": "",
+    "context": "示範語錄：每次合照前",
+    "is_demo": true
+  },
+  {
+    "id": "demo-quote-3",
+    "text": "衣櫃滿了，但這件真的很可愛。",
+    "speaker": "示範・圓舞曲",
+    "date": "2021",
+    "context": "",
+    "is_demo": true
+  },
+  {
+    "id": "demo-quote-4",
+    "text": "不同的遊戲，相同的夥伴。",
+    "speaker": "示範・快板",
+    "date": "2022-06",
+    "context": "示範語錄：前往新遊戲那天",
+    "is_demo": true
+  }
+]

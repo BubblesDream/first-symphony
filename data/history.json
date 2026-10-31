@@ -1,0 +1,62 @@
+[
+  {
+    "id": "demo-founding",
+    "date": "2020-03",
+    "title": "（示範）公會成立",
+    "body": "這是示範事件。幾位玩家在廣場合奏後決定成立公會，取名為「第一交響樂團」。",
+    "image": "assets/images/placeholders/history-1.svg",
+    "video_url": "",
+    "game": "mabinogi_pc",
+    "is_demo": true
+  },
+  {
+    "id": "demo-first-festival",
+    "date": "2020-12",
+    "title": "（示範）第一次節慶聚會",
+    "body": "示範事件：大家穿上節慶服裝在營火邊合照，這是公會的第一張團體照。",
+    "image": "",
+    "video_url": "",
+    "game": "mabinogi_pc",
+    "is_demo": true
+  },
+  {
+    "id": "demo-hundred-members",
+    "date": "2021-09-18",
+    "title": "（示範）成員突破二十人",
+    "body": "示範事件：公會慢慢熱鬧起來，大家一起辦了小小的慶祝活動。",
+    "image": "assets/images/placeholders/history-2.svg",
+    "video_url": "",
+    "game": "mabinogi_pc",
+    "is_demo": true
+  },
+  {
+    "id": "demo-move-to-m",
+    "date": "2022-06",
+    "title": "（示範）一起前往《瑪奇 M》",
+    "body": "示範事件：部分成員開始在《瑪奇 M》建立新角色，公會從此橫跨兩款遊戲。",
+    "image": "",
+    "video_url": "",
+    "game": "both",
+    "is_demo": true
+  },
+  {
+    "id": "demo-concert",
+    "date": "2023-08-05",
+    "title": "（示範）夏夜演奏會",
+    "body": "示範事件：在遊戲裡辦了一場演奏會，每位成員負責一段旋律。",
+    "image": "assets/images/placeholders/history-3.svg",
+    "video_url": "",
+    "game": "mabinogi_m",
+    "is_demo": true
+  },
+  {
+    "id": "demo-anniversary",
+    "date": "2025",
+    "title": "（示範）五週年紀念",
+    "body": "示範事件：整理歷年照片與影片，建立這座紀念網站。",
+    "image": "",
+    "video_url": "",
+    "game": "both",
+    "is_demo": true
+  }
+]

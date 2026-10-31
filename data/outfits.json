@@ -1,0 +1,137 @@
+[
+  {
+    "id": "demo-allegro-outfit-1",
+    "member_id": "demo-allegro",
+    "name": "初心者服裝（示範）",
+    "image": "assets/images/placeholders/outfit-1.svg",
+    "note": "示範用造型說明。",
+    "sort_order": 1,
+    "is_demo": true
+  },
+  {
+    "id": "demo-allegro-outfit-2",
+    "member_id": "demo-allegro",
+    "name": "節慶禮服（示範）",
+    "image": "assets/images/placeholders/outfit-2.svg",
+    "note": "",
+    "sort_order": 2,
+    "is_demo": true
+  },
+  {
+    "id": "demo-allegro-outfit-3",
+    "member_id": "demo-allegro",
+    "name": "旅行者斗篷（示範）",
+    "image": "assets/images/placeholders/outfit-3.svg",
+    "note": "",
+    "sort_order": 3,
+    "is_demo": true
+  },
+  {
+    "id": "demo-andante-outfit-1",
+    "member_id": "demo-andante",
+    "name": "料理圍裙（示範）",
+    "image": "assets/images/placeholders/outfit-1.svg",
+    "note": "示範用造型說明。",
+    "sort_order": 1,
+    "is_demo": true
+  },
+  {
+    "id": "demo-andante-outfit-2",
+    "member_id": "demo-andante",
+    "name": "騎士輕甲（示範）",
+    "image": "assets/images/placeholders/outfit-2.svg",
+    "note": "",
+    "sort_order": 2,
+    "is_demo": true
+  },
+  {
+    "id": "demo-adagio-outfit-1",
+    "member_id": "demo-adagio",
+    "name": "祭典浴衣（示範）",
+    "image": "assets/images/placeholders/outfit-1.svg",
+    "note": "示範用造型說明。",
+    "sort_order": 1,
+    "is_demo": true
+  },
+  {
+    "id": "demo-adagio-outfit-2",
+    "member_id": "demo-adagio",
+    "name": "冬季大衣（示範）",
+    "image": "assets/images/placeholders/outfit-2.svg",
+    "note": "",
+    "sort_order": 2,
+    "is_demo": true
+  },
+  {
+    "id": "demo-adagio-outfit-3",
+    "member_id": "demo-adagio",
+    "name": "舞台服（示範）",
+    "image": "assets/images/placeholders/outfit-3.svg",
+    "note": "",
+    "sort_order": 3,
+    "is_demo": true
+  },
+  {
+    "id": "demo-presto-outfit-1",
+    "member_id": "demo-presto",
+    "name": "戰鬥裝備（示範）",
+    "image": "assets/images/placeholders/outfit-1.svg",
+    "note": "示範用造型說明。",
+    "sort_order": 1,
+    "is_demo": true
+  },
+  {
+    "id": "demo-presto-outfit-2",
+    "member_id": "demo-presto",
+    "name": "休閒服（示範）",
+    "image": "assets/images/placeholders/outfit-2.svg",
+    "note": "",
+    "sort_order": 2,
+    "is_demo": true
+  },
+  {
+    "id": "demo-waltz-outfit-1",
+    "member_id": "demo-waltz",
+    "name": "蕾絲洋裝（示範）",
+    "image": "assets/images/placeholders/outfit-1.svg",
+    "note": "示範用造型說明。",
+    "sort_order": 1,
+    "is_demo": true
+  },
+  {
+    "id": "demo-waltz-outfit-2",
+    "member_id": "demo-waltz",
+    "name": "海灘套裝（示範）",
+    "image": "assets/images/placeholders/outfit-2.svg",
+    "note": "",
+    "sort_order": 2,
+    "is_demo": true
+  },
+  {
+    "id": "demo-waltz-outfit-3",
+    "member_id": "demo-waltz",
+    "name": "晚宴禮服（示範）",
+    "image": "assets/images/placeholders/outfit-3.svg",
+    "note": "",
+    "sort_order": 3,
+    "is_demo": true
+  },
+  {
+    "id": "demo-nocturne-outfit-1",
+    "member_id": "demo-nocturne",
+    "name": "攝影師背心（示範）",
+    "image": "assets/images/placeholders/outfit-1.svg",
+    "note": "示範用造型說明。",
+    "sort_order": 1,
+    "is_demo": true
+  },
+  {
+    "id": "demo-nocturne-outfit-2",
+    "member_id": "demo-nocturne",
+    "name": "雨天風衣（示範）",
+    "image": "assets/images/placeholders/outfit-2.svg",
+    "note": "",
+    "sort_order": 2,
+    "is_demo": true
+  }
+]

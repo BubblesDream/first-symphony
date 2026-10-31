@@ -1,0 +1,74 @@
+[
+  {
+    "id": "demo-allegro",
+    "nickname": "示範・快板",
+    "game": "mabinogi_m",
+    "role": "會長",
+    "avatar": "assets/images/placeholders/avatar-1.svg",
+    "intro": "（示範介紹）喜歡在廣場演奏魯特琴，常常是第一個上線、最後一個下線的人。",
+    "joined": "2020-03",
+    "featured": true,
+    "sort_order": 1,
+    "is_demo": true
+  },
+  {
+    "id": "demo-andante",
+    "nickname": "示範・行板",
+    "game": "mabinogi_pc",
+    "role": "副會長",
+    "avatar": "assets/images/placeholders/avatar-2.svg",
+    "intro": "（示範介紹）負責記住每個人的生日，也是公會裡最會做料理的玩家。",
+    "joined": "2020-03",
+    "featured": true,
+    "sort_order": 2,
+    "is_demo": true
+  },
+  {
+    "id": "demo-adagio",
+    "nickname": "示範・慢板",
+    "game": "both",
+    "role": "活動企劃",
+    "avatar": "assets/images/placeholders/avatar-3.svg",
+    "intro": "（示範介紹）節慶活動的主要企劃，兩款遊戲都有角色，常在兩邊跑來跑去。",
+    "joined": "2020-08",
+    "featured": true,
+    "sort_order": 3,
+    "is_demo": true
+  },
+  {
+    "id": "demo-presto",
+    "nickname": "示範・急板",
+    "game": "mabinogi_m",
+    "role": "團員",
+    "avatar": "assets/images/placeholders/avatar-4.svg",
+    "intro": "（示範介紹）副本裡衝最快的那一位，口頭禪是「再一場就好」。",
+    "joined": "2022-01",
+    "featured": true,
+    "sort_order": 4,
+    "is_demo": true
+  },
+  {
+    "id": "demo-waltz",
+    "nickname": "示範・圓舞曲",
+    "game": "mabinogi_pc",
+    "role": "團員",
+    "avatar": "assets/images/placeholders/avatar-5.svg",
+    "intro": "（示範介紹）喜歡收集各種造型，衣櫃永遠不夠用。",
+    "joined": "2021-05",
+    "featured": true,
+    "sort_order": 5,
+    "is_demo": true
+  },
+  {
+    "id": "demo-nocturne",
+    "nickname": "示範・夜曲",
+    "game": "mabinogi_m",
+    "role": "攝影紀錄",
+    "avatar": "assets/images/placeholders/avatar-6.svg",
+    "intro": "（示範介紹）公會合照幾乎都是這位拍的，自己卻很少出現在照片裡。",
+    "joined": "2023-11",
+    "featured": true,
+    "sort_order": 6,
+    "is_demo": true
+  }
+]

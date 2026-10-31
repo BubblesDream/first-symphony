@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第一交響樂團｜公會紀念網站</title>
+  <meta name="description" content="《瑪奇 M》與《瑪奇》（PC）公會「第一交響樂團」的紀念網站，收藏公會的合照、影片與一路走來的故事。">
+  <link rel="icon" href="assets/images/lyre.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/home.js"></script>
+</head>
+<body data-page="home">
+  <header id="site-header" class="site-header"></header>
+  <main id="main" tabindex="-1">
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__media">
+        <img id="hero-image" class="hero__image" src="assets/images/placeholders/banner.svg" alt="佔位圖：公會合照橫幅" width="2100" height="900" fetchpriority="high">
+        <p id="hero-quote" class="hero__quote tape">因為有你們，
+這段旅程才如此動聽。</p>
+      </div>
+      <div class="hero__intro container">
+        <h1 id="hero-title" class="hero__title">第一交響樂團</h1>
+        <p id="hero-tagline" class="hero__tagline">記錄我們一起走過的遊戲時光。</p>
+        <p id="hero-intro" class="hero__text"></p>
+      </div>
+    </section>
+
+    <section class="section container" aria-labelledby="photos-title">
+      <div class="section__head">
+        <h2 id="photos-title" class="section__title">精選回憶</h2>
+        <a class="text-link" href="gallery.html">走進紀念館 →</a>
+      </div>
+      <div id="featured-photos" class="photo-grid photo-grid--featured">
+        <p class="loading">照片載入中…</p>
+      </div>
+    </section>
+
+    <section class="section container story-teaser" aria-labelledby="story-title">
+      <div class="story-teaser__text">
+        <h2 id="story-title" class="section__title">我們的故事</h2>
+        <p id="story-founded" class="story-teaser__year"></p>
+        <p id="story-summary" class="prose-text">載入中…</p>
+        <a class="button" href="story.html">閱讀完整故事 →</a>
+      </div>
+    </section>
+
+    <section class="section container" aria-labelledby="members-title">
+      <div class="section__head">
+        <h2 id="members-title" class="section__title">公會成員</h2>
+        <a class="text-link" href="members.html">認識所有成員 →</a>
+      </div>
+      <div id="featured-members" class="member-strip">
+        <p class="loading">成員載入中…</p>
+      </div>
+    </section>
+
+    <section class="section container" aria-labelledby="videos-title">
+      <div class="section__head">
+        <h2 id="videos-title" class="section__title">精選影片</h2>
+        <a class="text-link" href="videos.html">觀看更多影片 →</a>
+      </div>
+      <div id="featured-videos" class="video-grid">
+        <p class="loading">影片載入中…</p>
+      </div>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+</body>
+</html>

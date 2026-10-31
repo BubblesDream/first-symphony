@@ -1,0 +1,58 @@
+/* 設計變數：配色、字型、字級、間距集中在這裡，換版時只改這個檔案。 */
+:root {
+  /* 配色：米白紙張 × 深咖啡 */
+  --color-paper: #f5efe3;
+  --color-paper-deep: #ece3d2;
+  --color-card: #fbf8f1;
+  --color-photo-border: #fffdf8;
+  --color-ink: #3a2a1f;
+  --color-ink-soft: #66513f;
+  --color-line: #dccfb9;
+  --color-accent: #8b5a3c;
+  --color-accent-soft: #efe2d0;
+  --color-topbar: #3a2a1f;
+  --color-topbar-text: #e9dfcd;
+  --color-tape: rgba(219, 199, 162, 0.78);
+  --color-film: #2f241c;
+  --color-overlay: rgba(28, 20, 14, 0.92);
+  --color-demo-bg: #f3dccb;
+  --color-demo-text: #7a3a17;
+  --color-focus: #b4572a;
+
+  /* 字型 */
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+  --font-heading: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+
+  /* 字級 */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: clamp(1.6rem, 1.3rem + 1.2vw, 2.1rem);
+  --text-hero: clamp(2rem, 1.4rem + 2.6vw, 3.2rem);
+  --leading: 1.8;
+  --leading-tight: 1.35;
+
+  /* 間距 */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+
+  /* 版面 */
+  --width-page: 1200px;
+  --width-wide: 1480px;
+  --width-prose: 40em;
+  --gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+
+  /* 照片與卡片 */
+  --photo-pad: clamp(6px, 0.6vw, 10px);
+  --photo-pad-bottom: clamp(10px, 1vw, 14px);
+  --radius: 4px;
+  --shadow-photo: 0 1px 2px rgba(58, 42, 31, 0.12), 0 4px 14px rgba(58, 42, 31, 0.07);
+}

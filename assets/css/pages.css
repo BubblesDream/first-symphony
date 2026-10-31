@@ -1,0 +1,415 @@
+/* 各頁專用版面 */
+
+/* ---- 首頁橫幅（接近滿版） ---- */
+.hero__media {
+  position: relative;
+  max-width: var(--width-wide);
+  margin-inline: auto;
+  padding-inline: clamp(0px, 1.2vw, 1.25rem);
+}
+
+.hero__image {
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  min-height: 14rem;
+  object-fit: cover;
+  background: var(--color-paper-deep);
+  border: var(--photo-pad) solid var(--color-photo-border);
+  box-shadow: var(--shadow-photo);
+}
+
+.hero__quote {
+  position: absolute;
+  left: clamp(1rem, 5vw, 4.5rem);
+  bottom: clamp(1rem, 4vw, 3rem);
+  margin: 0;
+  max-width: 80%;
+  font-family: var(--font-heading);
+  font-size: clamp(0.95rem, 0.8rem + 0.8vw, 1.4rem);
+  line-height: 1.7;
+  letter-spacing: 0.1em;
+  white-space: pre-line;
+  color: var(--color-ink);
+  transform: rotate(-1.5deg);
+}
+
+.hero__intro {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  gap: var(--space-3) var(--space-7);
+  padding-top: var(--space-6);
+}
+
+.hero__title {
+  font-size: var(--text-hero);
+  letter-spacing: 0.14em;
+}
+
+.hero__tagline {
+  grid-column: 1;
+  margin: 0;
+  color: var(--color-ink-soft);
+  letter-spacing: 0.25em;
+  font-size: var(--text-sm);
+}
+
+.hero__text {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin: 0;
+  max-width: var(--width-prose);
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--color-line);
+  color: var(--color-ink-soft);
+}
+
+@media (max-width: 760px) {
+  .hero__media {
+    padding-inline: 0;
+  }
+
+  .hero__image {
+    border-width: 0 0 var(--photo-pad);
+    box-shadow: none;
+  }
+
+  .hero__intro {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__text {
+    grid-column: 1;
+    grid-row: auto;
+    padding-left: 0;
+    border-left: 0;
+    padding-top: var(--space-3);
+  }
+}
+
+/* ---- 首頁故事摘要 ---- */
+.story-teaser__text {
+  background: var(--color-card);
+  border: 1px solid var(--color-line);
+  padding: var(--space-6) clamp(1.25rem, 4vw, 3rem);
+}
+
+.story-teaser__text .section__title {
+  margin-bottom: var(--space-1);
+}
+
+.story-teaser__year {
+  color: var(--color-ink-soft);
+  font-size: var(--text-sm);
+  letter-spacing: 0.15em;
+}
+
+.story-teaser__year:empty {
+  display: none;
+}
+
+/* ---- 公會故事 ---- */
+.story-layout {
+  display: grid;
+  gap: var(--space-6);
+  padding-top: var(--space-5);
+}
+
+.story-block .section__title {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+}
+
+.era-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-4);
+}
+
+.era {
+  background: var(--color-card);
+  border-top: 3px solid var(--color-accent);
+  padding: var(--space-4) var(--space-5);
+}
+
+.era__title {
+  font-size: var(--text-md);
+  margin-bottom: var(--space-2);
+}
+
+.era .prose-text {
+  margin: 0;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+.timeline__item {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: var(--space-5);
+  padding-bottom: var(--space-6);
+  position: relative;
+}
+
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: 10.75rem;
+  top: 0.6rem;
+  bottom: 0;
+  border-left: 1px solid var(--color-line);
+}
+
+.timeline__item::after {
+  content: "";
+  position: absolute;
+  left: calc(10.75rem - 4px);
+  top: 0.55rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+.timeline__date {
+  margin: 0;
+  text-align: right;
+  font-weight: 700;
+  color: var(--color-ink-soft);
+  font-size: var(--text-sm);
+}
+
+.timeline__card {
+  padding-left: var(--space-5);
+}
+
+.timeline__title {
+  font-size: var(--text-md);
+  margin-bottom: var(--space-1);
+}
+
+.timeline__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+
+.timeline__tags .demo-badge {
+  margin-left: 0;
+}
+
+.polaroid--inline {
+  max-width: 26rem;
+  height: auto;
+  margin-bottom: var(--space-3);
+}
+
+@media (max-width: 640px) {
+  .timeline__item {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+    padding-left: var(--space-5);
+  }
+
+  .timeline__item::before {
+    left: 4px;
+  }
+
+  .timeline__item::after {
+    left: 0;
+  }
+
+  .timeline__date {
+    text-align: left;
+  }
+
+  .timeline__card {
+    padding-left: 0;
+  }
+}
+
+.leaders {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: var(--width-prose);
+}
+
+.leader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px dashed var(--color-line);
+}
+
+.leader__name {
+  font-weight: 700;
+  min-width: 8em;
+}
+
+.leader__term,
+.leader__note {
+  font-size: var(--text-sm);
+  color: var(--color-ink-soft);
+}
+
+.leader .demo-badge {
+  margin-left: 0;
+}
+
+/* ---- 成員詳情 ---- */
+.member-detail {
+  padding-top: var(--space-5);
+}
+
+.breadcrumb {
+  font-size: var(--text-sm);
+}
+
+.profile {
+  display: grid;
+  grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.profile__avatar {
+  height: auto;
+}
+
+.profile__avatar .polaroid__frame {
+  aspect-ratio: 1 / 1;
+}
+
+.facts {
+  margin: 0 0 var(--space-4);
+  display: grid;
+  gap: var(--space-1);
+}
+
+.facts div {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.facts dt {
+  color: var(--color-ink-soft);
+  min-width: 3em;
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.outfit {
+  display: grid;
+  grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.outfit__main {
+  height: auto;
+}
+
+.outfit__main .polaroid__frame {
+  aspect-ratio: 3 / 4;
+}
+
+.outfit__caption {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-2);
+  line-height: 1.5;
+}
+
+.outfit__name {
+  font-weight: 700;
+}
+
+.outfit__note {
+  font-size: var(--text-sm);
+  color: var(--color-ink-soft);
+}
+
+.outfit__thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.outfit__thumb {
+  width: 5.5rem;
+  padding: 4px;
+  background: var(--color-photo-border);
+  border: 2px solid transparent;
+  box-shadow: var(--shadow-photo);
+  cursor: pointer;
+}
+
+.outfit__thumb img {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  width: 100%;
+}
+
+.outfit__thumb[aria-pressed="true"] {
+  border-color: var(--color-accent);
+}
+
+@media (max-width: 700px) {
+  .profile,
+  .outfit {
+    grid-template-columns: 1fr;
+  }
+
+  .profile__avatar {
+    max-width: 14rem;
+  }
+
+  .outfit__thumbs {
+    order: 2;
+  }
+
+  .outfit__thumb {
+    width: 4.5rem;
+  }
+}
+
+/* ---- 虛擬大廳 ---- */
+.hall {
+  display: grid;
+  gap: var(--space-6);
+  padding-top: var(--space-5);
+}
+
+.hall__figure {
+  height: auto;
+}
+
+.hall__figure .polaroid__frame {
+  aspect-ratio: 21 / 9;
+}
+
+.hall .section__title {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-3);
+}
+
+/* ---- 404 ---- */
+.notfound {
+  padding-top: var(--space-8);
+  text-align: center;
+}
+
+.notfound .page-lead {
+  margin-bottom: var(--space-5);
+}

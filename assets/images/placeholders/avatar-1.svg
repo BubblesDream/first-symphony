@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600" role="img" aria-label="佔位圖：成員頭像 1:1 ・ 1">
+<rect width="600" height="600" fill="#d8c7ad"/>
+<circle cx="444" cy="180" r="54" fill="#f4ecdc" opacity="0.8"/>
+<path d="M0 432 Q 120 330 252 408 T 600 372 V 600 H 0 Z" fill="#c4ae8f"/>
+<path d="M0 510 Q 180 444 360 504 T 600 480 V 600 H 0 Z" fill="#a88f6e"/>
+<rect x="82" y="233" width="437" height="134" rx="13" fill="#fbf8f1" opacity="0.88"/>
+<text x="300" y="294" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="42" fill="#3b2a1e" font-weight="700">佔位圖</text>
+<text x="300" y="342" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="26" fill="#6b5544">成員頭像 1:1 ・ 1</text>
+</svg>

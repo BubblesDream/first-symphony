@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="900" viewBox="0 0 2100 900" role="img" aria-label="佔位圖：首頁橫幅 21:9">
+<rect width="2100" height="900" fill="#d8c7ad"/>
+<circle cx="1554" cy="270" r="81" fill="#f4ecdc" opacity="0.8"/>
+<path d="M0 648 Q 420 495 882 612 T 2100 558 V 900 H 0 Z" fill="#c4ae8f"/>
+<path d="M0 765 Q 630 666 1260 756 T 2100 720 V 900 H 0 Z" fill="#a88f6e"/>
+<rect x="717" y="348" width="666" height="205" rx="19" fill="#fbf8f1" opacity="0.88"/>
+<text x="1050" y="440" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="64" fill="#3b2a1e" font-weight="700">佔位圖</text>
+<text x="1050" y="514" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="40" fill="#6b5544">首頁橫幅 21:9</text>
+</svg>

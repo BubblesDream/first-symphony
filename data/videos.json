@@ -1,0 +1,68 @@
+[
+  {
+    "id": "demo-video-concert",
+    "youtube_url": "",
+    "title": "（示範）夏夜演奏會精華",
+    "published": "2023-08",
+    "game": "mabinogi_m",
+    "category": "活動紀錄",
+    "summary": "示範影片，尚未提供 YouTube 網址。",
+    "featured": true,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-festival",
+    "youtube_url": "",
+    "title": "（示範）節慶合照幕後",
+    "published": "2020-12",
+    "game": "mabinogi_pc",
+    "category": "活動紀錄",
+    "summary": "示範影片，尚未提供 YouTube 網址。",
+    "featured": true,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-dungeon",
+    "youtube_url": "",
+    "title": "（示範）第一次通關高難度副本",
+    "published": "2024-03",
+    "game": "mabinogi_m",
+    "category": "副本挑戰",
+    "summary": "示範影片，尚未提供 YouTube 網址。",
+    "featured": true,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-daily",
+    "youtube_url": "",
+    "title": "（示範）營火邊的日常閒聊",
+    "published": "2021-07",
+    "game": "mabinogi_pc",
+    "category": "日常",
+    "summary": "示範影片，尚未提供 YouTube 網址。",
+    "featured": false,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-anniv",
+    "youtube_url": "",
+    "title": "（示範）五週年紀念影片",
+    "published": "2025-03",
+    "game": "both",
+    "category": "活動紀錄",
+    "summary": "示範影片，尚未提供 YouTube 網址。",
+    "featured": false,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-fishing",
+    "youtube_url": "",
+    "title": "（示範）釣魚大賽",
+    "published": "2024-09",
+    "game": "mabinogi_m",
+    "category": "日常",
+    "summary": "示範影片，尚未提供 YouTube 網址。",
+    "featured": false,
+    "is_demo": true
+  }
+]

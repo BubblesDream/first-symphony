@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function () {
+      var marker = '/first-symphony/';
+      var path = location.pathname;
+      var at = path.indexOf(marker);
+      var base = document.createElement('base');
+      base.href = location.origin + (at >= 0 ? path.slice(0, at + marker.length) : '/');
+      document.head.appendChild(base);
+    })();
+  </script>
+  <title>找不到頁面｜第一交響樂團</title>
+  <meta name="description" content="找不到這個頁面。">
+  <link rel="icon" href="assets/images/lyre.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/simple.js"></script>
+</head>
+<body data-page="notfound">
+  <header id="site-header" class="site-header"></header>
+  <main id="main" tabindex="-1">
+
+    <div class="container notfound">
+      <h1 class="page-title">找不到這一頁</h1>
+      <p class="page-lead">這段回憶好像走丟了，可能是網址打錯，或頁面已經搬家。</p>
+      <p><a class="button" href="index.html">回到首頁</a></p>
+    </div>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+</body>
+</html>

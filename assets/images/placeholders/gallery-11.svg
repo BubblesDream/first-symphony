@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="佔位圖：相簿照片 4:3 ・ 11">
+<rect width="1200" height="900" fill="#e0d2b6"/>
+<circle cx="888" cy="270" r="81" fill="#f4ecdc" opacity="0.8"/>
+<path d="M0 648 Q 240 495 504 612 T 1200 558 V 900 H 0 Z" fill="#cbb894"/>
+<path d="M0 765 Q 360 666 720 756 T 1200 720 V 900 H 0 Z" fill="#ad9872"/>
+<rect x="267" y="348" width="666" height="205" rx="19" fill="#fbf8f1" opacity="0.88"/>
+<text x="600" y="440" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="64" fill="#3b2a1e" font-weight="700">佔位圖</text>
+<text x="600" y="514" text-anchor="middle" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" font-size="40" fill="#6b5544">相簿照片 4:3 ・ 11</text>
+</svg>
