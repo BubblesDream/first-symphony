@@ -1,0 +1,195 @@
+# 第一交響樂團｜公會紀念網站：第一版規格（v2）
+
+> 本文件取代 `docs/原始提示詞.md`，是第一版網站的正式規格。
+> 專案規則與禁止事項見根目錄 `CLAUDE.md`，兩者衝突時以 `CLAUDE.md` 為準。
+
+## 一、專案定位
+
+**第一交響樂團**是以《瑪奇 M》與《瑪奇》（PC）為主的遊戲公會。本網站是公會的數位紀念館，保存公會歷史、成員、遊戲截圖、YouTube 影片與共同回憶，也作為對外展示的門面。
+
+- 更新頻率低，不以公告或即時消息為中心。
+- 內容只有遊戲暱稱、遊戲截圖與願意公開的遊戲影片，不含真實個資或聯絡方式。
+- 未來會加入可走動的 2D 虛擬公會大廳（第一版只做入口）。
+
+部署網址：`https://bubblesdream.github.io/first-symphony/`
+repo：`https://github.com/BubblesDream/first-symphony`
+
+## 二、視覺設計
+
+整體方向：「日系遊戲回憶錄 × 簡潔部落格 × 數位相簿」。
+
+### 參考圖
+
+`docs/reference/home-mood.png` 是首頁氛圍參考圖（AI 繪製的概念圖，**只參考氛圍，不是要逐像素重現**）。要取用的元素：
+
+- 暖米白紙張底色、深咖啡色文字與頂部細色帶
+- 公會名稱用有份量的中文標題字，副標一行小字
+- 橫向的合照大橫幅，上面疊一句短短的引言
+- 區塊標題像貼上去的紙膠帶標籤；照片像拍立得（白邊、極淡陰影、少量傾斜）
+- 影片區用簡單的膠卷框意象
+- 頁尾一句手寫感的短句與豎琴（lyre）小圖示
+
+要捨棄或簡化的部分：
+
+- 右側「最新文章／文章分類」側欄：本站不以文章更新為中心，第一版不做。首頁改為單欄或雙欄區塊。
+- 搜尋圖示：第一版不做搜尋。
+- 背景的城堡剪影、紙張紋理：用純色或極輕的 CSS 效果代替，不放大型背景圖。
+- 手寫字：只用在少數短句（引言、頁尾）。若使用中文手寫網頁字型，必須是 Google Fonts 分片載入的版本；也可以不用，改以一般字型表現。
+- 圖中的照片都是概念圖，一律換成本地 SVG 佔位圖。豎琴圖示用簡單的自製 SVG。
+
+具體的裝飾程度由各工作任務指定（見 `docs/cloud-tasks.md`）。
+
+共同要求：
+
+- 簡潔、自然、有溫度，像玩家自己用心整理的紀念網站
+- 照片、遊戲截圖與故事是主要視覺
+- 留白適當，正文易讀（行高約 1.7–1.9，正文欄寬不超過約 40 個中文字）
+- 簡單的卡片、相簿與文章版面
+- 桌面與手機都好用
+- 色彩、字級、間距集中定義為 CSS 自訂屬性，方便日後換版
+
+避免：
+
+- 金色發光邊框、過量漸層、粒子與光效
+- 華麗奇幻商城風、遊戲官方 UI 的仿製
+- 大量無意義動畫（尊重 `prefers-reduced-motion`）
+- 常見 AI 生成網站的浮誇視覺：巨大漸層標題、玻璃擬態卡片、滿版發光按鈕
+- 控制面板式的過度設計
+
+字型：優先使用系統字型（`"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif` 等）。若要用網頁字型，最多一套標題字，中文字型必須是 Google Fonts 那種依 unicode-range 分片載入的版本。
+
+圖片：一律使用本地 SVG 佔位圖，圖上清楚寫出「佔位圖」與用途（如「成員頭像 1:1」「橫幅 16:9」），不使用外部佔位圖服務。
+
+## 三、網站架構
+
+採**多頁靜態 HTML**，不使用前端路由。詳情頁用 query string。
+
+| 頁面 | 檔案 | 說明 |
+|---|---|---|
+| 首頁 | `index.html` | 導覽列、合照橫幅、公會名稱與一句介紹、故事摘要、精選回憶、成員預覽、精選影片、頁尾 |
+| 公會故事 | `story.html` | 創立緣由、名稱由來、時間軸、歷任會長、不同遊戲時期 |
+| 成員列表 | `members.html` | 成員卡片，可依遊戲篩選 |
+| 成員詳情 | `member.html?id=<member_id>` | 頭像、介紹、職位、造型收藏切換 |
+| 影片回顧 | `videos.html` | 影片卡片，可依年份或遊戲篩選 |
+| 紀念館 | `gallery.html` | 相簿，可依年份或分類篩選，點擊放大並顯示說明；另有經典語錄區 |
+| 虛擬大廳 | `hall.html` | 預留入口與構想介紹，不實作遊戲 |
+| 找不到頁面 | `404.html` | 提供回首頁連結 |
+
+首頁保持簡潔：每個區塊只放少量精選（例如 3–6 筆）並附「查看全部」連結。
+
+### 頁面細節
+
+**公會故事**：時間軸與文章混排。事件包含日期（可只填年或年月）、標題、內文、圖片（選填）、相關影片（選填）。可依遊戲時期（瑪奇 M／瑪奇 PC）區分或標示。
+
+**成員詳情**：像簡易角色圖鑑。造型以切換整張圖片的方式呈現（縮圖列＋主圖），不做分層紙娃娃。可用鍵盤操作。id 不存在時顯示友善訊息與回列表連結。
+
+**影片回顧**：列表只顯示縮圖（`https://i.ytimg.com/vi/<VIDEO_ID>/hqdefault.jpg`）。點擊後才在原地載入 `https://www.youtube-nocookie.com/embed/<VIDEO_ID>` 的 iframe，或直接開啟 YouTube。不要一次載入多個 iframe。
+
+**紀念館**：燈箱放大要能用 Esc 關閉、左右鍵切換，手機可點擊關閉；開啟時鎖定背景捲動，關閉後焦點回到原本的縮圖。
+
+**虛擬大廳**：說明構想（操控小角色走動、與物品和成員互動、看公告板與相簿、支援鍵盤與觸控），標示「籌備中」。未來可能使用 Godot Web Export 或 HTML5 Canvas。
+
+## 四、技術要求
+
+- 純 HTML、CSS、原生 JavaScript（ES modules）、JSON；不使用框架、不需要建置步驟、不需要 npm。
+- 所有內部連結與資源一律使用**相對路徑**，網站要能同時在 `/first-symphony/` 子路徑與本機 `http://localhost:8000/` 正常運作。
+- 根目錄放 `.nojekyll`。
+- GitHub Pages 設定：從 `main` 分支根目錄部署，不需要 GitHub Actions。
+- 共用的頁首、頁尾由 JS 產生，或以其他方式避免在每頁重複大量 HTML。
+- RWD：至少在 360px 手機寬度與 1440px 桌面寬度都正常。
+- 基本無障礙：語意化標籤、圖片 `alt`、可見的鍵盤焦點、足夠的對比。
+- `<html lang="zh-Hant-TW">`，每頁有適當的 `<title>` 與 `description`。
+
+建議目錄結構（可在合理範圍內調整）：
+
+```
+index.html  story.html  members.html  member.html
+videos.html gallery.html hall.html    404.html
+.nojekyll   README.md   CLAUDE.md
+assets/
+  css/        # tokens（變數）、base、components、各頁樣式
+  js/
+    config.js   # 資料來源設定（json / csv）
+    data.js     # 資料載入模組（唯一讀取資料的地方）
+    validate.js # 網址與欄位驗證
+    render.js   # 共用的安全 DOM 產生工具
+    pages/      # 各頁腳本
+  images/
+    placeholders/
+    members/ outfits/ gallery/ history/
+data/
+  site.json members.json outfits.json history.json
+  leaders.json videos.json gallery.json quotes.json
+docs/
+```
+
+## 五、資料管理
+
+第一版使用本地 JSON；未來改為讀取公開 Google 試算表的 CSV（「發布到網路」→ CSV）。
+
+### 設計原則
+
+1. **一個 JSON 檔對應試算表的一個分頁。** 每個檔案是物件陣列，每筆資料只有平面欄位（字串、數字、布林），**不准巢狀陣列或物件**。關聯用 id 欄位表示。
+2. 每筆資料都有穩定的 `id`（英數小寫與連字號）。
+3. 日期欄位是字串，允許 `YYYY`、`YYYY-MM`、`YYYY-MM-DD` 三種精度，顯示時依精度格式化。
+4. 內文欄位是純文字，換行以 `white-space: pre-line` 呈現，不支援 HTML 或 Markdown。
+5. 示範資料一律 `is_demo: true`，畫面上要有明顯的「示範資料」標記；全站頁尾也要註明目前為示範內容。
+6. `game` 欄位值固定為 `mabinogi_m`、`mabinogi_pc`、`both` 其中之一，顯示名稱集中定義在一處。
+
+### 資料表
+
+| 檔案 | 欄位 |
+|---|---|
+| `site.json` | `key`, `value`（公會名稱、一句介紹、橫幅圖、創立年份、故事摘要等設定，key/value 兩欄方便試算表維護） |
+| `members.json` | `id`, `nickname`, `game`, `role`（選填）, `avatar`, `intro`, `joined`（選填）, `featured`, `sort_order`, `is_demo` |
+| `outfits.json` | `id`, `member_id`, `name`, `image`, `note`（選填）, `sort_order`, `is_demo` |
+| `history.json` | `id`, `date`, `title`, `body`, `image`（選填）, `video_url`（選填）, `game`, `is_demo` |
+| `leaders.json` | `id`, `nickname`, `member_id`（選填）, `term_start`, `term_end`（選填，空白代表現任）, `note`（選填）, `is_demo` |
+| `videos.json` | `id`, `youtube_url`, `title`, `published`, `game`, `category`, `summary`, `featured`, `is_demo` |
+| `gallery.json` | `id`, `image`, `thumb`（選填）, `title`, `caption`, `date`, `game`, `category`, `featured`, `is_demo` |
+| `quotes.json` | `id`, `text`, `speaker`, `date`（選填）, `context`（選填）, `is_demo` |
+
+CSV 讀入的值全是字串，`data.js` 要負責型別轉換（`"TRUE"`/`"true"` → 布林、數字字串 → 數字、空字串 → 未填）。
+
+### 資料載入模組
+
+- `config.js` 設定每張表的來源：本地 JSON 路徑，或 CSV 網址。第一版全部是 JSON。
+- `data.js` 對外只提供類似 `loadTable('members')` 的介面，頁面腳本不知道資料來自 JSON 還是 CSV。
+- 內建一個能處理引號、逗號與換行的小型 CSV 解析器（第一版可以沒有實際 CSV 來源，但解析器與轉換要寫好並能運作）。
+- 讀取失敗時，頁面顯示友善的錯誤訊息，不整頁空白。
+
+### 安全
+
+- 外部資料**一律以 `textContent` 或 `createElement` 顯示**，不得把資料串進 `innerHTML`。
+- 圖片網址只允許：網站內的相對路徑（`assets/` 底下），或 `https://` 開頭的網址。其餘一律改用佔位圖。
+- YouTube 網址只接受 `youtube.com/watch?v=`、`youtu.be/`、`youtube.com/shorts/`、`youtube.com/embed/` 這幾種格式，抽出 11 碼影片 ID 並以正規表達式 `^[A-Za-z0-9_-]{11}$` 驗證，不符就不顯示該影片。
+- 前端不放任何 API Key、密碼或機密。試算表只存可公開的資訊。
+
+不建立管理後台。
+
+## 六、第一版完成範圍
+
+1. 首頁
+2. 公會故事頁
+3. 成員列表與詳情頁
+4. 成員造型切換
+5. 影片回顧頁
+6. 紀念館與燈箱
+7. 虛擬大廳預留頁
+8. 手機版響應式設計
+9. 本地 JSON 資料與資料載入模組
+10. GitHub Pages 部署所需設定（`.nojekyll`、相對路徑、`404.html`）
+11. README：本機預覽方式、如何新增修改成員、造型、照片、影片、歷史、語錄，以及未來改接 Google 試算表的步驟
+
+示範資料：成員約 6 位（瑪奇 M 與瑪奇 PC 都有），每位 2–3 套造型；歷史事件約 6 筆；影片約 6 支；相簿約 12 張；語錄約 4 則。所有名稱、日期、事件都要看得出是虛構的示範內容。示範影片可以用明顯的佔位 ID，或留空並顯示佔位卡片，**不要隨便填真實的影片網址**。
+
+## 七、驗證
+
+完成後至少執行：
+
+1. 用 Python 檢查所有 `data/*.json` 都能解析、欄位符合上表、沒有巢狀值、id 不重複、`member_id` 都對得到成員。
+2. `python3 -m http.server 8000` 啟動後，以 `curl` 確認每個頁面、CSS、JS、JSON 都回傳 200。
+3. 以 `grep` 確認沒有任何以 `/` 開頭的內部絕對路徑，且資料沒有被放進 `innerHTML`。
+4. 若環境中有瀏覽器自動化工具（例如 Playwright），開啟各頁確認主控台沒有錯誤；沒有則略過並在 PR 說明。
+
+PR 說明要列出：完成項目、驗證結果（含略過的項目）、已知問題、未完成項目、合併後啟用 GitHub Pages 的步驟。
