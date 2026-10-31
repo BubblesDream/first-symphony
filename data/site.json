@@ -1,0 +1,58 @@
+[
+  {
+    "key": "guild_name",
+    "value": "第一交響樂團"
+  },
+  {
+    "key": "tagline",
+    "value": "記錄我們一起走過的遊戲時光。"
+  },
+  {
+    "key": "intro",
+    "value": "（示範文字）這裡是一段公會簡介的示範內容，正式上線前請換成公會自己的介紹。"
+  },
+  {
+    "key": "banner_image",
+    "value": "assets/images/placeholders/banner.svg"
+  },
+  {
+    "key": "banner_alt",
+    "value": "公會合照橫幅（佔位圖）"
+  },
+  {
+    "key": "banner_quote",
+    "value": "因為有你們，這段旅程才如此動聽。"
+  },
+  {
+    "key": "founded_year",
+    "value": "2020"
+  },
+  {
+    "key": "story_summary",
+    "value": "（示範文字）從一場意外的相遇開始，到成為彼此重要的存在。\n這段文字是故事摘要的示範內容，用來確認版面，之後請換成公會真正的故事。"
+  },
+  {
+    "key": "founding_story",
+    "value": "（示範文字）這裡會寫公會的創立緣由：當初是誰提議、在哪裡集合、為什麼想要一起冒險。\n目前內容全部為虛構，只用來展示文章段落的排版效果。"
+  },
+  {
+    "key": "name_origin",
+    "value": "（示範文字）這裡會寫「第一交響樂團」這個名字的由來。\n例如：大家各自擅長不同的事，聚在一起就像一支樂團。此段為示範內容。"
+  },
+  {
+    "key": "era_mabinogi_m",
+    "value": "（示範文字）瑪奇 M 時期的簡短介紹：活動的伺服器、常做的事、印象深刻的回憶。"
+  },
+  {
+    "key": "era_mabinogi_pc",
+    "value": "（示範文字）瑪奇（PC）時期的簡短介紹：早期的據點、一起練過的技能、熟悉的地圖。"
+  },
+  {
+    "key": "footer_phrase",
+    "value": "遊戲會有結束的一天，但我們的故事還會繼續下去。"
+  },
+  {
+    "key": "is_demo",
+    "value": "true"
+  }
+]

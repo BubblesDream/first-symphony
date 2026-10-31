@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>找不到頁面｜第一交響樂團</title>
+  <meta name="description" content="找不到這個頁面。">
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&amp;display=swap">
+  <script>
+    // GitHub Pages 會在任何找不到的網址顯示這頁（例如 first-symphony/a/b/c），
+    // 相對路徑會跟著錯位，所以先把基準設回網站根目錄，再載入樣式與腳本。
+    (function () {
+      var path = location.pathname;
+      var marker = "first-symphony/";
+      var cut = path.indexOf(marker);
+      var root = cut >= 0 ? path.slice(0, cut + marker.length) : "/";
+      var base = document.createElement("base");
+      base.href = location.origin + root;
+      document.head.appendChild(base);
+
+      function add(tag, attrs) {
+        var node = document.createElement(tag);
+        for (var key in attrs) node.setAttribute(key, attrs[key]);
+        document.head.appendChild(node);
+      }
+      add("link", { rel: "icon", href: "assets/images/lyre.svg", type: "image/svg+xml" });
+      ["tokens", "base", "components", "pages"].forEach(function (name) {
+        add("link", { rel: "stylesheet", href: "assets/css/" + name + ".css" });
+      });
+      add("script", { type: "module", src: "assets/js/pages/simple.js" });
+    })();
+  </script>
+</head>
+<body data-page="">
+  <a class="skip-link" href="#main">跳到主要內容</a>
+  <div id="site-header"></div>
+  <main id="main" class="page container">
+    <header class="page-intro">
+      <h1>找不到這個頁面</h1>
+      <p>這個網址可能打錯了，或頁面已經搬家。</p>
+      <p><a class="button-link" href="index.html">回到首頁</a></p>
+    </header>
+  </main>
+  <div id="site-footer"></div>
+</body>
+</html>

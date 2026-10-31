@@ -1,0 +1,56 @@
+/* 設計變數：顏色、字型、字級、間距集中在這裡，換版時只改這個檔案。 */
+:root {
+  /* 紙張與文字 */
+  --color-paper: #f5efe3;
+  --color-surface: #fbf8f1;
+  --color-ink: #3a2c22;
+  --color-ink-soft: #5b4a3d;
+  --color-muted: #75624f;
+  --color-line: #ddd1bd;
+  --color-line-strong: #bfae94;
+
+  /* 頂部細色帶 */
+  --color-band: #3f3128;
+  --color-band-text: #eee4d3;
+
+  /* 唯一的強調色（低彩度灰綠） */
+  --color-accent: #4f6b63;
+  --color-accent-soft: #e3e8e2;
+
+  /* 示範資料標記 */
+  --color-demo-bg: #efe2c9;
+  --color-demo-text: #6a4f2c;
+
+  --color-focus: #2f5d8a;
+  --color-overlay: rgba(32, 24, 18, 0.88);
+
+  /* 字型 */
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-heading: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+
+  /* 字級 */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-2xl: clamp(1.9rem, 1.4rem + 2vw, 2.75rem);
+  --leading-body: 1.8;
+  --leading-tight: 1.35;
+
+  /* 間距 */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+
+  /* 版面 */
+  --width-page: 72rem;
+  --width-text: 40em; /* 正文欄寬約 40 個中文字 */
+  --radius: 3px;
+  --shadow-photo: 0 1px 3px rgba(58, 44, 34, 0.12);
+}

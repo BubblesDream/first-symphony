@@ -1,0 +1,137 @@
+[
+  {
+    "id": "demo-kotone-outfit-1",
+    "member_id": "demo-kotone",
+    "name": "示範造型：日常服",
+    "image": "assets/images/outfits/demo-kotone-outfit-1.svg",
+    "note": "（示範）造型說明可以寫取得方式或搭配心得。",
+    "sort_order": 10,
+    "is_demo": true
+  },
+  {
+    "id": "demo-kotone-outfit-2",
+    "member_id": "demo-kotone",
+    "name": "示範造型：冒險裝",
+    "image": "assets/images/outfits/demo-kotone-outfit-2.svg",
+    "note": "",
+    "sort_order": 20,
+    "is_demo": true
+  },
+  {
+    "id": "demo-kotone-outfit-3",
+    "member_id": "demo-kotone",
+    "name": "示範造型：節慶禮服",
+    "image": "assets/images/outfits/demo-kotone-outfit-3.svg",
+    "note": "",
+    "sort_order": 30,
+    "is_demo": true
+  },
+  {
+    "id": "demo-flute-outfit-1",
+    "member_id": "demo-flute",
+    "name": "示範造型：日常服",
+    "image": "assets/images/outfits/demo-flute-outfit-1.svg",
+    "note": "（示範）造型說明可以寫取得方式或搭配心得。",
+    "sort_order": 10,
+    "is_demo": true
+  },
+  {
+    "id": "demo-flute-outfit-2",
+    "member_id": "demo-flute",
+    "name": "示範造型：冒險裝",
+    "image": "assets/images/outfits/demo-flute-outfit-2.svg",
+    "note": "",
+    "sort_order": 20,
+    "is_demo": true
+  },
+  {
+    "id": "demo-timpani-outfit-1",
+    "member_id": "demo-timpani",
+    "name": "示範造型：日常服",
+    "image": "assets/images/outfits/demo-timpani-outfit-1.svg",
+    "note": "（示範）造型說明可以寫取得方式或搭配心得。",
+    "sort_order": 10,
+    "is_demo": true
+  },
+  {
+    "id": "demo-timpani-outfit-2",
+    "member_id": "demo-timpani",
+    "name": "示範造型：冒險裝",
+    "image": "assets/images/outfits/demo-timpani-outfit-2.svg",
+    "note": "",
+    "sort_order": 20,
+    "is_demo": true
+  },
+  {
+    "id": "demo-timpani-outfit-3",
+    "member_id": "demo-timpani",
+    "name": "示範造型：節慶禮服",
+    "image": "assets/images/outfits/demo-timpani-outfit-3.svg",
+    "note": "",
+    "sort_order": 30,
+    "is_demo": true
+  },
+  {
+    "id": "demo-harp-outfit-1",
+    "member_id": "demo-harp",
+    "name": "示範造型：日常服",
+    "image": "assets/images/outfits/demo-harp-outfit-1.svg",
+    "note": "（示範）造型說明可以寫取得方式或搭配心得。",
+    "sort_order": 10,
+    "is_demo": true
+  },
+  {
+    "id": "demo-harp-outfit-2",
+    "member_id": "demo-harp",
+    "name": "示範造型：冒險裝",
+    "image": "assets/images/outfits/demo-harp-outfit-2.svg",
+    "note": "",
+    "sort_order": 20,
+    "is_demo": true
+  },
+  {
+    "id": "demo-tuba-outfit-1",
+    "member_id": "demo-tuba",
+    "name": "示範造型：日常服",
+    "image": "assets/images/outfits/demo-tuba-outfit-1.svg",
+    "note": "（示範）造型說明可以寫取得方式或搭配心得。",
+    "sort_order": 10,
+    "is_demo": true
+  },
+  {
+    "id": "demo-tuba-outfit-2",
+    "member_id": "demo-tuba",
+    "name": "示範造型：冒險裝",
+    "image": "assets/images/outfits/demo-tuba-outfit-2.svg",
+    "note": "",
+    "sort_order": 20,
+    "is_demo": true
+  },
+  {
+    "id": "demo-tuba-outfit-3",
+    "member_id": "demo-tuba",
+    "name": "示範造型：節慶禮服",
+    "image": "assets/images/outfits/demo-tuba-outfit-3.svg",
+    "note": "",
+    "sort_order": 30,
+    "is_demo": true
+  },
+  {
+    "id": "demo-baton-outfit-1",
+    "member_id": "demo-baton",
+    "name": "示範造型：日常服",
+    "image": "assets/images/outfits/demo-baton-outfit-1.svg",
+    "note": "（示範）造型說明可以寫取得方式或搭配心得。",
+    "sort_order": 10,
+    "is_demo": true
+  },
+  {
+    "id": "demo-baton-outfit-2",
+    "member_id": "demo-baton",
+    "name": "示範造型：冒險裝",
+    "image": "assets/images/outfits/demo-baton-outfit-2.svg",
+    "note": "",
+    "sort_order": 20,
+    "is_demo": true
+  }
+]

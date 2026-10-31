@@ -1,0 +1,68 @@
+[
+  {
+    "id": "demo-video-1",
+    "youtube_url": "",
+    "title": "示範影片一：副本攻略紀錄",
+    "published": "2021-05",
+    "game": "mabinogi_m",
+    "category": "副本",
+    "summary": "（示範資料）尚未提供影片網址，這是一張佔位卡片。填入 YouTube 網址後就會顯示縮圖並可播放。",
+    "featured": true,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-2",
+    "youtube_url": "",
+    "title": "示範影片二：公會日常片段",
+    "published": "2021-11",
+    "game": "mabinogi_pc",
+    "category": "日常",
+    "summary": "（示範資料）尚未提供影片網址，這是一張佔位卡片。填入 YouTube 網址後就會顯示縮圖並可播放。",
+    "featured": false,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-3",
+    "youtube_url": "",
+    "title": "示範影片三：聖誕演奏會",
+    "published": "2022-12",
+    "game": "both",
+    "category": "活動",
+    "summary": "（示範資料）尚未提供影片網址，這是一張佔位卡片。填入 YouTube 網址後就會顯示縮圖並可播放。",
+    "featured": true,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-4",
+    "youtube_url": "",
+    "title": "示範影片四：新成員歡迎會",
+    "published": "2023-03",
+    "game": "mabinogi_m",
+    "category": "活動",
+    "summary": "（示範資料）尚未提供影片網址，這是一張佔位卡片。填入 YouTube 網址後就會顯示縮圖並可播放。",
+    "featured": false,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-5",
+    "youtube_url": "",
+    "title": "示範影片五：週年回顧",
+    "published": "2024-01",
+    "game": "both",
+    "category": "回顧",
+    "summary": "（示範資料）尚未提供影片網址，這是一張佔位卡片。填入 YouTube 網址後就會顯示縮圖並可播放。",
+    "featured": true,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-6",
+    "youtube_url": "",
+    "title": "示範影片六：釣魚大賽",
+    "published": "2024-08",
+    "game": "mabinogi_pc",
+    "category": "日常",
+    "summary": "（示範資料）尚未提供影片網址，這是一張佔位卡片。填入 YouTube 網址後就會顯示縮圖並可播放。",
+    "featured": false,
+    "is_demo": true
+  }
+]

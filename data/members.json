@@ -1,0 +1,74 @@
+[
+  {
+    "id": "demo-kotone",
+    "nickname": "示範團員・琴音",
+    "game": "mabinogi_m",
+    "role": "示範會長",
+    "avatar": "assets/images/members/demo-kotone.svg",
+    "intro": "（示範資料）這是虛構成員「琴音」的介紹文字。\n正式上線前請換成成員自己願意公開的遊戲暱稱與介紹。",
+    "joined": "2020-05",
+    "featured": true,
+    "sort_order": 10,
+    "is_demo": true
+  },
+  {
+    "id": "demo-flute",
+    "nickname": "示範團員・長笛",
+    "game": "mabinogi_m",
+    "role": "示範副會長",
+    "avatar": "assets/images/members/demo-flute.svg",
+    "intro": "（示範資料）這是虛構成員「長笛」的介紹文字。\n正式上線前請換成成員自己願意公開的遊戲暱稱與介紹。",
+    "joined": "2020-06",
+    "featured": true,
+    "sort_order": 20,
+    "is_demo": true
+  },
+  {
+    "id": "demo-timpani",
+    "nickname": "示範團員・定音鼓",
+    "game": "mabinogi_pc",
+    "role": "",
+    "avatar": "assets/images/members/demo-timpani.svg",
+    "intro": "（示範資料）這是虛構成員「定音鼓」的介紹文字。\n正式上線前請換成成員自己願意公開的遊戲暱稱與介紹。",
+    "joined": "2021-01",
+    "featured": true,
+    "sort_order": 30,
+    "is_demo": true
+  },
+  {
+    "id": "demo-harp",
+    "nickname": "示範團員・豎琴",
+    "game": "mabinogi_pc",
+    "role": "示範活動組",
+    "avatar": "assets/images/members/demo-harp.svg",
+    "intro": "（示範資料）這是虛構成員「豎琴」的介紹文字。\n正式上線前請換成成員自己願意公開的遊戲暱稱與介紹。",
+    "joined": "2021-09",
+    "featured": false,
+    "sort_order": 40,
+    "is_demo": true
+  },
+  {
+    "id": "demo-tuba",
+    "nickname": "示範團員・低音號",
+    "game": "both",
+    "role": "",
+    "avatar": "assets/images/members/demo-tuba.svg",
+    "intro": "（示範資料）這是虛構成員「低音號」的介紹文字。\n正式上線前請換成成員自己願意公開的遊戲暱稱與介紹。",
+    "joined": "2022",
+    "featured": true,
+    "sort_order": 50,
+    "is_demo": true
+  },
+  {
+    "id": "demo-baton",
+    "nickname": "示範團員・指揮棒",
+    "game": "mabinogi_m",
+    "role": "示範攝影組",
+    "avatar": "assets/images/members/demo-baton.svg",
+    "intro": "（示範資料）這是虛構成員「指揮棒」的介紹文字。\n正式上線前請換成成員自己願意公開的遊戲暱稱與介紹。",
+    "joined": "",
+    "featured": true,
+    "sort_order": 60,
+    "is_demo": true
+  }
+]

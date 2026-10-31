@@ -1,0 +1,29 @@
+[
+  {
+    "id": "demo-leader-1",
+    "nickname": "示範團員・琴音",
+    "member_id": "demo-kotone",
+    "term_start": "2020",
+    "term_end": "2023-06",
+    "note": "（示範）創團會長。",
+    "is_demo": true
+  },
+  {
+    "id": "demo-leader-2",
+    "nickname": "示範團員・長笛",
+    "member_id": "demo-flute",
+    "term_start": "2023-07",
+    "term_end": "",
+    "note": "（示範）現任會長。",
+    "is_demo": true
+  },
+  {
+    "id": "demo-leader-pc",
+    "nickname": "示範團員・定音鼓",
+    "member_id": "demo-timpani",
+    "term_start": "2021-03",
+    "term_end": "",
+    "note": "（示範）瑪奇（PC）分部負責人。",
+    "is_demo": true
+  }
+]

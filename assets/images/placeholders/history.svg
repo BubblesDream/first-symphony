@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="佔位圖：歷史照片 4:3">
+<rect width="800" height="600" fill="#e9dfcc"/>
+<rect x="25" y="25" width="750" height="550" fill="none" stroke="#5a4636" stroke-opacity="0.35" stroke-width="2" stroke-dasharray="8 6"/>
+<g fill="#5a4636" font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" text-anchor="middle">
+<text x="400.0" y="280.0" font-size="65" font-weight="700">佔位圖</text>
+<text x="400.0" y="350.0" font-size="40">歷史照片 4:3</text>
+</g>
+</svg>

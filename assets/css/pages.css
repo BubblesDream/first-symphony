@@ -1,0 +1,90 @@
+/* 各頁專屬版面。共用元件請放 components.css。 */
+
+/* ── 首頁 ── */
+.hero { margin-bottom: var(--space-6); }
+.hero__image { position: relative; }
+.hero__image img { width: 100%; aspect-ratio: 8 / 3; object-fit: cover; }
+.hero__quote {
+  position: absolute; left: var(--space-5); bottom: var(--space-5);
+  margin: 0; max-width: 22em;
+  padding: var(--space-2) var(--space-4);
+  background: rgba(251, 248, 241, 0.92);
+  border-left: 3px solid var(--color-accent);
+  font-family: var(--font-heading); font-size: var(--text-lg); line-height: 1.6;
+}
+.hero__intro { max-width: var(--width-text); margin-top: var(--space-5); color: var(--color-ink-soft); }
+
+.feature { display: grid; gap: var(--space-6); grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; }
+.feature__text { max-width: var(--width-text); }
+
+/* ── 公會故事 ── */
+.story-columns { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+.story-columns .prose p { margin-bottom: 0; }
+
+.timeline { list-style: none; margin: 0; padding: 0; max-width: 48rem; }
+.timeline__item {
+  display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: var(--space-5);
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--color-line);
+}
+.timeline__item:first-child { border-top: 0; padding-top: 0; }
+.timeline__date { font-family: var(--font-heading); color: var(--color-accent); font-weight: 700; }
+.timeline__body h3 { margin-bottom: var(--space-2); }
+.timeline__body p { white-space: pre-line; max-width: var(--width-text); color: var(--color-ink-soft); margin-top: var(--space-2); }
+.timeline__body .photo { max-width: 26rem; margin-top: var(--space-3); }
+
+.era-list { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.era { border-left: 3px solid var(--color-line-strong); padding-left: var(--space-4); }
+.era p { white-space: pre-line; color: var(--color-ink-soft); margin: 0; }
+
+.leaders { width: 100%; max-width: 48rem; border-collapse: collapse; font-size: var(--text-sm); }
+.leaders th, .leaders td { text-align: left; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-line); vertical-align: top; }
+.leaders th { font-weight: 700; color: var(--color-muted); }
+
+/* ── 成員詳情 ── */
+.profile { margin-bottom: var(--space-4); display: grid; gap: var(--space-6); grid-template-columns: minmax(0, 16rem) minmax(0, 1fr); align-items: start; }
+.profile .photo img { aspect-ratio: 1 / 1; object-fit: cover; }
+.profile__info h1 { margin-bottom: var(--space-2); }
+.profile__info dl { display: grid; grid-template-columns: auto 1fr; gap: var(--space-1) var(--space-4); margin: var(--space-4) 0; font-size: var(--text-sm); }
+.profile__info dt { color: var(--color-muted); }
+.profile__info dd { margin: 0; }
+
+.outfit-viewer { display: grid; gap: var(--space-5); grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); align-items: start; }
+.outfit-viewer__main img { aspect-ratio: 3 / 4; object-fit: cover; }
+.outfit-viewer__caption { margin-top: var(--space-3); }
+.outfit-viewer__caption p { font-size: var(--text-sm); color: var(--color-ink-soft); margin: 0; }
+.outfit-thumbs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.outfit-thumb {
+  display: block; width: 6rem; padding: var(--space-1); cursor: pointer;
+  background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius);
+  font-size: var(--text-xs); text-align: center; color: var(--color-ink-soft);
+}
+.outfit-thumb img { aspect-ratio: 3 / 4; object-fit: cover; width: 100%; margin-bottom: var(--space-1); }
+.outfit-thumb[aria-pressed="true"] { border-color: var(--color-accent); box-shadow: 0 0 0 1px var(--color-accent); color: var(--color-ink); }
+
+/* ── 紀念館 ── */
+.photo-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); }
+.photo-btn { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; text-align: left; }
+.photo-btn img { aspect-ratio: 4 / 3; object-fit: cover; }
+.photo-btn:hover .photo { border-color: var(--color-line-strong); }
+.photo-item__title { font-size: var(--text-sm); margin: var(--space-2) 0 0; }
+
+.quotes { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
+.quote { margin: 0; padding-left: var(--space-4); border-left: 3px solid var(--color-accent); }
+.quote blockquote { margin: 0 0 var(--space-2); font-family: var(--font-heading); font-size: var(--text-lg); line-height: 1.6; }
+.quote figcaption { font-size: var(--text-sm); color: var(--color-muted); }
+
+/* ── 虛擬大廳 ── */
+.hall-list { padding-left: 1.2em; max-width: var(--width-text); }
+.hall-list li { margin-bottom: var(--space-2); }
+
+@media (max-width: 48rem) {
+  .feature, .profile, .outfit-viewer { grid-template-columns: 1fr; }
+  .profile .photo { max-width: 14rem; }
+  .timeline__item { grid-template-columns: 1fr; gap: var(--space-1); }
+}
+@media (max-width: 40rem) {
+  .hero__image img { aspect-ratio: 4 / 3; }
+  .hero__quote { position: static; max-width: none; margin-top: var(--space-3); font-size: var(--text-base); }
+  .outfit-thumb { width: 5rem; }
+}
