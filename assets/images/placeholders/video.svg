@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360" role="img" aria-label="佔位圖：影片縮圖 16:9">
+<rect width="640" height="360" fill="#3a2c22"/>
+<rect x="25.6" y="14.4" width="588.8000000000001" height="331.2" fill="none" stroke="#efe5d4" stroke-opacity=".35" stroke-dasharray="8 6"/>
+<g font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" fill="#efe5d4" text-anchor="middle">
+<text x="320.0" y="169.2" font-size="27" font-weight="700">佔位圖</text>
+<text x="320.0" y="204.3" font-size="16">影片縮圖 16:9</text>
+<text x="320.0" y="228.6" font-size="14" opacity=".8">尚未設定影片網址</text>
+</g></svg>

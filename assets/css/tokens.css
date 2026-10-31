@@ -1,0 +1,93 @@
+/* 設計變數：配色、字型、字級、間距集中在這裡，換版時只改這個檔案。
+   方向 A「回憶剪貼簿」：暖米白紙張、深咖啡文字、紙膠帶與拍立得。 */
+:root {
+  /* 紙張與文字 */
+  --c-paper: #f4ede1;
+  --c-paper-deep: #ebe1cf;
+  --c-card: #fbf7ef;
+  --c-photo: #fffdf8;
+  --c-ink: #3a2a1f;
+  --c-ink-soft: #5c4a3c;
+  --c-ink-faint: #725f4e;
+  --c-line: #dccfb9;
+
+  /* 頂部色帶、膠卷 */
+  --c-band: #3f2e23;
+  --c-band-text: #eee3d0;
+  --c-film: #2e241d;
+  --c-film-hole: #e9dfcd;
+
+  /* 強調色（連結、焦點） */
+  --c-accent: #8a4528;
+  --c-focus: #8a4528;
+
+  /* 紙膠帶與便條 */
+  --c-tape: rgba(212, 188, 146, 0.72);
+  --c-tape-alt: rgba(190, 168, 150, 0.7);
+  --c-note: #fbf3db;
+
+  /* 遊戲標籤 */
+  --c-tag-m-bg: #e4ece0;
+  --c-tag-m-ink: #34502f;
+  --c-tag-pc-bg: #e6e4ef;
+  --c-tag-pc-ink: #433d68;
+  --c-tag-both-bg: #f0e3d4;
+  --c-tag-both-ink: #6e3d22;
+
+  /* 示範資料標記 */
+  --c-demo: #9c3a26;
+
+  /* 字型（標題與手寫字由 Google Fonts 分片載入，載不到時改用系統字型） */
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+  --font-title: "Noto Serif TC", "Source Han Serif TC", "Songti TC", "PMingLiU", serif;
+  --font-hand: "LXGW WenKai TC", "Kaiti TC", "BiauKai", "DFKai-SB", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+
+  /* 字級 */
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.35rem;
+  --fs-xl: 1.7rem;
+  --fs-brand: clamp(1.75rem, 1.2rem + 2.4vw, 2.6rem);
+
+  --lh-body: 1.8;
+  --lh-tight: 1.35;
+
+  /* 間距 */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  /* 版面 */
+  --page-max: 1120px;
+  --page-pad: clamp(1rem, 4vw, 2rem);
+  --measure: 40em; /* 約 40 個中文字 */
+  --radius: 6px;
+  --radius-sm: 3px;
+
+  /* 陰影（只用極淡的紙張陰影） */
+  --shadow-photo: 0 1px 2px rgba(58, 42, 31, 0.14), 0 4px 10px rgba(58, 42, 31, 0.07);
+  --shadow-card: 0 1px 2px rgba(58, 42, 31, 0.06);
+
+  /* 拍立得傾斜角度 */
+  --tilt-1: -1.8deg;
+  --tilt-2: 1.4deg;
+  --tilt-3: -0.8deg;
+  --tilt-4: 2deg;
+}
+
+/* 手機：傾斜減到很小，避免擠在一起 */
+@media (max-width: 600px) {
+  :root {
+    --tilt-1: -0.6deg;
+    --tilt-2: 0.5deg;
+    --tilt-3: -0.3deg;
+    --tilt-4: 0.6deg;
+  }
+}

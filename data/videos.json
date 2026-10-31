@@ -1,0 +1,68 @@
+[
+  {
+    "id": "demo-video-1",
+    "youtube_url": "",
+    "title": "示範：公會成立紀念影片",
+    "published": "2091-04",
+    "game": "mabinogi_m",
+    "category": "活動紀錄",
+    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
+    "featured": true,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-2",
+    "youtube_url": "",
+    "title": "示範：第一次團體副本",
+    "published": "2091-09",
+    "game": "mabinogi_m",
+    "category": "副本",
+    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
+    "featured": false,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-3",
+    "youtube_url": "",
+    "title": "示範：瑪奇 PC 分團日常",
+    "published": "2092-05",
+    "game": "mabinogi_pc",
+    "category": "日常",
+    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
+    "featured": false,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-4",
+    "youtube_url": "",
+    "title": "示範：節日演奏會",
+    "published": "2092-12",
+    "game": "both",
+    "category": "活動紀錄",
+    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
+    "featured": true,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-5",
+    "youtube_url": "",
+    "title": "示範：生活技能大會",
+    "published": "2093-07",
+    "game": "mabinogi_pc",
+    "category": "日常",
+    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
+    "featured": false,
+    "is_demo": true
+  },
+  {
+    "id": "demo-video-6",
+    "youtube_url": "",
+    "title": "示範：三週年回顧",
+    "published": "2094-03",
+    "game": "both",
+    "category": "活動紀錄",
+    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
+    "featured": true,
+    "is_demo": true
+  }
+]

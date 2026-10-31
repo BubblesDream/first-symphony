@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>紀念館｜第一交響樂團</title>
+  <meta name="description" content="第一交響樂團的相簿與經典語錄。">
+  <link rel="icon" href="assets/images/icons/lyre.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&amp;family=Noto+Serif+TC:wght@700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/gallery.js"></script>
+</head>
+<body data-page="gallery">
+  <a class="skip-link" href="#main">跳到主要內容</a>
+  <header id="site-header" class="site-header"></header>
+  <main id="main" class="page page--gallery" tabindex="-1">
+    <div class="page-head">
+      <h1 class="page-title"><span class="tape">紀念館</span></h1>
+      <p class="page-lead">一起留下的截圖與那些忘不了的話。點照片可以放大。</p>
+    </div>
+    <section class="gallery-photos" aria-labelledby="photos-title">
+      <h2 class="visually-hidden" id="photos-title">相簿</h2>
+      <div id="filters" class="filters"></div>
+      <p id="status" class="status" role="status" aria-live="polite">讀取中…</p>
+      <ul id="photo-grid" class="photo-grid"></ul>
+    </section>
+    <section class="gallery-quotes" aria-labelledby="quotes-title">
+      <h2 class="tape-title" id="quotes-title"><span class="tape">經典語錄</span></h2>
+      <ul id="quote-list" class="quote-grid"></ul>
+    </section>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+</body>
+</html>

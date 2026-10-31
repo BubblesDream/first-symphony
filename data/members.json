@@ -1,0 +1,70 @@
+[
+  {
+    "id": "demo-flute",
+    "nickname": "示範・長笛",
+    "game": "mabinogi_m",
+    "role": "會長",
+    "avatar": "assets/images/members/demo-flute.svg",
+    "intro": "（示範資料）喜歡在副本前替大家整理裝備清單的團員。這段文字只是版面示意，之後換成真正的自我介紹。",
+    "joined": "2091-03",
+    "featured": true,
+    "sort_order": 1,
+    "is_demo": true
+  },
+  {
+    "id": "demo-cello",
+    "nickname": "示範・大提琴",
+    "game": "mabinogi_pc",
+    "role": "副會長",
+    "avatar": "assets/images/members/demo-cello.svg",
+    "intro": "（示範資料）總是最後一個下線，負責把走散的人帶回營火旁。此為示範文字。",
+    "joined": "2091-05",
+    "featured": true,
+    "sort_order": 2,
+    "is_demo": true
+  },
+  {
+    "id": "demo-trumpet",
+    "nickname": "示範・小號",
+    "game": "both",
+    "role": "活動企劃",
+    "avatar": "assets/images/members/demo-trumpet.svg",
+    "intro": "（示範資料）兩邊遊戲都在玩，常常發起節日合照。此為示範文字。",
+    "joined": "2092",
+    "featured": true,
+    "sort_order": 3,
+    "is_demo": true
+  },
+  {
+    "id": "demo-harp",
+    "nickname": "示範・豎琴",
+    "game": "mabinogi_m",
+    "avatar": "assets/images/members/demo-harp.svg",
+    "intro": "（示範資料）擅長演奏，公會聚會時的背景音樂幾乎都由這位團員準備。此為示範文字。",
+    "joined": "2092-08",
+    "featured": true,
+    "sort_order": 4,
+    "is_demo": true
+  },
+  {
+    "id": "demo-timpani",
+    "nickname": "示範・定音鼓",
+    "game": "mabinogi_pc",
+    "avatar": "assets/images/members/demo-timpani.svg",
+    "intro": "（示範資料）熱愛採集與生活技能，倉庫永遠塞滿材料。此為示範文字。",
+    "joined": "2093-01",
+    "featured": false,
+    "sort_order": 5,
+    "is_demo": true
+  },
+  {
+    "id": "demo-oboe",
+    "nickname": "示範・雙簧管",
+    "game": "mabinogi_m",
+    "avatar": "assets/images/members/demo-oboe.svg",
+    "intro": "（示範資料）新加入不久，正在努力認識每一位團員。此為示範文字。",
+    "featured": false,
+    "sort_order": 6,
+    "is_demo": true
+  }
+]

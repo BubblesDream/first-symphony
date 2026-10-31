@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="佔位圖：遊戲截圖 4:3">
+<rect width="800" height="600" fill="#cfd0de"/><path d="M0 468.0 Q160.0 360.0 320.0 444.0 T640.0 408.00000000000006 T800 432.0 V600 H0Z" fill="#3a3a5c" opacity=".18"/><path d="M0 528.0 Q240.0 456.0 440.00000000000006 516.0 T800 491.99999999999994 V600 H0Z" fill="#3a3a5c" opacity=".22"/><circle cx="624.0" cy="168.00000000000003" r="42.00000000000001" fill="#fffaf0" opacity=".55"/>
+<rect x="32.0" y="24.0" width="736.0" height="552.0" fill="none" stroke="#3a3a5c" stroke-opacity=".35" stroke-dasharray="8 6"/>
+<g font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" fill="#3a3a5c" text-anchor="middle">
+<text x="400.0" y="282.0" font-size="45" font-weight="700">佔位圖</text>
+<text x="400.0" y="340.5" font-size="27">遊戲截圖 4:3</text>
+<text x="400.0" y="381.0" font-size="22" opacity=".8">示範相片 03｜日常</text>
+</g></svg>
