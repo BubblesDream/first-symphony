@@ -9,7 +9,7 @@
   },
   {
     "key": "banner_image",
-    "value": "assets/images/placeholders/banner.svg"
+    "value": ""
   },
   {
     "key": "banner_alt",
@@ -33,7 +33,7 @@
   },
   {
     "key": "story_image",
-    "value": "assets/images/placeholders/story.svg"
+    "value": ""
   },
   {
     "key": "story_origin",
