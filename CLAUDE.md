@@ -34,6 +34,10 @@
 - `assets/images/members/`、`site/`、`gallery/`、`data/gallery.json`、`tools/image-sync-state.json` 由同步程式產生，不要手動修改。
 - 細節見 `docs/spec.md`「圖片同步」與 `docs/指南-圖片同步設定.md`。
 
+## 管理頁（第二個例外，不是網站的一部分）
+
+`tools/admin/`（`Code.gs`、`Logic.gs`、`*.html`、`appsscript.json`）是給管理員用的 Google Apps Script 網頁應用程式，綁在「網站用」試算表上，只在 Apps Script 內執行。它**不部署到 GitHub Pages、網站頁面不引用它**，也不受「純 HTML／CSS／原生 JS」與「只用 `/` 相對路徑」等網站規則限制；但仍要遵守：介面簡單實用、繁體中文（台灣用語）、外部資料只用 `textContent`／`createElement`、Drive 動作只限管理員資料夾與投稿區、刪除一律移到垃圾桶、不把任何檔案改成公開分享。說明見 `docs/指南-管理頁.md`。
+
 ## 內容規則
 
 - 只放遊戲暱稱、遊戲截圖、願意公開的遊戲影片；不放真實姓名或聯絡方式。
