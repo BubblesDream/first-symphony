@@ -1,7 +1,7 @@
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
 import { el, img, clear, formatDate, queryParam } from '../render.js';
-import { tapeTitle, gameTag, demoBadge, errorBox, polaroid } from '../ui.js';
+import { tapeTitle, gameTag, demoBadge, errorBox, polaroid, pendingNote } from '../ui.js';
 import { PLACEHOLDERS, safeImageUrl } from '../validate.js';
 
 initLayout();
@@ -20,7 +20,7 @@ function notFound() {
 /** 造型切換：縮圖列＋主圖。縮圖可用滑鼠、Tab、左右方向鍵操作。 */
 function outfitViewer(member, outfits) {
   if (outfits.length === 0) {
-    return el('p', { className: 'muted', text: '這位成員還沒有造型紀錄。' });
+    return pendingNote('造型照片整理中，敬請期待。');
   }
   const mainImg = img(outfits[0].image, '', { fallback: PLACEHOLDERS.outfit, lazy: false });
   const caption = el('figcaption', { 'aria-live': 'polite' });
@@ -84,6 +84,7 @@ async function main() {
 
     const info = el('dl', { className: 'profile__facts' },
       el('div', {}, el('dt', { text: '遊戲' }), el('dd', {}, gameTag(member.game))),
+      member.aka ? el('div', {}, el('dt', { text: '別名' }), el('dd', { text: member.aka })) : null,
       member.role ? el('div', {}, el('dt', { text: '職位' }), el('dd', { text: member.role })) : null,
       member.joined ? el('div', {}, el('dt', { text: '加入' }), el('dd', { text: formatDate(member.joined) })) : null,
     );
@@ -100,7 +101,7 @@ async function main() {
             el('h1', { className: 'profile__name', id: 'member-name', text: member.nickname || '（未命名）' }),
             demoBadge(member),
             info,
-            member.intro ? el('p', { className: 'prose pre-line', text: member.intro }) : null,
+            member.intro ? el('p', { className: 'prose pre-line', text: member.intro }) : pendingNote('自我介紹整理中。'),
           ),
         ),
         el('section', { className: 'outfits', 'aria-labelledby': 'outfits-title' },

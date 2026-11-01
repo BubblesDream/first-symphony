@@ -1,18 +1,11 @@
 [
   {
-    "id": "demo-leader-1",
-    "nickname": "示範・大提琴",
-    "member_id": "demo-cello",
-    "term_start": "2091-03",
-    "term_end": "2093-06",
-    "note": "示範資料：首任會長。",
-    "is_demo": true
-  },
-  {
-    "id": "demo-leader-2",
-    "nickname": "示範・長笛",
-    "member_id": "demo-flute",
-    "term_start": "2093-06",
-    "is_demo": true
+    "id": "leader-01",
+    "nickname": "伊莎貝拉",
+    "member_id": "m01",
+    "term_start": "2005",
+    "term_end": "",
+    "note": "創始會長。",
+    "is_demo": false
   }
 ]

@@ -1,7 +1,7 @@
 import { initLayout } from '../layout.js';
 import { loadSite, loadTable } from '../data.js';
 import { el, clear, formatDate, dateKey, matchesGame } from '../render.js';
-import { tapeTitle, polaroid, gameTag, demoBadge, filterGroup, errorBox, showStatus, tiltClass } from '../ui.js';
+import { tapeTitle, polaroid, gameTag, demoBadge, filterGroup, errorBox, showStatus, tiltClass, pendingNote } from '../ui.js';
 import { parseYouTubeId, youTubeWatch } from '../validate.js';
 
 initLayout();
@@ -9,10 +9,9 @@ initLayout();
 const root = document.getElementById('story');
 
 function textSection(id, title, body) {
-  if (!body) return null;
   return el('section', { className: 'story-section card', 'aria-labelledby': id },
     (() => { const h = tapeTitle(title); h.id = id; return h; })(),
-    el('p', { className: 'prose pre-line', text: body }),
+    body ? el('p', { className: 'prose pre-line', text: body }) : pendingNote(),
   );
 }
 
@@ -55,12 +54,10 @@ async function main() {
     const periods = el('section', { className: 'story-periods', 'aria-labelledby': 'periods-title' },
       (() => { const h = tapeTitle('不同的遊戲時期'); h.id = 'periods-title'; return h; })(),
       el('div', { className: 'period-grid' },
-        ['mabinogi_m', 'mabinogi_pc'].map((g) => site[`period_${g}`]
-          ? el('article', { className: 'card period' },
-            el('h3', { className: 'period__title' }, gameTag(g)),
-            el('p', { className: 'prose pre-line', text: site[`period_${g}`] }),
-          )
-          : null),
+        ['mabinogi_pc', 'mabinogi_m'].map((g) => el('article', { className: 'card period' },
+          el('h3', { className: 'period__title' }, gameTag(g)),
+          site[`period_${g}`] ? el('p', { className: 'prose pre-line', text: site[`period_${g}`] }) : pendingNote(),
+        )),
       ),
     );
 
@@ -71,7 +68,7 @@ async function main() {
     const draw = (game) => {
       const items = sorted.filter((h) => matchesGame(h.game, game));
       list.replaceChildren(...items.map(timelineItem));
-      showStatus(status, items.length ? '' : '這個時期還沒有紀錄。');
+      showStatus(status, items.length ? '' : '這個時期的紀錄整理中。');
     };
     const timeline = el('section', { className: 'story-timeline', 'aria-labelledby': 'timeline-title' },
       (() => { const h = tapeTitle('時間軸'); h.id = 'timeline-title'; return h; })(),
@@ -103,7 +100,7 @@ async function main() {
     );
     const leaderSection = el('section', { className: 'story-leaders card', 'aria-labelledby': 'leaders-title' },
       (() => { const h = tapeTitle('歷任會長'); h.id = 'leaders-title'; return h; })(),
-      leaderList,
+      leaders.length ? leaderList : pendingNote(),
     );
 
     clear(root).append(

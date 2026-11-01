@@ -182,11 +182,6 @@
   margin: 0;
 }
 
-.site-footer__demo {
-  color: var(--c-demo);
-  font-weight: 700;
-}
-
 @media (max-width: 600px) {
   .site-footer__inner {
     grid-template-columns: 1fr;
@@ -532,6 +527,15 @@
 
 .empty-state {
   max-width: 36rem;
+}
+
+/* 還沒有資料的區塊 */
+.pending-note {
+  border: 1px dashed var(--c-ink-faint);
+  border-radius: var(--radius);
+  padding: var(--sp-4) var(--sp-5);
+  color: var(--c-ink-faint);
+  font-size: var(--fs-sm);
 }
 
 /* ---------- 燈箱 ---------- */

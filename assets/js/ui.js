@@ -38,6 +38,11 @@ export function handNote(text, className = '') {
   return el('p', { className: `hand-note ${className}`.trim(), text });
 }
 
+/** 還沒有資料的區塊顯示「整理中」 */
+export function pendingNote(text = '整理中，敬請期待。') {
+  return el('p', { className: 'pending-note', text });
+}
+
 /** 讀取中／錯誤／沒有資料 的訊息 */
 export function showStatus(node, message, type = 'info') {
   if (!node) return;

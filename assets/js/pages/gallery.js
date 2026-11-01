@@ -1,7 +1,7 @@
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
 import { el, img, clear, dateKey, yearOf, formatDate, gameLabel } from '../render.js';
-import { filterGroup, errorBox, showStatus, demoBadge, tiltClass } from '../ui.js';
+import { filterGroup, errorBox, showStatus, demoBadge, tiltClass, pendingNote } from '../ui.js';
 import { safeImageUrl, PLACEHOLDERS } from '../validate.js';
 
 initLayout();
@@ -137,6 +137,14 @@ async function main() {
   try {
     const [photos, quotes] = await Promise.all([loadTable('gallery'), loadTable('quotes')]);
     const sorted = [...photos].sort((a, b) => dateKey(b.date).localeCompare(dateKey(a.date)));
+    quotesRoot.replaceChildren(...quotes.map(quoteItem));
+    if (!quotes.length) quotesRoot.after(pendingNote('經典語錄整理中，敬請期待。'));
+
+    if (!sorted.length) {
+      showStatus(status, '');
+      grid.after(pendingNote('照片整理中，敬請期待。'));
+      return;
+    }
 
     const state = { year: 'all', category: 'all' };
     const draw = () => {
@@ -157,8 +165,6 @@ async function main() {
     );
     draw();
     openFromHash(sorted);
-
-    quotesRoot.replaceChildren(...quotes.map(quoteItem));
   } catch (error) {
     console.warn(error);
     showStatus(status, '');

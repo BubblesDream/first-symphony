@@ -61,7 +61,7 @@ export function initLayout() {
           el('span', { className: 'site-footer__name', text: DEFAULTS.guild_name }),
         ),
         el('div', { className: 'site-footer__notes' },
-          el('p', { className: 'site-footer__demo', text: '目前網站內容為示範資料，正式內容整理中。' }),
+          el('p', { text: '網站內容持續整理中，照片與成員介紹會陸續補上。' }),
           el('p', { text: '本站為玩家自行整理的紀念網站，與遊戲官方無關。只收錄遊戲暱稱、遊戲截圖與願意公開的影片。' }),
         ),
       ),

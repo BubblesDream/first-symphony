@@ -133,7 +133,7 @@ docs/
 2. 每筆資料都有穩定的 `id`（英數小寫與連字號）。
 3. 日期欄位是字串，允許 `YYYY`、`YYYY-MM`、`YYYY-MM-DD` 三種精度，顯示時依精度格式化。
 4. 內文欄位是純文字，換行以 `white-space: pre-line` 呈現，不支援 HTML 或 Markdown。
-5. 示範資料一律 `is_demo: true`，畫面上要有明顯的「示範資料」標記；全站頁尾也要註明目前為示範內容。
+5. 示範資料一律 `is_demo: true`，畫面上要有明顯的「示範資料」標記。正式上線後不放示範資料，沒有資料的區塊顯示「整理中」。
 6. `game` 欄位值固定為 `mabinogi_m`、`mabinogi_pc`、`both` 其中之一，顯示名稱集中定義在一處。
 
 ### 資料表
@@ -141,7 +141,7 @@ docs/
 | 檔案 | 欄位 |
 |---|---|
 | `site.json` | `key`, `value`（公會名稱、一句介紹、橫幅圖、創立年份、故事摘要等設定，key/value 兩欄方便試算表維護） |
-| `members.json` | `id`, `nickname`, `game`, `role`（選填）, `avatar`, `intro`, `joined`（選填）, `featured`, `sort_order`, `is_demo` |
+| `members.json` | `id`, `nickname`, `aka`（選填，另一款遊戲的角色名）, `game`, `role`（選填）, `avatar`, `intro`, `joined`（選填）, `featured`, `sort_order`, `is_demo` |
 | `outfits.json` | `id`, `member_id`, `name`, `image`, `note`（選填）, `sort_order`, `is_demo` |
 | `history.json` | `id`, `date`, `title`, `body`, `image`（選填）, `video_url`（選填）, `game`, `is_demo` |
 | `leaders.json` | `id`, `nickname`, `member_id`（選填）, `term_start`, `term_end`（選填，空白代表現任）, `note`（選填）, `is_demo` |
