@@ -94,15 +94,15 @@ python3 -m http.server 8000
 { "id": "founding", "date": "2024-03", "title": "標題", "body": "內文", "image": "assets/images/history/founding.jpg", "video_url": "", "game": "mabinogi_m", "is_demo": false }
 ```
 
-`image`、`video_url` 選填。時間軸依日期排序。
+`image`、`video_url` 選填。`date` 可寫模糊的年代，如 `2008 左右`、`約 2008`，會顯示成「約 2008 年」。時間軸依日期排序。
 
 ### 歷任會長 `data/leaders.json`
 
 ```json
-{ "id": "leader-1", "nickname": "暱稱", "member_id": "cello", "term_start": "2024-03", "term_end": "", "note": "", "is_demo": false }
+{ "id": "leader-1", "nickname": "暱稱", "member_id": "cello", "period": "2005～2008 左右", "sort_order": 1, "note": "", "is_demo": false }
 ```
 
-`term_end` 留空代表現任；`member_id` 有填且對得到成員時，名字會連到成員頁。
+`period` 自由文字、原樣顯示；`sort_order` 越小越前面；`member_id` 有填且對得到成員時，名字會連到成員頁。
 
 ### 語錄 `data/quotes.json`
 

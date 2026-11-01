@@ -59,26 +59,42 @@ export function img(src, alt, { fallback = PLACEHOLDERS.image, className, lazy =
   return node;
 }
 
-/** 依精度格式化日期：YYYY、YYYY-MM、YYYY-MM-DD */
+// 模糊寫法：「2008 左右」「約 2008」「2008 前後」
+const FUZZY_PREFIX = /^約\s*/;
+const FUZZY_SUFFIX = /\s*(?:左右|前後)$/;
+
+/**
+ * 依精度格式化日期：YYYY、YYYY-MM、YYYY-MM-DD。
+ * 模糊寫法（2008 左右／約 2008／2008 前後）一律顯示成「約 2008 年」。
+ */
 export function formatDate(value) {
   if (!value) return '';
-  const m = String(value).match(/^(\d{4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?$/);
-  if (!m) return String(value);
+  const raw = String(value).trim();
+  const fuzzy = FUZZY_PREFIX.test(raw) || FUZZY_SUFFIX.test(raw);
+  const core = raw.replace(FUZZY_PREFIX, '').replace(FUZZY_SUFFIX, '');
+  const m = core.match(/^(\d{4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?$/);
+  if (!m) return raw;
   const [, y, mo, d] = m;
-  if (d) return `${y} 年 ${Number(mo)} 月 ${Number(d)} 日`;
-  if (mo) return `${y} 年 ${Number(mo)} 月`;
-  return `${y} 年`;
+  let text = `${y} 年`;
+  if (mo) text += ` ${Number(mo)} 月`;
+  if (d) text += ` ${Number(d)} 日`;
+  return fuzzy ? `約 ${text}` : text;
 }
 
-/** 日期字串補齊成可排序的格式 */
+/** 是不是精確的日期寫法（可放進 <time datetime>） */
+export function isExactDate(value) {
+  return /^\d{4}(?:-\d{1,2}){0,2}$/.test(String(value || '').trim());
+}
+
+/** 日期字串補齊成可排序的格式（模糊寫法只看開頭的年月） */
 export function dateKey(value) {
-  const m = String(value || '').match(/^(\d{4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?/);
+  const m = String(value || '').trim().replace(FUZZY_PREFIX, '').match(/^(\d{4})(?:-(\d{1,2}))?(?:-(\d{1,2}))?/);
   if (!m) return '0000-00-00';
   return `${m[1]}-${(m[2] || '0').padStart(2, '0')}-${(m[3] || '0').padStart(2, '0')}`;
 }
 
 export function yearOf(value) {
-  const m = String(value || '').match(/^(\d{4})/);
+  const m = String(value || '').trim().replace(FUZZY_PREFIX, '').match(/^(\d{4})/);
   return m ? m[1] : '';
 }
 

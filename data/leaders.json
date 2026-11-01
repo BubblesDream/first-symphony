@@ -3,8 +3,8 @@
     "id": "leader-01",
     "nickname": "伊莎貝拉",
     "member_id": "m01",
-    "term_start": "2005",
-    "term_end": "",
+    "period": "2005 創立時",
+    "sort_order": 1,
     "note": "創始會長。",
     "is_demo": false
   }

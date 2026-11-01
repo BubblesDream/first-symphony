@@ -31,7 +31,7 @@ export const FIELD_TYPES = {
   members: { featured: 'boolean', sort_order: 'number', is_demo: 'boolean' },
   outfits: { sort_order: 'number', is_demo: 'boolean' },
   history: { is_demo: 'boolean' },
-  leaders: { is_demo: 'boolean' },
+  leaders: { sort_order: 'number', is_demo: 'boolean' },
   videos:  { featured: 'boolean', is_demo: 'boolean' },
   albums:  { featured: 'boolean', is_demo: 'boolean' },
   gallery: { sort_order: 'number' },
