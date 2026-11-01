@@ -119,13 +119,13 @@ assets/
     members/ outfits/ gallery/ history/
 data/
   site.json members.json outfits.json history.json
-  leaders.json videos.json gallery.json quotes.json
+  leaders.json videos.json albums.json gallery.json quotes.json
 docs/
 ```
 
 ## 五、資料管理
 
-第一版使用本地 JSON；未來改為讀取公開 Google 試算表的 CSV（「發布到網路」→ CSV）。
+資料來源是管理員專用的「網站用」Google 試算表，網站讀取「檔案 → 共用 → 發布到網路」產生的 CSV（每個分頁一個網址）。CSV 網址還沒填或讀取失敗時，自動改讀 `data/*.json`（當作備用資料）。圖片由同步程式從雲端硬碟轉成 WebP，放到固定路徑。
 
 ### 設計原則
 
@@ -146,16 +146,35 @@ docs/
 | `history.json` | `id`, `date`, `title`, `body`, `image`（選填）, `video_url`（選填）, `game`, `is_demo` |
 | `leaders.json` | `id`, `nickname`, `member_id`（選填）, `term_start`, `term_end`（選填，空白代表現任）, `note`（選填）, `is_demo` |
 | `videos.json` | `id`, `youtube_url`, `title`, `published`, `game`, `category`, `summary`, `featured`, `is_demo` |
-| `gallery.json` | 由圖片同步程式產生，一張照片一列：`id`, `album`, `category`, `date`, `image`, `thumb`, `sort_order`（見第八節） |
+| `albums.json` | `album`（必須與雲端硬碟相簿資料夾名稱完全相同）, `title`（選填，空白時用資料夾名稱去掉日期）, `caption`, `game`, `featured`, `is_demo`。一本相簿一列 |
+| `gallery.json` | `id`（＝雲端硬碟檔案 id）, `album`（相簿資料夾名稱，例如 `2010-08 夏日合奏`）, `category`（團體合照／副本／節日活動／演奏／日常／紀念日）, `date`（取自資料夾名稱開頭的 `YYYY-MM`）, `image`, `thumb`, `sort_order`。一張照片一列，由同步程式產生，不走試算表（見第八節） |
 | `quotes.json` | `id`, `text`, `speaker`, `date`（選填）, `context`（選填）, `is_demo` |
+
+試算表分頁與資料表的對應：成員→`members`、造型→`outfits`、相簿→`albums`、影片→`videos`、歷史→`history`、歷任會長→`leaders`、語錄→`quotes`、公會設定→`site`（「填寫說明」分頁網站不讀）。
+
+試算表格式：**第 1 列＝欄位名稱（與上表相同）；第 2 列＝中文說明（網站略過，`config.js` 的 `skipRows: 1`）；第 3 列起才是資料。**
 
 CSV 讀入的值全是字串，`data.js` 要負責型別轉換（`"TRUE"`/`"true"` → 布林、數字字串 → 數字、空字串 → 未填）。
 
+相簿頁與首頁用 `loadGallery()` 取照片：把 `gallery` 與 `albums` 用 `album` 欄位對起來，組成 `id, image, thumb, title, caption, date, game, category, featured, is_demo` 的照片物件。試算表裡沒有對應相簿的照片也照樣顯示。
+
+### 圖片固定路徑
+
+全部是 WebP，由同步程式產生並 commit。資料欄位有填圖片網址時用資料的；空白時用下表的固定路徑；檔案不存在時顯示佔位圖。路徑集中寫在 `data.js`（`memberAvatar()`、`outfitImage()`、`bannerImage()`、`storyImage()`）。
+
+| 用途 | 路徑 | 對應欄位 |
+|---|---|---|
+| 成員頭像 | `assets/images/members/<member_id>/avatar.webp` | `members.avatar` |
+| 成員造型 | `assets/images/members/<member_id>/outfit-<n>.webp`（n＝造型的 `sort_order`：1、2、3…） | `outfits.image` |
+| 首頁橫幅 | `assets/images/site/banner.webp` | `site` 的 `banner_image` |
+| 故事配圖 | `assets/images/site/story.webp` | `site` 的 `story_image` |
+| 相簿照片 | `assets/images/gallery/<drive_file_id>.webp`，縮圖 `assets/images/gallery/<drive_file_id>-thumb.webp` | `gallery.image`／`gallery.thumb` |
+
 ### 資料載入模組
 
-- `config.js` 設定每張表的來源：本地 JSON 路徑，或 CSV 網址。第一版全部是 JSON。
+- `config.js` 設定每張表的來源：試算表分頁設 `source: 'csv'`、`url`（CSV 網址）、`fallback`（本地 JSON 路徑）、`skipRows: 1`。`url` 是空字串時直接讀 `fallback`；CSV 讀取失敗時也改讀 `fallback`，並在 console 留下警告。`gallery` 固定讀 `data/gallery.json`。
 - `data.js` 對外只提供類似 `loadTable('members')` 的介面，頁面腳本不知道資料來自 JSON 還是 CSV。
-- 內建一個能處理引號、逗號與換行的小型 CSV 解析器（第一版可以沒有實際 CSV 來源，但解析器與轉換要寫好並能運作）。
+- 內建一個能處理引號、逗號與換行的小型 CSV 解析器。
 - 讀取失敗時，頁面顯示友善的錯誤訊息，不整頁空白。
 
 ### 安全

@@ -1,5 +1,5 @@
 import { initLayout } from '../layout.js';
-import { loadTable } from '../data.js';
+import { loadTable, memberAvatar, outfitImage } from '../data.js';
 import { el, img, clear, formatDate, queryParam } from '../render.js';
 import { tapeTitle, gameTag, demoBadge, errorBox, polaroid, pendingNote } from '../ui.js';
 import { PLACEHOLDERS, safeImageUrl } from '../validate.js';
@@ -22,14 +22,18 @@ function outfitViewer(member, outfits) {
   if (outfits.length === 0) {
     return pendingNote('造型照片整理中，敬請期待。');
   }
-  const mainImg = img(outfits[0].image, '', { fallback: PLACEHOLDERS.outfit, lazy: false });
+  const mainImg = img(outfitImage(outfits[0]), '', { fallback: PLACEHOLDERS.outfit, lazy: false });
+  // 切換造型後圖片若讀不到（例如固定路徑還沒有檔案），也要換回佔位圖
+  mainImg.addEventListener('error', () => {
+    if (!mainImg.src.endsWith(PLACEHOLDERS.outfit)) mainImg.src = PLACEHOLDERS.outfit;
+  });
   const caption = el('figcaption', { 'aria-live': 'polite' });
   const main = el('figure', { className: 'polaroid outfit-viewer__main has-tape' }, mainImg, caption);
   const buttons = [];
 
   const select = (index, focus = false) => {
     const o = outfits[index];
-    mainImg.src = safeImageUrl(o.image, PLACEHOLDERS.outfit);
+    mainImg.src = safeImageUrl(outfitImage(o), PLACEHOLDERS.outfit);
     mainImg.alt = `${member.nickname || ''}的造型：${o.name || ''}`;
     caption.replaceChildren(el('span', { className: 'outfit-viewer__name', text: o.name || '' }));
     if (o.note) caption.append(el('span', { className: 'outfit-viewer__note', text: o.note }));
@@ -57,7 +61,7 @@ function outfitViewer(member, outfits) {
             if (next !== null) { e.preventDefault(); select(next, true); }
           },
         },
-      }, img(o.image, '', { fallback: PLACEHOLDERS.outfit }));
+      }, img(outfitImage(o), '', { fallback: PLACEHOLDERS.outfit }));
       buttons.push(b);
       return el('li', {}, b);
     }),
@@ -96,7 +100,7 @@ async function main() {
       el('p', { className: 'breadcrumb' }, el('a', { href: 'members.html', text: '← 成員列表' })),
       el('div', { className: 'member-detail' },
         el('section', { className: 'profile card', 'aria-labelledby': 'member-name' },
-          polaroid({ src: member.avatar, alt: `${member.nickname || '成員'}的頭像`, fallback: PLACEHOLDERS.avatar, tilt: 'tilt-a', className: 'profile__avatar' }),
+          polaroid({ src: memberAvatar(member), alt: `${member.nickname || '成員'}的頭像`, fallback: PLACEHOLDERS.avatar, tilt: 'tilt-a', className: 'profile__avatar' }),
           el('div', { className: 'profile__body' },
             el('h1', { className: 'profile__name', id: 'member-name', text: member.nickname || '（未命名）' }),
             demoBadge(member),

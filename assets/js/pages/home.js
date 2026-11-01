@@ -1,5 +1,5 @@
 import { initLayout } from '../layout.js';
-import { loadSite, loadTable } from '../data.js';
+import { loadSite, loadTable, loadGallery, memberAvatar, bannerImage, storyImage } from '../data.js';
 import { el, img, clear, dateKey, formatDate } from '../render.js';
 import { tapeTitle, polaroid, handNote, videoCard, errorBox, demoBadge, pendingNote } from '../ui.js';
 import { PLACEHOLDERS } from '../validate.js';
@@ -78,13 +78,13 @@ function featuredSection(gallery, site) {
 async function main() {
   try {
     const [site, members, gallery, videos] = await Promise.all([
-      loadSite(), loadTable('members'), loadTable('gallery'), loadTable('videos'),
+      loadSite(), loadTable('members'), loadGallery(), loadTable('videos'),
     ]);
 
     // 橫幅
     const hero = el('section', { className: 'hero', 'aria-label': '公會合照' },
       el('div', { className: 'hero__photo' },
-        img(site.banner_image, site.banner_alt || '公會合照', { fallback: PLACEHOLDERS.banner, lazy: false, width: 1600, height: 560 }),
+        img(bannerImage(site), site.banner_alt || '公會合照', { fallback: PLACEHOLDERS.banner, lazy: false, width: 1600, height: 560 }),
         site.banner_quote ? el('p', { className: 'hero__quote', text: site.banner_quote }) : null,
       ),
       handNote(site.banner_note, 'hero__note'),
@@ -99,7 +99,7 @@ async function main() {
     const story = card({
       id: 'story', title: '我們的創立故事', text: site.story_summary,
       button: '閱讀完整故事', href: 'story.html',
-      visual: polaroid({ src: site.story_image, alt: '公會故事配圖', tilt: 'tilt-b', tape: true }),
+      visual: polaroid({ src: storyImage(site), alt: '公會故事配圖', fallback: PLACEHOLDERS.story, tilt: 'tilt-b', tape: true }),
     });
 
     // 2. 成員預覽（最多 6 位）
@@ -112,7 +112,7 @@ async function main() {
       visual: el('ul', { className: 'mini-members' },
         preview.map((m) => el('li', {},
           el('a', { href: `member.html?id=${encodeURIComponent(m.id)}` },
-            img(m.avatar, '', { fallback: PLACEHOLDERS.avatar }),
+            img(memberAvatar(m), '', { fallback: PLACEHOLDERS.avatar }),
             el('span', { text: m.nickname || '' }),
           ),
         )),
