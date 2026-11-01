@@ -5,15 +5,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>找不到頁面｜第一交響樂團</title>
   <meta name="description" content="找不到這個頁面，請回到第一交響樂團首頁。">
-  <link rel="icon" href="assets/images/icons/lyre.svg" type="image/svg+xml">
+  <script>
+    // GitHub Pages 在任何深度的錯誤網址都會回傳這一頁（例如 /first-symphony/a/b/c）。
+    // 先依目前網址算出網站根目錄並寫入 <base>，讓之後的相對路徑（導覽連結、圖片、資料）都以網站根目錄為準。
+    // 網址含 /first-symphony/ 時以該段為根目錄；否則（日後改用自訂網域）以網域根目錄為準。
+    // 這段必須在所有站內 <link>、<script> 之前執行。
+    (function () {
+      var marker = '/first-symphony/';
+      var path = location.pathname;
+      var at = path.indexOf(marker);
+      var base = document.createElement('base');
+      base.href = location.origin + (at >= 0 ? path.slice(0, at + marker.length) : '/');
+      document.head.appendChild(base);
+
+      // 站內的圖示、CSS、JS 在 <base> 設好之後才加入。
+      // 若直接寫成 <link> 標籤，瀏覽器會在 <base> 生效前先用原本的網址預先下載，深層網址下會出現 404 錯誤。
+      function add(tag, attrs) {
+        var node = document.createElement(tag);
+        for (var key in attrs) node.setAttribute(key, attrs[key]);
+        document.head.appendChild(node);
+      }
+      add('link', { rel: 'icon', href: 'assets/images/icons/lyre.svg', type: 'image/svg+xml' });
+      ['tokens', 'base', 'components', 'pages'].forEach(function (name) {
+        add('link', { rel: 'stylesheet', href: 'assets/css/' + name + '.css' });
+      });
+      add('script', { type: 'module', src: 'assets/js/pages/static.js' });
+
+      // 有了 <base> 之後，"#main" 會被當成首頁的 #main；改成目前網址加 #main，「跳到主要內容」才不會換頁。
+      document.addEventListener('DOMContentLoaded', function () {
+        var skip = document.querySelector('.skip-link');
+        if (skip) skip.href = location.href.split('#')[0] + '#main';
+      });
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&amp;family=Noto+Serif+TC:wght@700&amp;display=swap">
-  <link rel="stylesheet" href="assets/css/tokens.css">
-  <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/components.css">
-  <link rel="stylesheet" href="assets/css/pages.css">
-  <script type="module" src="assets/js/pages/static.js"></script>
 </head>
 <body data-page="notfound">
   <a class="skip-link" href="#main">跳到主要內容</a>
