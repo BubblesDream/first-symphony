@@ -94,7 +94,7 @@ repo：`https://github.com/BubblesDream/first-symphony`
 - 純 HTML、CSS、原生 JavaScript（ES modules）、JSON；不使用框架、不需要建置步驟、不需要 npm。
 - 所有內部連結與資源一律使用**相對路徑**，網站要能同時在 `/first-symphony/` 子路徑與本機 `http://localhost:8000/` 正常運作。
 - 根目錄放 `.nojekyll`。
-- GitHub Pages 設定：從 `main` 分支根目錄部署，不需要 GitHub Actions。
+- GitHub Pages 設定：從 `main` 分支根目錄部署，網站本身不需要 GitHub Actions。唯一例外是圖片同步 workflow（見第八節），它只負責開 Pull Request，不參與部署。
 - 共用的頁首、頁尾由 JS 產生，或以其他方式避免在每頁重複大量 HTML。
 - RWD：至少在 360px 手機寬度與 1440px 桌面寬度都正常。
 - 基本無障礙：語意化標籤、圖片 `alt`、可見的鍵盤焦點、足夠的對比。
@@ -147,7 +147,7 @@ docs/
 | `leaders.json` | `id`, `nickname`, `member_id`（選填）, `term_start`, `term_end`（選填，空白代表現任）, `note`（選填）, `is_demo` |
 | `videos.json` | `id`, `youtube_url`, `title`, `published`, `game`, `category`, `summary`, `featured`, `is_demo` |
 | `albums.json` | `album`（必須與雲端硬碟相簿資料夾名稱完全相同）, `title`（選填，空白時用資料夾名稱去掉日期）, `caption`, `game`, `featured`, `is_demo`。一本相簿一列 |
-| `gallery.json` | `id`（＝雲端硬碟檔案 id）, `album`（相簿資料夾名稱，例如 `2010-08 夏日合奏`）, `category`（團體合照／副本／節日活動／演奏／日常／紀念日）, `date`（取自資料夾名稱開頭的 `YYYY-MM`）, `image`, `thumb`, `sort_order`。一張照片一列，由同步程式產生，不走試算表 |
+| `gallery.json` | `id`（＝雲端硬碟檔案 id）, `album`（相簿資料夾名稱，例如 `2010-08 夏日合奏`）, `category`（團體合照／副本／節日活動／演奏／日常／紀念日）, `date`（取自資料夾名稱開頭的 `YYYY-MM`）, `image`, `thumb`, `sort_order`。一張照片一列，由同步程式產生，不走試算表（見第八節） |
 | `quotes.json` | `id`, `text`, `speaker`, `date`（選填）, `context`（選填）, `is_demo` |
 
 試算表分頁與資料表的對應：成員→`members`、造型→`outfits`、相簿→`albums`、影片→`videos`、歷史→`history`、歷任會長→`leaders`、語錄→`quotes`、公會設定→`site`（「填寫說明」分頁網站不讀）。
@@ -212,3 +212,57 @@ CSV 讀入的值全是字串，`data.js` 要負責型別轉換（`"TRUE"`/`"true
 4. 若環境中有瀏覽器自動化工具（例如 Playwright），開啟各頁確認主控台沒有錯誤；沒有則略過並在 PR 說明。
 
 PR 說明要列出：完成項目、驗證結果（含略過的項目）、已知問題、未完成項目、合併後啟用 GitHub Pages 的步驟。
+
+## 八、圖片同步（Google 雲端硬碟 → WebP → Pull Request）
+
+網站圖片由 GitHub Action 從 Google 雲端硬碟自動同步。這是 `CLAUDE.md`「不要建立 CI」的**唯一例外**（管理員已同意）：只允許 `.github/workflows/sync-images.yml` 這一支 workflow，以及它使用的 `tools/sync_drive_images.py`。網站本身仍是純靜態、沒有建置步驟。設定步驟見 `docs/指南-圖片同步設定.md`。
+
+### 運作方式
+
+- 每天排程一次，也可以在 Actions 頁面手動執行。
+- 用 service account（secret `GDRIVE_SA_KEY`）以唯讀權限讀「管理員專用」資料夾（variable `GDRIVE_ROOT_FOLDER_ID`）。
+- 增量同步：`tools/image-sync-state.json` 記錄每個雲端檔案的 `md5Checksum`／`modifiedTime`／輸出路徑，只下載新增或變動的檔案；雲端刪掉的檔案，對應的輸出也會刪除。
+- 轉檔：修正 EXIF 方向、去掉 EXIF、轉 WebP（quality 80），只縮小不放大。
+- 有變更時開 Pull Request（固定分支 `sync/images`，已有 PR 就更新），不直接推 `main`。
+- 不認得的檔案或資料夾會略過並在 log／PR 說明列出警告，不會讓整個同步失敗。
+- 成員的「投稿區」資料夾不同步，由管理員手動挑進下列結構。
+
+### 雲端硬碟結構
+
+```
+第一交響樂團｜網站（管理員專用，不要分享）/
+├─ 第一交響樂團｜網站資料（網站用）   ← 試算表，同步程式不處理
+├─ 成員/
+│   └─ m01-伊莎貝拉/   頭像.*、造型-1.*、造型-2.* …（以 m01- 前綴辨識成員 id）
+├─ 網站相簿/
+│   └─ 團體合照/ 副本/ 節日活動/ 演奏/ 日常/ 紀念日/   ← 固定 6 個分類
+│        └─ 2010-08 夏日合奏/   ← 一本相簿＝一個資料夾，「YYYY-MM 標題」
+│             └─ 任意檔名的照片
+└─ 橫幅與故事配圖/   橫幅.*、故事配圖.*
+```
+
+### 圖片路徑
+
+| 來源 | 輸出路徑（WebP） | 尺寸 |
+|---|---|---|
+| `成員/mXX-*/頭像.*` | `assets/images/members/<mXX>/avatar.webp` | 400×400 內，等比 |
+| `成員/mXX-*/造型-<n>.*` | `assets/images/members/<mXX>/outfit-<n>.webp` | 高 900 內，等比 |
+| `橫幅與故事配圖/橫幅.*` | `assets/images/site/banner.webp` | 寬 1600 內 |
+| `橫幅與故事配圖/故事配圖.*` | `assets/images/site/story.webp` | 寬 1200 內 |
+| `網站相簿/<分類>/<相簿>/<照片>` | `assets/images/gallery/<drive_file_id>.webp`＋`<drive_file_id>-thumb.webp` | 長邊 1600／縮圖長邊 480 |
+
+### `data/gallery.json`
+
+由同步程式每次重新產生，一張照片一列，平面結構：
+
+| 欄位 | 內容 |
+|---|---|
+| `id` | 雲端硬碟檔案 id（drive_file_id） |
+| `album` | 相簿資料夾名稱，例如 `2010-08 夏日合奏` |
+| `category` | 分類資料夾名稱（6 個之一） |
+| `date` | 相簿資料夾名稱開頭的 `YYYY-MM` |
+| `image` | 大圖路徑 |
+| `thumb` | 縮圖路徑 |
+| `sort_order` | 同一本相簿內依檔名排序的順序（從 1 開始） |
+
+相簿說明、遊戲、精選等文字放在試算表「相簿」分頁（一本相簿一列，以 `album` 對應），不是同步程式的工作。

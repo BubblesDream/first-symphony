@@ -1,0 +1,8 @@
+# Google service account 金鑰：絕對不能 commit
+*.sa.json
+service-account*.json
+*-sa-key.json
+
+# Python 暫存
+__pycache__/
+*.pyc

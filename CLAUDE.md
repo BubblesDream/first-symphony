@@ -19,6 +19,21 @@
 - 圖片網址與 YouTube 網址都要經 `validate.js` 驗證。
 - 樣式變數集中在 tokens 檔；不要在各頁重複定義相同元件樣式。
 
+## 圖片同步（唯一的 CI 例外）
+
+管理員已同意一個例外：`.github/workflows/sync-images.yml` 這一支 GitHub Action，加上它使用的 `tools/sync_drive_images.py`（Python，只在 Action 裡跑）。它每天把 Google 雲端硬碟的圖片轉成 WebP，有變更就開 Pull Request 到 `sync/images` 分支，不直接推 `main`。網站本身仍是純靜態、沒有建置步驟。除此之外不要新增其他 workflow 或 CI。
+
+| 雲端硬碟來源 | 輸出（WebP） |
+|---|---|
+| `成員/mXX-*/頭像.*` | `assets/images/members/<mXX>/avatar.webp` |
+| `成員/mXX-*/造型-<n>.*` | `assets/images/members/<mXX>/outfit-<n>.webp` |
+| `橫幅與故事配圖/橫幅.*` | `assets/images/site/banner.webp` |
+| `橫幅與故事配圖/故事配圖.*` | `assets/images/site/story.webp` |
+| `網站相簿/<分類>/<YYYY-MM 標題>/<照片>` | `assets/images/gallery/<drive_file_id>.webp`、`<drive_file_id>-thumb.webp` |
+
+- `assets/images/members/`、`site/`、`gallery/`、`data/gallery.json`、`tools/image-sync-state.json` 由同步程式產生，不要手動修改。
+- 細節見 `docs/spec.md`「圖片同步」與 `docs/指南-圖片同步設定.md`。
+
 ## 內容規則
 
 - 只放遊戲暱稱、遊戲截圖、願意公開的遊戲影片；不放真實姓名或聯絡方式。
@@ -28,7 +43,7 @@
 
 ## 工作方式
 
-- 不要自行追加規格以外的功能；不要建立測試框架或 CI。
+- 不要自行追加規格以外的功能；不要建立測試框架或 CI（唯一例外是上面的圖片同步 workflow）。
 - 不要修改與當前任務無關的檔案。
 - 本機預覽：`python3 -m http.server 8000`，開啟 `http://localhost:8000/`（直接雙擊 HTML 會因 fetch 限制無法讀取資料）。
 - 完成工作時在獨立分支提交並開 Pull Request，PR 說明列出完成項目、驗證結果、未完成項目。
