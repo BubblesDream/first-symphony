@@ -1,0 +1,74 @@
+[
+  {
+    "key": "guild_name",
+    "value": "第一交響樂團"
+  },
+  {
+    "key": "tagline",
+    "value": "記錄我們一起走過的遊戲時光。"
+  },
+  {
+    "key": "banner_image",
+    "value": "assets/images/placeholders/banner.svg"
+  },
+  {
+    "key": "banner_alt",
+    "value": "佔位圖：首頁橫幅，未來換成公會合照"
+  },
+  {
+    "key": "banner_quote",
+    "value": "因為有你們，\n這段旅程才如此動聽。"
+  },
+  {
+    "key": "banner_note",
+    "value": "同一片天空下，\n永遠是第一交響樂團。"
+  },
+  {
+    "key": "intro",
+    "value": "《瑪奇 M》與《瑪奇》（PC）公會「第一交響樂團」的紀念網站，收藏我們的故事、成員、截圖與影片。"
+  },
+  {
+    "key": "story_summary",
+    "value": "（示範文字）這裡放兩三句公會的創立故事摘要：大家怎麼相遇、為什麼留下來。正式內容整理中。"
+  },
+  {
+    "key": "story_image",
+    "value": "assets/images/placeholders/story.svg"
+  },
+  {
+    "key": "story_origin",
+    "value": "（示範文字）創立緣由：寫下公會是在什麼契機下成立的、最早有哪些人。\n可以分成好幾段。"
+  },
+  {
+    "key": "story_name",
+    "value": "（示範文字）名稱由來：說明為什麼叫做「第一交響樂團」。"
+  },
+  {
+    "key": "period_mabinogi_m",
+    "value": "（示範文字）瑪奇 M 時期：這個時期的主要活動與回憶。"
+  },
+  {
+    "key": "period_mabinogi_pc",
+    "value": "（示範文字）瑪奇 PC 時期：這個時期的主要活動與回憶。"
+  },
+  {
+    "key": "memories_intro",
+    "value": "副本、節日、合照與每一次閒聊，都是一起留下的回憶。"
+  },
+  {
+    "key": "members_intro",
+    "value": "每一位成員，都是這個樂團不可缺少的音符。"
+  },
+  {
+    "key": "members_note",
+    "value": "謝謝你們，\n讓平凡的日子閃閃發光。"
+  },
+  {
+    "key": "videos_intro",
+    "value": "熱血的戰鬥、爆笑的日常、感動的時刻，都在這裡。"
+  },
+  {
+    "key": "footer_quote",
+    "value": "遊戲會換季，\n但我們的故事還會繼續。"
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "demo-quote-1",
+    "text": "示範語錄：等我一下，我先去拿個材料！",
+    "speaker": "示範・定音鼓",
+    "date": "2092",
+    "context": "示範資料：每次出團前的固定台詞。",
+    "is_demo": true
+  },
+  {
+    "id": "demo-quote-2",
+    "text": "示範語錄：迷路也沒關係，大家都在營火這裡。",
+    "speaker": "示範・大提琴",
+    "is_demo": true
+  },
+  {
+    "id": "demo-quote-3",
+    "text": "示範語錄：今天的合照，大家記得站好位置。",
+    "speaker": "示範・小號",
+    "date": "2093-12",
+    "is_demo": true
+  },
+  {
+    "id": "demo-quote-4",
+    "text": "示範語錄：再一首就好，真的最後一首。",
+    "speaker": "示範・豎琴",
+    "context": "示範資料：演奏會延長了一小時。",
+    "is_demo": true
+  }
+]

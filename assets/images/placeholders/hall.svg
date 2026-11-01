@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-label="佔位圖：虛擬大廳構想圖 2:1">
+<rect width="1200" height="600" fill="#c9d3c0"/><path d="M0 468.0 Q240.0 360.0 480.0 444.0 T960.0 408.00000000000006 T1200 432.0 V600 H0Z" fill="#33452f" opacity=".18"/><path d="M0 528.0 Q360.0 456.0 660.0 516.0 T1200 491.99999999999994 V600 H0Z" fill="#33452f" opacity=".22"/><circle cx="936.0" cy="168.00000000000003" r="42.00000000000001" fill="#fffaf0" opacity=".55"/>
+<rect x="48.0" y="24.0" width="1104.0" height="552.0" fill="none" stroke="#33452f" stroke-opacity=".35" stroke-dasharray="8 6"/>
+<g font-family="Noto Sans TC, PingFang TC, Microsoft JhengHei, sans-serif" fill="#33452f" text-anchor="middle">
+<text x="600.0" y="282.0" font-size="45" font-weight="700">佔位圖</text>
+<text x="600.0" y="340.5" font-size="27">虛擬大廳構想圖 2:1</text>
+<text x="600.0" y="381.0" font-size="22" opacity=".8">籌備中</text>
+</g></svg>
