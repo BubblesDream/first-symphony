@@ -123,15 +123,20 @@ export async function loadGallery() {
 // 同步程式會把雲端硬碟的圖片轉成 WebP 放到固定位置。資料欄位有填網址就用資料的，
 // 空白時改用固定路徑。檔案不存在時 render.js 的 img() 會自動換成佔位圖。
 
+/** 欄位有填、而且不是佔位圖路徑，才算「有指定圖片」；填佔位圖等同空白，避免擋住同步進來的照片。 */
+function customImage(value) {
+  return Boolean(value) && !String(value).includes('assets/images/placeholders/');
+}
+
 /** 成員頭像：assets/images/members/<id>/avatar.webp */
 export function memberAvatar(member) {
-  if (member?.avatar) return member.avatar;
+  if (customImage(member?.avatar)) return member.avatar;
   return isValidId(member?.id) ? `assets/images/members/${member.id}/avatar.webp` : '';
 }
 
 /** 成員造型：assets/images/members/<member_id>/outfit-<sort_order>.webp */
 export function outfitImage(outfit) {
-  if (outfit?.image) return outfit.image;
+  if (customImage(outfit?.image)) return outfit.image;
   const n = outfit?.sort_order;
   if (!isValidId(outfit?.member_id) || !Number.isInteger(n) || n < 1) return '';
   return `assets/images/members/${outfit.member_id}/outfit-${n}.webp`;
@@ -139,12 +144,12 @@ export function outfitImage(outfit) {
 
 /** 首頁橫幅：assets/images/site/banner.webp */
 export function bannerImage(site) {
-  return site?.banner_image || 'assets/images/site/banner.webp';
+  return customImage(site?.banner_image) ? site.banner_image : 'assets/images/site/banner.webp';
 }
 
 /** 故事配圖：assets/images/site/story.webp */
 export function storyImage(site) {
-  return site?.story_image || 'assets/images/site/story.webp';
+  return customImage(site?.story_image) ? site.story_image : 'assets/images/site/story.webp';
 }
 
 function galleryImage(id) {
