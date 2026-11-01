@@ -1,0 +1,565 @@
+<script>
+(function () {
+  'use strict';
+
+  var SAVED_NOTE = '已儲存。文字約 5 分鐘內反映到網站；圖片會在下一次同步（每天凌晨 3 點，或到 GitHub 手動執行）開 PR，合併後上線。';
+  var MAX_BYTES = 20 * 1024 * 1024;
+  var GAMES = [['', '（未選）'], ['mabinogi_m', '瑪奇 M'], ['mabinogi_pc', '瑪奇 PC'], ['both', '兩邊都有']];
+  var TABS = [['members', '成員'], ['history', '歷史'], ['leaders', '歷任會長'], ['albums', '相簿'], ['settings', '公會設定']];
+  var init = { categories: [] };
+  var panel = document.getElementById('panel');
+  var notice = document.getElementById('notice');
+
+  // ---------- 小工具：全部用 textContent／createElement，不用 innerHTML ----------
+  function h(tag, props, kids) {
+    var node = document.createElement(tag);
+    props = props || {};
+    Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (k === 'text') node.textContent = v;
+      else if (k === 'className') node.className = v;
+      else if (k.indexOf('on') === 0) node.addEventListener(k.slice(2), v);
+      else if (v === true) node.setAttribute(k, '');
+      else if (v !== false && v !== null && v !== undefined) node.setAttribute(k, v);
+    });
+    (kids || []).forEach(function (c) {
+      if (c === null || c === undefined || c === false) return;
+      node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    });
+    return node;
+  }
+  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+
+  function call(name) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return new Promise(function (resolve, reject) {
+      google.script.run.withSuccessHandler(resolve).withFailureHandler(function (e) { reject(e); })[name].apply(null, args);
+    });
+  }
+  function say(msg, isError) {
+    notice.hidden = false;
+    notice.className = 'notice' + (isError ? ' error' : '');
+    notice.textContent = msg;
+    window.scrollTo(0, 0);
+  }
+  function fail(e) { say('發生錯誤：' + (e && e.message ? e.message : e), true); }
+  function saved() { say(SAVED_NOTE, false); }
+  function busy(btn, p) {
+    btn.disabled = true;
+    return p.then(function (r) { btn.disabled = false; return r; }, function (e) { btn.disabled = false; throw e; });
+  }
+
+  // 欄位小工具
+  function field(label, input, hint) {
+    return h('div', {}, [h('label', {}, [label, hint ? h('small', { text: '　' + hint }) : null]), input]);
+  }
+  function textInput(value, ph) { var i = h('input', { type: 'text', placeholder: ph || '' }); i.value = value || ''; return i; }
+  function numInput(value) { var i = h('input', { type: 'number' }); i.value = value === undefined || value === null ? '' : value; return i; }
+  function area(value, rows) { var t = h('textarea', { rows: rows || 4 }); t.value = value || ''; return t; }
+  function select(options, value) {
+    var s = h('select');
+    options.forEach(function (o) { var op = h('option', { value: o[0], text: o[1] }); s.appendChild(op); });
+    s.value = value || '';
+    return s;
+  }
+  function check(label, value) {
+    var c = h('input', { type: 'checkbox', id: 'c' + Math.random().toString(36).slice(2) });
+    c.checked = value === true || String(value).toLowerCase() === 'true';
+    return { box: c, node: h('div', { className: 'inline' }, [c, h('label', { for: c.id, text: label })]) };
+  }
+  function btn(text, onclick, cls) { return h('button', { className: 'btn' + (cls ? ' ' + cls : ''), type: 'button', text: text, onclick: onclick }); }
+
+  // 讀檔案 → base64（限制種類與 20MB）
+  function pickImage(file) {
+    return new Promise(function (resolve, reject) {
+      if (!file) return reject(new Error('沒有選擇檔案。'));
+      if (['image/jpeg', 'image/png', 'image/webp', 'image/gif'].indexOf(file.type) < 0) return reject(new Error('只能上傳圖片（jpg、png、webp、gif）。'));
+      if (file.size > MAX_BYTES) return reject(new Error('檔案超過 20MB，請先縮小再上傳。'));
+      var r = new FileReader();
+      r.onload = function () {
+        var s = String(r.result);
+        resolve({ name: file.name, mimeType: file.type, base64: s.slice(s.indexOf(',') + 1) });
+      };
+      r.onerror = function () { reject(new Error('讀取檔案失敗。')); };
+      r.readAsDataURL(file);
+    });
+  }
+  // 上傳按鈕：選檔後呼叫 upload(payload)
+  function uploader(label, upload) {
+    var input = h('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp,image/gif', hidden: true });
+    var b = btn(label, function () { input.click(); }, 'sub');
+    input.addEventListener('change', function () {
+      var f = input.files[0];
+      input.value = '';
+      if (!f) return;
+      busy(b, pickImage(f).then(upload)).catch(fail);
+    });
+    return h('span', {}, [b, input]);
+  }
+
+  // 縮圖：先放框，再分批（每次 8 張）跟後端要
+  function thumbBox(extra) {
+    var img = h('div', { className: 'img', text: '載入中…' });
+    var box = h('div', { className: 'thumb' }, [img].concat(extra || []));
+    return { box: box, img: img };
+  }
+  function fillThumbs(items) { // items: [{id, img}]
+    var list = items.filter(function (x) { return x.id; });
+    items.forEach(function (x) { if (!x.id) x.img.textContent = '（沒有檔案）'; });
+    function next() {
+      var batch = list.splice(0, 8);
+      if (!batch.length) return;
+      call('getThumbnails', batch.map(function (x) { return x.id; })).then(function (map) {
+        batch.forEach(function (x) {
+          if (map[x.id]) { x.img.textContent = ''; x.img.style.backgroundImage = 'url("' + map[x.id] + '")'; }
+          else x.img.textContent = '無縮圖';
+        });
+        next();
+      }).catch(function () { batch.forEach(function (x) { x.img.textContent = '無縮圖'; }); next(); });
+    }
+    next();
+  }
+
+  // ---------- 分頁 ----------
+  var current = 'members';
+  function buildTabs() {
+    var nav = document.getElementById('tabs');
+    clear(nav);
+    TABS.forEach(function (t) {
+      nav.appendChild(h('button', { type: 'button', text: t[1], 'aria-current': String(t[0] === current), onclick: function () { show(t[0]); } }));
+    });
+  }
+  function show(name) {
+    current = name;
+    buildTabs();
+    clear(panel);
+    panel.textContent = '載入中…';
+    ({ members: membersTab, history: historyTab, leaders: leadersTab, albums: albumsTab, settings: settingsTab })[name]().catch(fail);
+  }
+  function layout(listNode, formNode) {
+    clear(panel);
+    panel.appendChild(h('div', { className: 'cols' }, [listNode, formNode]));
+  }
+
+  // ======================= 成員 =======================
+  var M = { list: [], onlyMissing: false, selected: '' };
+
+  function memberMissing(m) { return !m.has_avatar || !trimStr(m.intro) || !m.outfit_count; }
+  function trimStr(v) { return v === null || v === undefined ? '' : String(v).replace(/^\s+|\s+$/g, ''); }
+
+  function membersTab() {
+    return call('listMembers').then(function (list) {
+      M.list = list;
+      drawMembers();
+    });
+  }
+  function visibleMembers() { return M.list.filter(function (m) { return !M.onlyMissing || memberMissing(m); }); }
+
+  function drawMembers(keepForm) {
+    var list = h('div', { className: 'list' });
+    var only = check('只看缺資料的', M.onlyMissing);
+    only.box.addEventListener('change', function () { M.onlyMissing = only.box.checked; drawMembers(true); });
+    list.appendChild(h('div', { className: 'tools' }, [btn('＋ 新增成員', function () { selectMember(''); }, 'sub'), only.node]));
+    visibleMembers().forEach(function (m) {
+      list.appendChild(h('button', { type: 'button', className: 'item', 'aria-current': String(m.id === M.selected), onclick: function () { selectMember(m.id); } }, [
+        trimStr(m.id) + '　' + trimStr(m.nickname),
+        h('small', {}, [
+          h('span', { className: m.has_avatar ? 'mark-ok' : 'mark-bad', text: m.has_avatar ? '頭像✓ ' : '頭像✗ ' }),
+          h('span', { className: trimStr(m.intro) ? 'mark-ok' : 'mark-bad', text: trimStr(m.intro) ? '介紹✓ ' : '介紹✗ ' }),
+          h('span', { className: m.outfit_count ? 'mark-ok' : 'mark-bad', text: '造型 ' + m.outfit_count })
+        ])
+      ]));
+    });
+    if (keepForm && document.getElementById('memberForm')) {
+      var cols = panel.querySelector('.cols');
+      cols.replaceChild(list, cols.firstChild);
+      return;
+    }
+    layout(list, h('div', { id: 'memberForm' }, [h('p', { className: 'hint', text: '請從左邊選一位成員，或新增成員。' })]));
+  }
+
+  function refreshMemberList() {
+    return call('listMembers').then(function (list) { M.list = list; drawMembers(true); });
+  }
+
+  function selectMember(id) {
+    M.selected = id;
+    drawMembers(true);
+    var holder = document.getElementById('memberForm');
+    if (!holder) return;
+    clear(holder);
+    if (!id) { holder.appendChild(memberForm({ member: { game: 'both', featured: false }, avatar: null, outfits: [] })); return; }
+    holder.textContent = '載入中…';
+    call('getMemberDetail', id).then(function (d) { clear(holder); holder.appendChild(memberForm(d)); }).catch(fail);
+  }
+
+  function memberForm(d) {
+    var m = d.member;
+    var isNew = !m.id;
+    var f = {
+      nickname: textInput(m.nickname), role: textInput(m.role), game: select(GAMES.slice(1), m.game || 'both'),
+      joined: textInput(m.joined, '大約即可，例如 2008 或 2008-09'), aka: textInput(m.aka, '另一款遊戲的角色名（選填）'),
+      intro: area(m.intro, 6), sort: numInput(m.sort_order)
+    };
+    var feat = check('放在首頁精選（featured）', m.featured);
+    var wrap = h('div', {});
+    var info = h('div', { className: 'card' }, [
+      h('h2', { text: isNew ? '新增成員' : '成員 ' + m.id }),
+      h('div', { className: 'row' }, [field('暱稱 nickname', f.nickname), field('職位 role', f.role, '選填')]),
+      h('div', { className: 'row' }, [field('遊戲 game', f.game), field('加入時間 joined', f.joined)]),
+      field('自我介紹 intro', f.intro),
+      h('div', { className: 'row' }, [field('另一款遊戲角色名 aka', f.aka), field('排序 sort_order', f.sort, '數字越小越前面')]),
+      feat.node
+    ]);
+    function doSave(goNext) {
+      var data = { id: m.id || '', nickname: f.nickname.value, role: f.role.value, game: f.game.value, joined: f.joined.value,
+        intro: f.intro.value, aka: f.aka.value, featured: feat.box.checked, sort_order: f.sort.value };
+      return call('saveMember', data).then(function (r) {
+        saved();
+        return refreshMemberList().then(function () { if (goNext) nextMember(r.id); else selectMember(r.id); });
+      });
+    }
+    var saveBtn = btn('儲存', function () { busy(saveBtn, doSave(false)).catch(fail); });
+    var nextBtn = btn('下一位 →', function () { nextMember(m.id); }, 'sub');
+    nextBtn.disabled = isNew;
+    info.appendChild(h('div', { className: 'actions' }, [saveBtn, nextBtn]));
+    wrap.appendChild(info);
+    if (isNew) { wrap.appendChild(h('p', { className: 'hint', text: '儲存後會自動給下一個 id，並建立雲端資料夾；之後才能上傳頭像與造型。' })); return wrap; }
+
+    // 頭像
+    var av = thumbBox();
+    var avCard = h('div', { className: 'card' }, [h('h2', { text: '頭像' }),
+      h('div', { className: 'thumbs' }, [av.box]),
+      h('p', { className: 'hint', text: d.avatar ? '目前檔案：' + d.avatar.name : '還沒有頭像。' }),
+      uploader('上傳／更換頭像', function (p) {
+        return call('uploadMemberImage', m.id, 'avatar', p).then(function () { say('頭像已上傳。' + SAVED_NOTE); return refreshMemberList().then(function () { selectMember(m.id); }); });
+      })]);
+    wrap.appendChild(avCard);
+    var thumbItems = [{ id: d.avatar ? d.avatar.id : '', img: av.img }];
+
+    // 造型
+    var oCard = h('div', { className: 'card' }, [h('h2', { text: '造型（' + d.outfits.length + ' 套）' })]);
+    var grid = h('div', { className: 'thumbs' });
+    d.outfits.forEach(function (o) {
+      var tb = thumbBox();
+      var name = textInput(o.name, '名稱'); var note = textInput(o.note, '備註');
+      var saveO = btn('存', function () {
+        busy(saveO, call('saveOutfit', { member_id: m.id, n: o.n, name: name.value, note: note.value }).then(saved)).catch(fail);
+      }, 'sub');
+      var del = btn('刪除', function () {
+        if (!confirm('刪除造型 ' + o.n + '？檔案會移到雲端硬碟垃圾桶，並刪掉試算表那一列。')) return;
+        busy(del, call('deleteOutfit', m.id, o.n).then(function () { say('已刪除（檔案在垃圾桶）。'); return refreshMemberList().then(function () { selectMember(m.id); }); })).catch(fail);
+      }, 'danger');
+      var cell = h('div', { className: 'thumb' }, [h('div', { text: '造型-' + o.n }), tb.img, name, note, h('div', { className: 'actions' }, [saveO, del])]);
+      grid.appendChild(cell);
+      thumbItems.push({ id: o.fileId, img: tb.img });
+    });
+    oCard.appendChild(grid);
+    oCard.appendChild(h('div', { className: 'actions' }, [uploader('上傳新造型', function (p) {
+      return call('uploadMemberImage', m.id, 'outfit', p).then(function () { say('造型已上傳。' + SAVED_NOTE); return refreshMemberList().then(function () { selectMember(m.id); }); });
+    })]));
+    wrap.appendChild(oCard);
+    fillThumbs(thumbItems);
+    return wrap;
+  }
+  function nextMember(id) {
+    var list = visibleMembers();
+    var i = -1;
+    list.forEach(function (x, k) { if (x.id === id) i = k; });
+    if (i < 0 || i + 1 >= list.length) { say('這已經是最後一位了。'); return; }
+    selectMember(list[i + 1].id);
+  }
+
+  // ======================= 歷史 =======================
+  var H = { list: [], selected: '' };
+  function historyTab() { return call('listHistory').then(function (l) { H.list = l; drawHistory(); }); }
+  function drawHistory() {
+    var list = h('div', { className: 'list' }, [h('div', { className: 'tools' }, [btn('＋ 新增歷史', function () { H.selected = ''; formHistory(null); }, 'sub')])]);
+    H.list.forEach(function (x) {
+      list.appendChild(h('button', { type: 'button', className: 'item', 'aria-current': String(x.id === H.selected), onclick: function () { H.selected = x.id; drawHistory(); formHistory(x); } },
+        [trimStr(x.date) + '　' + trimStr(x.title), h('small', { text: x.id })]));
+    });
+    layout(list, h('div', { id: 'histForm' }, [h('p', { className: 'hint', text: '請從左邊選一筆，或新增。' })]));
+    var cur = H.list.filter(function (x) { return x.id === H.selected; })[0];
+    if (cur) formHistory(cur);
+  }
+  function formHistory(x) {
+    var holder = document.getElementById('histForm');
+    clear(holder);
+    var isNew = !x; x = x || {};
+    var f = { date: textInput(x.date, '2008、2008-09、2008 左右、約 2008'), title: textInput(x.title), body: area(x.body, 4),
+      game: select(GAMES, x.game), video: textInput(x.video_url, '選填，YouTube 網址') };
+    var card = h('div', { className: 'card' }, [h('h2', { text: isNew ? '新增歷史' : '歷史 ' + x.id }),
+      h('div', { className: 'row' }, [field('日期 date', f.date), field('遊戲 game', f.game, '選填')]),
+      field('標題 title', f.title), field('內容 body', f.body, '一兩句即可，選填'), field('影片網址 video_url', f.video)]);
+    var imgBox = h('div', { className: 'thumbs' });
+    var fileInput = null;
+    var saveBtn = btn('儲存', function () {
+      busy(saveBtn, call('saveHistory', { id: x.id || '', date: f.date.value, title: f.title.value, body: f.body.value, game: f.game.value, video_url: f.video.value })
+        .then(function (r) { saved(); H.selected = r.id; return call('listHistory').then(function (l) { H.list = l; drawHistory(); }); })).catch(fail);
+    });
+    var actions = h('div', { className: 'actions' }, [saveBtn]);
+    if (!isNew) {
+      var del = btn('刪除', function () {
+        if (!confirm('刪除「' + trimStr(x.title) + '」？配圖會移到雲端硬碟垃圾桶。')) return;
+        busy(del, call('deleteHistory', x.id).then(function () { say('已刪除。'); H.selected = ''; return call('listHistory').then(function (l) { H.list = l; drawHistory(); }); })).catch(fail);
+      }, 'danger');
+      actions.appendChild(del);
+      var tb = thumbBox();
+      imgBox.appendChild(tb.box);
+      call('getHistoryImage', x.id).then(function (img) { fillThumbs([{ id: img ? img.id : '', img: tb.img }]); });
+      card.appendChild(h('h2', { text: '配圖（選填）' }));
+      card.appendChild(imgBox);
+      card.appendChild(h('div', { className: 'actions' }, [uploader('上傳／更換配圖', function (p) {
+        return call('uploadHistoryImage', x.id, p).then(function () { say('配圖已上傳。' + SAVED_NOTE); formHistory(x); });
+      })]));
+    } else {
+      card.appendChild(h('p', { className: 'hint', text: '要放配圖的話，先儲存，再回來上傳。' }));
+    }
+    card.appendChild(actions);
+    holder.appendChild(card);
+  }
+
+  // ======================= 歷任會長 =======================
+  var L = { list: [], members: [], selected: '' };
+  function leadersTab() {
+    return Promise.all([call('listLeaders'), call('listMembers')]).then(function (r) { L.list = r[0]; L.members = r[1]; drawLeaders(); });
+  }
+  function reloadLeaders() { return call('listLeaders').then(function (l) { L.list = l; drawLeaders(); }); }
+  function drawLeaders() {
+    var list = h('div', { className: 'list' }, [h('div', { className: 'tools' }, [btn('＋ 新增會長', function () { L.selected = ''; formLeader(null); }, 'sub')])]);
+    L.list.forEach(function (x) {
+      var row = h('div', { style: 'display:flex;border-bottom:1px solid #dccfbd' }, [
+        h('button', { type: 'button', className: 'item', style: 'border:0;flex:1', 'aria-current': String(x.id === L.selected), onclick: function () { L.selected = x.id; drawLeaders(); formLeader(x); } },
+          [trimStr(x.nickname), h('small', { text: trimStr(x.period) })]),
+        h('button', { type: 'button', className: 'btn sub', title: '上移', text: '↑', onclick: function () { move(x.id, -1); } }),
+        h('button', { type: 'button', className: 'btn sub', title: '下移', text: '↓', onclick: function () { move(x.id, 1); } })
+      ]);
+      list.appendChild(row);
+    });
+    layout(list, h('div', { id: 'leaderForm' }, [h('p', { className: 'hint', text: '請從左邊選一位，或新增。用 ↑↓ 調整順序（越早越上面）。' })]));
+    var cur = L.list.filter(function (x) { return x.id === L.selected; })[0];
+    if (cur) formLeader(cur);
+  }
+  function move(id, dir) { call('moveLeader', id, dir).then(function () { saved(); return reloadLeaders(); }).catch(fail); }
+  function formLeader(x) {
+    var holder = document.getElementById('leaderForm');
+    clear(holder);
+    var isNew = !x; x = x || {};
+    var opts = [['', '（不連結成員，自由輸入暱稱）']].concat(L.members.map(function (m) { return [trimStr(m.id), trimStr(m.id) + ' ' + trimStr(m.nickname)]; }));
+    var pick = select(opts, x.member_id);
+    var f = { nickname: textInput(x.nickname), period: textInput(x.period, '例如 2005～2008 左右'), sort: numInput(x.sort_order), note: textInput(x.note) };
+    pick.addEventListener('change', function () {
+      var m = L.members.filter(function (mm) { return trimStr(mm.id) === pick.value; })[0];
+      if (m) f.nickname.value = trimStr(m.nickname);
+    });
+    var saveBtn = btn('儲存', function () {
+      busy(saveBtn, call('saveLeader', { id: x.id || '', nickname: f.nickname.value, member_id: pick.value, period: f.period.value, sort_order: f.sort.value, note: f.note.value })
+        .then(function (r) { saved(); L.selected = r.id; return reloadLeaders(); })).catch(fail);
+    });
+    var actions = h('div', { className: 'actions' }, [saveBtn]);
+    if (!isNew) {
+      var del = btn('刪除', function () {
+        if (!confirm('刪除會長「' + trimStr(x.nickname) + '」？')) return;
+        busy(del, call('deleteLeader', x.id).then(function () { say('已刪除。'); L.selected = ''; return reloadLeaders(); })).catch(fail);
+      }, 'danger');
+      actions.appendChild(del);
+    }
+    holder.appendChild(h('div', { className: 'card' }, [h('h2', { text: isNew ? '新增會長' : '會長 ' + x.id }),
+      field('成員 member_id', pick, '選填'), field('暱稱 nickname', f.nickname), field('任期 period', f.period),
+      h('div', { className: 'row' }, [field('排序 sort_order', f.sort, '越早越小；空白＝排最後'), field('備註 note', f.note)]), actions]));
+  }
+
+  // ======================= 相簿 =======================
+  var A = { sub: 'pick', stack: [], added: {}, selected: {}, token: '', folderId: '' };
+  function albumsTab() {
+    return call('getAddedIndex').then(function (keys) {
+      A.added = {}; keys.forEach(function (k) { A.added[k] = true; });
+      drawAlbums();
+    });
+  }
+  function drawAlbums() {
+    clear(panel);
+    var sub = h('div', { className: 'subtabs' }, [
+      btn('從投稿區挑照片', function () { A.sub = 'pick'; drawAlbums(); }, A.sub === 'pick' ? '' : 'sub'),
+      btn('管理網站相簿', function () { A.sub = 'manage'; drawAlbums(); }, A.sub === 'manage' ? '' : 'sub')
+    ]);
+    panel.appendChild(sub);
+    var body = h('div', {});
+    panel.appendChild(body);
+    (A.sub === 'pick' ? pickView : manageView)(body).catch(fail);
+  }
+
+  function pickView(body) {
+    A.selected = {};
+    A.stack = [];
+    return openFolder(body, '', '投稿區', false);
+  }
+
+  function openFolder(body, folderId, name, push) {
+    if (push) A.stack.push({ id: folderId, name: name });
+    else if (!A.stack.length) A.stack.push({ id: '', name: name });
+    body.textContent = '載入中…';
+    return call('browseInbox', folderId, '').then(function (r) { A.folderId = r.folderId; drawBrowse(body, r, true); });
+  }
+
+  function drawBrowse(body, r, fresh) {
+    if (fresh) {
+      clear(body);
+      var crumbs = h('div', { className: 'crumbs' });
+      A.stack.forEach(function (c, i) {
+        if (i) crumbs.appendChild(document.createTextNode(' ／ '));
+        crumbs.appendChild(h('button', { type: 'button', text: c.name, onclick: function () { A.stack = A.stack.slice(0, i); openFolder(body, c.id, c.name, true); } }));
+      });
+      body.appendChild(crumbs);
+      var folders = h('div', { className: 'folders' });
+      r.folders.forEach(function (f) { folders.appendChild(btn('📁 ' + f.name, function () { openFolder(body, f.id, f.name, true); }, 'sub')); });
+      body.appendChild(folders);
+      body.appendChild(h('div', { className: 'grid', id: 'photoGrid' }));
+      body.appendChild(h('div', { className: 'actions', id: 'moreBox' }));
+      body.appendChild(addBar());
+    }
+    var grid = document.getElementById('photoGrid');
+    var items = [];
+    r.files.forEach(function (f) {
+      var isAdded = !!A.added[f.name + '|' + f.size];
+      var cb = h('input', { type: 'checkbox' });
+      cb.checked = !!A.selected[f.id];
+      var tb = thumbBox([h('div', { text: f.name }), isAdded ? h('div', { className: 'tag', text: '已在網站相簿' }) : null, h('label', {}, [cb, ' 勾選'])]);
+      tb.box.className = 'thumb' + (isAdded ? ' added' : '') + (cb.checked ? ' selected' : '');
+      cb.addEventListener('change', function () {
+        if (cb.checked) A.selected[f.id] = true; else delete A.selected[f.id];
+        tb.box.className = 'thumb' + (isAdded ? ' added' : '') + (cb.checked ? ' selected' : '');
+        updateCount();
+      });
+      grid.appendChild(tb.box);
+      items.push({ id: f.id, img: tb.img });
+    });
+    fillThumbs(items);
+    var more = document.getElementById('moreBox');
+    clear(more);
+    if (r.nextToken) {
+      var moreBtn = btn('載入下一頁（再 30 張）', function () {
+        busy(moreBtn, call('browseInbox', r.folderId, r.nextToken).then(function (nr) { drawBrowse(body, nr, false); })).catch(fail);
+      }, 'sub');
+      more.appendChild(moreBtn);
+    } else if (!r.files.length && !grid.children.length) {
+      more.appendChild(h('span', { className: 'hint', text: '這個資料夾沒有圖片。' }));
+    }
+    updateCount();
+  }
+
+  var countNode = null;
+  function updateCount() { if (countNode) countNode.textContent = '已勾選 ' + Object.keys(A.selected).length + ' 張'; }
+
+  function addBar() {
+    var catSel = select([['', '選擇分類']].concat(init.categories.map(function (c) { return [c, c]; })), '');
+    var albumSel = select([['', '（先選分類）']], '');
+    var ym = textInput('', '新相簿年月 2010-08'); var title = textInput('', '新相簿標題');
+    var newBox = h('div', { className: 'row' }, [field('年月', ym), field('標題', title)]);
+    newBox.hidden = true;
+    countNode = h('strong', { text: '已勾選 0 張' });
+    catSel.addEventListener('change', function () {
+      clear(albumSel);
+      albumSel.appendChild(h('option', { value: '', text: '（選現有相簿或新建）' }));
+      albumSel.appendChild(h('option', { value: '__new__', text: '＋ 新建相簿' }));
+      newBox.hidden = true;
+      if (!catSel.value) return;
+      call('listAlbums').then(function (all) {
+        all.filter(function (a) { return a.category === catSel.value; }).forEach(function (a) { albumSel.appendChild(h('option', { value: a.album, text: a.album })); });
+      }).catch(fail);
+    });
+    albumSel.addEventListener('change', function () { newBox.hidden = albumSel.value !== '__new__'; });
+    var go = btn('加入網站相簿', function () {
+      var ids = Object.keys(A.selected);
+      if (!ids.length) return say('請先勾選照片。', true);
+      if (!catSel.value) return say('請選擇分類。', true);
+      if (!albumSel.value) return say('請選擇相簿或新建。', true);
+      var req = { fileIds: ids, category: catSel.value };
+      if (albumSel.value === '__new__') { req.ym = ym.value; req.title = title.value; } else req.album = albumSel.value;
+      busy(go, call('addPhotos', req).then(function (r) {
+        say('已加入「' + r.album + '」：新增 ' + r.added + ' 張，略過重複 ' + r.skipped + ' 張。' + SAVED_NOTE);
+        return call('getAddedIndex').then(function (keys) { A.added = {}; keys.forEach(function (k) { A.added[k] = true; }); A.selected = {}; drawAlbums(); });
+      })).catch(fail);
+    });
+    return h('div', { className: 'card', style: 'margin-top:16px' }, [h('h2', { text: '加入網站相簿（複製，不會動投稿區原檔）' }),
+      h('div', { className: 'row' }, [field('分類', catSel), field('相簿', albumSel)]), newBox, h('div', { className: 'actions' }, [countNode, go])]);
+  }
+
+  function manageView(body) {
+    body.textContent = '載入中…';
+    return call('listAlbums').then(function (all) {
+      clear(body);
+      if (!all.length) body.appendChild(h('p', { className: 'hint', text: '網站相簿還沒有照片。先到「從投稿區挑照片」加入。' }));
+      all.forEach(function (a) { body.appendChild(albumCard(a)); });
+    });
+  }
+
+  function albumCard(a) {
+    var f = { title: textInput(a.title), caption: area(a.caption, 2), game: select(GAMES, a.game) };
+    var feat = check('放在首頁精選', a.featured);
+    var photos = h('div', { className: 'thumbs' });
+    var shown = false;
+    var saveBtn = btn('儲存相簿資訊', function () {
+      busy(saveBtn, call('saveAlbum', { album: a.album, title: f.title.value, caption: f.caption.value, game: f.game.value, featured: feat.box.checked }).then(saved)).catch(fail);
+    });
+    var toggle = btn('顯示照片（' + a.count + ' 張）', function () {
+      if (shown) return;
+      shown = true;
+      busy(toggle, call('getAlbumPhotos', a.category, a.album).then(function (list) {
+        var items = [];
+        list.forEach(function (p) {
+          var tb = thumbBox([h('div', { text: p.name })]);
+          var rm = btn('移除', function () {
+            if (!confirm('把「' + p.name + '」從網站相簿移除？檔案會移到雲端硬碟垃圾桶。')) return;
+            busy(rm, call('removeAlbumPhoto', p.id).then(function () { tb.box.remove(); say('已移除（檔案在垃圾桶）。'); return call('getAddedIndex').then(function (keys) { A.added = {}; keys.forEach(function (k) { A.added[k] = true; }); }); })).catch(fail);
+          }, 'danger');
+          tb.box.appendChild(rm);
+          photos.appendChild(tb.box);
+          items.push({ id: p.id, img: tb.img });
+        });
+        fillThumbs(items);
+      })).catch(fail);
+    }, 'sub');
+    return h('div', { className: 'card' }, [h('h2', { text: a.category + '／' + a.album }),
+      a.hasRow ? null : h('p', { className: 'hint', text: '試算表「相簿」分頁還沒有這本相簿，儲存時會新增一列。' }),
+      field('標題 title', f.title), field('說明 caption', f.caption), field('遊戲 game', f.game), feat.node,
+      h('div', { className: 'actions' }, [saveBtn, toggle]), photos]);
+  }
+
+  // ======================= 公會設定 =======================
+  function settingsTab() {
+    return Promise.all([call('listSettings'), call('getSiteImages')]).then(function (r) {
+      clear(panel);
+      var rows = r[0];
+      var imgs = r[1];
+      panel.appendChild(h('div', { className: 'card' }, [h('h2', { text: '橫幅與故事配圖' }),
+        siteImage('橫幅（首頁橫幅，建議 16:9）', 'banner', imgs.banner), siteImage('故事配圖', 'story', imgs.story)]));
+      var card = h('div', { className: 'card' }, [h('h2', { text: '網站設定（key／value）' })]);
+      rows.forEach(function (row) { card.appendChild(settingRow(row.key, row.value)); });
+      var nk = textInput('', '新的 key'); var nv = textInput('', 'value');
+      var addBtn = btn('新增一列', function () {
+        busy(addBtn, call('saveSetting', nk.value, nv.value).then(function () { saved(); return settingsTab(); })).catch(fail);
+      }, 'sub');
+      card.appendChild(h('div', { className: 'row', style: 'margin-top:14px' }, [field('新增 key', nk), field('value', nv)]));
+      card.appendChild(h('div', { className: 'actions' }, [addBtn]));
+      panel.appendChild(card);
+    });
+  }
+  function settingRow(key, value) {
+    var v = area(value, trimStr(value).indexOf('\n') >= 0 ? 3 : 1);
+    var b = btn('儲存此列', function () { busy(b, call('saveSetting', key, v.value).then(saved)).catch(fail); }, 'sub');
+    return h('div', { style: 'margin-bottom:10px' }, [h('label', { text: key }), v, h('div', { className: 'actions', style: 'margin-top:4px' }, [b])]);
+  }
+  function siteImage(label, kind, img) {
+    var tb = thumbBox();
+    fillThumbs([{ id: img ? img.id : '', img: tb.img }]);
+    return h('div', { style: 'margin-bottom:12px' }, [h('label', { text: label }), h('div', { className: 'thumbs' }, [tb.box]),
+      h('p', { className: 'hint', text: img ? '目前檔案：' + img.name : '還沒有檔案。' }),
+      uploader('上傳／更換', function (p) { return call('uploadSiteImage', kind, p).then(function () { say('已上傳。' + SAVED_NOTE); return settingsTab(); }); })]);
+  }
+
+  // ---------- 啟動 ----------
+  call('getInit').then(function (r) { init = r; show('members'); }).catch(fail);
+})();
+</script>
