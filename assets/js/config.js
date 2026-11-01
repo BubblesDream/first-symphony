@@ -1,17 +1,28 @@
 // 資料來源設定。
-// 每張表對應試算表的一個分頁。第一版全部讀取本地 JSON；
-// 日後改接 Google 試算表時，把 source 改成 'csv'、url 換成「發布到網路」的 CSV 網址即可。
-// 例：members: { source: 'csv', url: 'https://docs.google.com/spreadsheets/d/e/.../pub?gid=0&single=true&output=csv' }
+// 每張表對應「網站用」Google 試算表的一個分頁。
+//
+// 試算表分頁（source: 'csv'）：
+//   url      ＝「檔案 → 共用 → 發布到網路」產生的 CSV 網址，每個分頁一個，格式像：
+//              https://docs.google.com/spreadsheets/d/e/<文件代碼>/pub?gid=<分頁代碼>&single=true&output=csv
+//              發布時「整份文件」改選該分頁、格式選「逗號分隔值 (.csv)」。
+//   fallback ＝本地 JSON 路徑。url 還沒填（空字串）時直接讀它；試算表讀取失敗時也會自動改讀它。
+//   skipRows ＝第 1 列欄位名稱之後要略過幾列。試算表第 2 列是中文說明，所以填 1。
+//
+// 網址目前都還沒有，由管理員之後填進下面的 url。
+
+const SHEET = { source: 'csv', skipRows: 1 };
 
 export const TABLES = {
-  site:    { source: 'json', url: 'data/site.json' },
-  members: { source: 'json', url: 'data/members.json' },
-  outfits: { source: 'json', url: 'data/outfits.json' },
-  history: { source: 'json', url: 'data/history.json' },
-  leaders: { source: 'json', url: 'data/leaders.json' },
-  videos:  { source: 'json', url: 'data/videos.json' },
+  site:    { ...SHEET, url: '', fallback: 'data/site.json' },     // 分頁：公會設定
+  members: { ...SHEET, url: '', fallback: 'data/members.json' },  // 分頁：成員
+  outfits: { ...SHEET, url: '', fallback: 'data/outfits.json' },  // 分頁：造型
+  albums:  { ...SHEET, url: '', fallback: 'data/albums.json' },   // 分頁：相簿（一本相簿一列）
+  videos:  { ...SHEET, url: '', fallback: 'data/videos.json' },   // 分頁：影片
+  history: { ...SHEET, url: '', fallback: 'data/history.json' },  // 分頁：歷史
+  leaders: { ...SHEET, url: '', fallback: 'data/leaders.json' },  // 分頁：歷任會長
+  quotes:  { ...SHEET, url: '', fallback: 'data/quotes.json' },   // 分頁：語錄
+  // 相簿照片清單（一張照片一列）由同步程式從雲端硬碟產生，固定讀本地檔，不走試算表。
   gallery: { source: 'json', url: 'data/gallery.json' },
-  quotes:  { source: 'json', url: 'data/quotes.json' },
 };
 
 // 各表欄位型別：沒列出的欄位一律當作字串。
@@ -22,7 +33,8 @@ export const FIELD_TYPES = {
   history: { is_demo: 'boolean' },
   leaders: { is_demo: 'boolean' },
   videos:  { featured: 'boolean', is_demo: 'boolean' },
-  gallery: { featured: 'boolean', is_demo: 'boolean' },
+  albums:  { featured: 'boolean', is_demo: 'boolean' },
+  gallery: { sort_order: 'number' },
   quotes:  { is_demo: 'boolean' },
 };
 

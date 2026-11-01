@@ -6,6 +6,7 @@ export const PLACEHOLDERS = {
   outfit: 'assets/images/placeholders/outfit.svg',
   video: 'assets/images/placeholders/video.svg',
   banner: 'assets/images/placeholders/banner.svg',
+  story: 'assets/images/placeholders/story.svg',
 };
 
 /**

@@ -1,5 +1,5 @@
 import { initLayout } from '../layout.js';
-import { loadTable } from '../data.js';
+import { loadTable, loadGallery } from '../data.js';
 import { el, img, clear, dateKey, yearOf, formatDate, gameLabel } from '../render.js';
 import { filterGroup, errorBox, showStatus, demoBadge, tiltClass, pendingNote } from '../ui.js';
 import { safeImageUrl, PLACEHOLDERS } from '../validate.js';
@@ -135,7 +135,7 @@ function quoteItem(q, i) {
 
 async function main() {
   try {
-    const [photos, quotes] = await Promise.all([loadTable('gallery'), loadTable('quotes')]);
+    const [photos, quotes] = await Promise.all([loadGallery(), loadTable('quotes')]);
     const sorted = [...photos].sort((a, b) => dateKey(b.date).localeCompare(dateKey(a.date)));
     quotesRoot.replaceChildren(...quotes.map(quoteItem));
     if (!quotes.length) quotesRoot.after(pendingNote('經典語錄整理中，敬請期待。'));
