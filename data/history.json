@@ -1,53 +1,32 @@
 [
   {
-    "id": "demo-founding",
-    "date": "2091-03",
-    "title": "示範：公會成立",
-    "body": "（示範資料）這裡記錄公會成立的經過。\n可以分段寫，換行會照樣顯示。",
-    "image": "assets/images/history/demo-founding.svg",
-    "game": "mabinogi_m",
-    "is_demo": true
-  },
-  {
-    "id": "demo-first-raid",
-    "date": "2091-09",
-    "title": "示範：第一次團體副本",
-    "body": "（示範資料）第一次大家一起挑戰副本的紀錄。此為示範文字。",
-    "game": "mabinogi_m",
-    "is_demo": true
-  },
-  {
-    "id": "demo-pc-branch",
-    "date": "2092",
-    "title": "示範：瑪奇 PC 分團成立",
-    "body": "（示範資料）部分團員在瑪奇 PC 也成立了分團。此為示範文字。",
-    "image": "assets/images/history/demo-pc-branch.svg",
+    "id": "founding",
+    "date": "2005",
+    "title": "公會成立",
+    "body": "第一交響樂團在《瑪奇》（PC）成立，創始會長是伊莎貝拉。\n由一群喜歡在遊戲中演奏的玩家組成，是以音樂為主的休閒公會。",
+    "image": "",
+    "video_url": "",
     "game": "mabinogi_pc",
-    "is_demo": true
+    "is_demo": false
   },
   {
-    "id": "demo-concert",
-    "date": "2092-12-24",
-    "title": "示範：第一次公會演奏會",
-    "body": "（示範資料）節日時在廣場舉辦的小型演奏會。此為示範文字。",
-    "game": "both",
-    "is_demo": true
+    "id": "2009-duet",
+    "date": "2009-09",
+    "title": "雙人演奏（組曲 1）",
+    "body": "許久不見的大家聚在一起與音樂相伴。\n演奏者：真瞳有馬、WELASPER。",
+    "image": "",
+    "video_url": "https://www.youtube.com/watch?v=ZE1gQBA6BPU",
+    "game": "mabinogi_pc",
+    "is_demo": false
   },
   {
-    "id": "demo-new-leader",
-    "date": "2093-06",
-    "title": "示範：會長交接",
-    "body": "（示範資料）會長交接的紀錄。此為示範文字。",
-    "game": "mabinogi_m",
-    "is_demo": true
-  },
-  {
-    "id": "demo-anniversary",
-    "date": "2094-03-01",
-    "title": "示範：三週年合照",
-    "body": "（示範資料）週年合照與留言。此為示範文字。",
-    "image": "assets/images/history/demo-anniversary.svg",
-    "game": "both",
-    "is_demo": true
+    "id": "2010-maple",
+    "date": "2010-03",
+    "title": "楓葉活動",
+    "body": "楓葉活動的紀錄影片〈回夢〉。",
+    "image": "",
+    "video_url": "https://www.youtube.com/watch?v=PstOVRWO92c",
+    "game": "mabinogi_pc",
+    "is_demo": false
   }
 ]

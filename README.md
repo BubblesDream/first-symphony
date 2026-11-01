@@ -5,7 +5,7 @@
 
 純 HTML／CSS／原生 JavaScript／JSON，不需要安裝任何東西、也沒有建置步驟。完整規格見 `docs/spec.md`。
 
-> 目前所有內容都是**示範資料**（名稱都以「示範」開頭，年份用 2091 年以後的虛構年份，避免被誤認為真實公會歷史）。換成正式內容時，把該筆資料的 `is_demo` 改成 `false`。
+> 目前已放入正式的成員名單、公會簡介與影片；照片、造型、語錄與自我介紹整理中。沒有資料的區塊會自動顯示「整理中」。
 
 ## 本機預覽
 
@@ -50,6 +50,7 @@ python3 -m http.server 8000
 {
   "id": "cello",
   "nickname": "遊戲暱稱",
+  "aka": "瑪奇 PC：另一個角色名（選填）",
   "game": "mabinogi_m",
   "role": "會長",
   "avatar": "assets/images/members/cello.png",
@@ -60,6 +61,8 @@ python3 -m http.server 8000
   "is_demo": false
 }
 ```
+
+同一個人在兩款遊戲都有角色時只建一筆，`game` 填 `both`，另一款的角色名寫在 `aka`。`id` 目前用 `m01`、`m02`… 編號。
 
 `featured: true` 的成員會出現在首頁預覽（最多 6 位）；`sort_order` 數字小的排前面。
 

@@ -1,68 +1,24 @@
 [
   {
-    "id": "demo-video-1",
-    "youtube_url": "",
-    "title": "示範：公會成立紀念影片",
-    "published": "2091-04",
-    "game": "mabinogi_m",
-    "category": "活動紀錄",
-    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
-    "featured": true,
-    "is_demo": true
-  },
-  {
-    "id": "demo-video-2",
-    "youtube_url": "",
-    "title": "示範：第一次團體副本",
-    "published": "2091-09",
-    "game": "mabinogi_m",
-    "category": "副本",
-    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
-    "featured": false,
-    "is_demo": true
-  },
-  {
-    "id": "demo-video-3",
-    "youtube_url": "",
-    "title": "示範：瑪奇 PC 分團日常",
-    "published": "2092-05",
+    "id": "video-2010-maple",
+    "youtube_url": "https://www.youtube.com/watch?v=PstOVRWO92c",
+    "title": "瑪奇mabinogi 第一交響樂團 楓葉活動記錄 (回夢)",
+    "published": "2010-03-29",
     "game": "mabinogi_pc",
-    "category": "日常",
-    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
-    "featured": false,
-    "is_demo": true
-  },
-  {
-    "id": "demo-video-4",
-    "youtube_url": "",
-    "title": "示範：節日演奏會",
-    "published": "2092-12",
-    "game": "both",
     "category": "活動紀錄",
-    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
+    "summary": "影片提供：月傾歌（YUE）",
     "featured": true,
-    "is_demo": true
+    "is_demo": false
   },
   {
-    "id": "demo-video-5",
-    "youtube_url": "",
-    "title": "示範：生活技能大會",
-    "published": "2093-07",
+    "id": "video-2009-duet",
+    "youtube_url": "https://www.youtube.com/watch?v=ZE1gQBA6BPU",
+    "title": "瑪奇-永遠的第一交響樂團雙人演奏(組曲1)",
+    "published": "2009-09-24",
     "game": "mabinogi_pc",
-    "category": "日常",
-    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
-    "featured": false,
-    "is_demo": true
-  },
-  {
-    "id": "demo-video-6",
-    "youtube_url": "",
-    "title": "示範：三週年回顧",
-    "published": "2094-03",
-    "game": "both",
-    "category": "活動紀錄",
-    "summary": "（示範資料）尚未設定影片網址，正式上線前請填入 YouTube 連結。",
+    "category": "演奏",
+    "summary": "許久不見的大家聚在一起與音樂相伴～\n演奏者：真瞳有馬、WELASPER\n影片提供：月傾歌（YUE）",
     "featured": true,
-    "is_demo": true
+    "is_demo": false
   }
 ]

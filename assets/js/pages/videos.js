@@ -1,7 +1,7 @@
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
 import { clear, dateKey, yearOf, matchesGame } from '../render.js';
-import { videoCard, filterGroup, errorBox, showStatus } from '../ui.js';
+import { videoCard, filterGroup, errorBox, showStatus, pendingNote } from '../ui.js';
 
 initLayout();
 
@@ -18,6 +18,11 @@ async function main() {
     const cards = videos
       .map((v) => ({ video: v, node: videoCard(v) }))
       .filter((c) => c.node);
+    if (!cards.length) {
+      showStatus(status, '');
+      list.replaceChildren(pendingNote('影片整理中，敬請期待。'));
+      return;
+    }
 
     const state = { year: 'all', game: 'all' };
     const draw = () => {

@@ -1,7 +1,7 @@
 import { initLayout } from '../layout.js';
 import { loadSite, loadTable } from '../data.js';
 import { el, img, clear, dateKey, formatDate } from '../render.js';
-import { tapeTitle, polaroid, handNote, videoCard, errorBox, demoBadge } from '../ui.js';
+import { tapeTitle, polaroid, handNote, videoCard, errorBox, demoBadge, pendingNote } from '../ui.js';
 import { PLACEHOLDERS } from '../validate.js';
 
 initLayout();
@@ -51,13 +51,12 @@ function featuredItem(p, isLarge) {
   );
 }
 
-/** 精選回憶：featured 照片依日期由新到舊取前 5 張；沒有照片就不顯示 */
+/** 精選回憶：featured 照片依日期由新到舊取前 5 張；沒有照片就顯示「整理中」 */
 function featuredSection(gallery, site) {
   const photos = gallery
     .filter((g) => g.featured && g.id)
     .sort((a, b) => dateKey(b.date).localeCompare(dateKey(a.date)))
     .slice(0, 5);
-  if (!photos.length) return null;
 
   const heading = tapeTitle('精選回憶', 'h2');
   heading.id = 'home-memories-title';
@@ -67,10 +66,12 @@ function featuredSection(gallery, site) {
       el('a', { className: 'btn', href: 'gallery.html' }, '走進紀念館', el('span', { 'aria-hidden': 'true', text: ' →' })),
     ),
     site.memories_intro ? el('p', { className: 'home-featured__lead', text: site.memories_intro }) : null,
-    el('ul', { className: 'featured-grid', dataset: { count: String(photos.length) } },
-      // 5 張：左大右四小；1 張：只有一張大圖；2–4 張：等分
-      photos.map((p, i) => featuredItem(p, i === 0 && (photos.length === 5 || photos.length === 1))),
-    ),
+    photos.length
+      ? el('ul', { className: 'featured-grid', dataset: { count: String(photos.length) } },
+        // 5 張：左大右四小；1 張：只有一張大圖；2–4 張：等分
+        photos.map((p, i) => featuredItem(p, i === 0 && (photos.length === 5 || photos.length === 1))),
+      )
+      : pendingNote('照片整理中，敬請期待。'),
   );
 }
 
