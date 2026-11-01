@@ -96,12 +96,29 @@ function photoItem(p, i, list) {
     type: 'button',
     className: `photo ${tiltClass(i)}`,
     'aria-label': `放大查看：${p.title || '照片'}`,
+    dataset: { id: p.id || '' },
   },
   el('span', { className: 'photo__img' }, img(p.thumb || p.image, p.title || '')),
   el('span', { className: 'photo__caption', text: p.title || '' }),
   );
   button.addEventListener('click', () => lightbox.open(list, i, button));
   return el('li', {}, button);
+}
+
+/** 網址有 #照片id（例如從首頁點進來）就直接打開那張照片；對不到就忽略 */
+function openFromHash(list) {
+  let id = '';
+  try {
+    id = decodeURIComponent(window.location.hash.slice(1));
+  } catch {
+    return;
+  }
+  if (!id) return;
+  const index = list.findIndex((p) => p.id === id);
+  if (index < 0) return;
+  const button = [...grid.querySelectorAll('.photo')].find((b) => b.dataset.id === id);
+  if (button) button.scrollIntoView({ block: 'center' });
+  lightbox.open(list, index, button || null);
 }
 
 function quoteItem(q, i) {
@@ -139,6 +156,7 @@ async function main() {
         (v) => { state.category = v; draw(); }),
     );
     draw();
+    openFromHash(sorted);
 
     quotesRoot.replaceChildren(...quotes.map(quoteItem));
   } catch (error) {
