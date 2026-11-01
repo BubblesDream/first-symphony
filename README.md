@@ -78,11 +78,7 @@ python3 -m http.server 8000
 
 ### 照片 `data/gallery.json`
 
-```json
-{ "id": "photo-2024-01", "image": "assets/images/gallery/2024-01.jpg", "thumb": "", "title": "標題", "caption": "說明", "date": "2024-01", "game": "both", "category": "團體合照", "featured": true, "is_demo": false }
-```
-
-`thumb` 是選填的小圖；`category` 是自由文字，紀念館的「分類」篩選會自動列出所有出現過的分類；`featured: true` 的前 3 張會出現在首頁。
+這個檔案由圖片同步程式自動產生，**不要手動修改**。照片請放進 Google 雲端硬碟的「網站相簿」資料夾，見下方「素材與更新流程」。
 
 ### 影片 `data/videos.json`
 
@@ -117,6 +113,19 @@ python3 -m http.server 8000
 ### 網站文字 `data/site.json`
 
 `key` / `value` 兩欄，例如首頁橫幅圖 `banner_image`、橫幅引言 `banner_quote`、故事摘要 `story_summary`、創立緣由 `story_origin`、名稱由來 `story_name`、頁尾短句 `footer_quote` 等。直接改 `value` 即可。
+
+## 素材與更新流程
+
+網站圖片（成員頭像、造型、橫幅、故事配圖、相簿照片）放在 Google 雲端硬碟的「管理員專用」資料夾。GitHub Action 每天自動把圖片轉成 WebP，有變更就開一個 Pull Request，管理員確認後合併，網站幾分鐘內更新。
+
+1. 從投稿區挑照片，放進「管理員專用」資料夾的對應位置（成員／網站相簿／橫幅與故事配圖）。
+2. 在試算表補上文字說明（例如「相簿」分頁）。
+3. 等每天的自動同步，或到 GitHub 的 Actions 頁面手動執行「同步雲端硬碟圖片」。
+4. 檢查自動開出的 Pull Request，沒問題就合併。
+
+第一次設定（Google Cloud、金鑰、GitHub 設定）與日常操作的完整步驟見 [`docs/指南-圖片同步設定.md`](docs/指南-圖片同步設定.md)。
+
+`assets/images/members/`、`assets/images/site/`、`assets/images/gallery/`、`data/gallery.json`、`tools/image-sync-state.json` 都由同步程式產生，不要手動修改。
 
 ## 未來改接 Google 試算表
 

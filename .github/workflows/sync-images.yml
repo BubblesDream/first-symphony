@@ -1,0 +1,58 @@
+# 從 Google 雲端硬碟同步網站圖片，有變更就開（或更新）Pull Request。
+# 這是本專案唯一的 GitHub Action（管理員同意的例外），網站本身仍然沒有建置步驟。
+# 設定方式見 docs/指南-圖片同步設定.md
+name: 同步雲端硬碟圖片
+
+on:
+  schedule:
+    - cron: '17 19 * * *'   # 每天一次（UTC 19:17＝台灣時間 03:17）
+  workflow_dispatch:         # Actions 頁面手動執行
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-images
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 取出程式碼
+        uses: actions/checkout@v4
+
+      - name: 安裝 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: tools/requirements.txt
+
+      - name: 安裝套件
+        run: pip install -r tools/requirements.txt
+
+      - name: 同步圖片
+        env:
+          # 金鑰只從 secrets 讀；程式不會把它印出來，GitHub 也會自動遮蔽
+          GDRIVE_SA_KEY: ${{ secrets.GDRIVE_SA_KEY }}
+          GDRIVE_ROOT_FOLDER_ID: ${{ vars.GDRIVE_ROOT_FOLDER_ID }}
+        run: python tools/sync_drive_images.py --summary "$RUNNER_TEMP/sync-summary.md"
+
+      - name: 開或更新 Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: sync/images
+          base: main
+          delete-branch: true
+          commit-message: 同步雲端硬碟圖片
+          title: 同步雲端硬碟圖片
+          body-path: ${{ runner.temp }}/sync-summary.md
+          add-paths: |
+            assets/images/members
+            assets/images/site
+            assets/images/gallery
+            data/gallery.json
+            tools/image-sync-state.json

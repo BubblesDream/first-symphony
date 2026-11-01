@@ -1,0 +1,4 @@
+# 圖片同步程式（tools/sync_drive_images.py）用的套件，只在 GitHub Action 裡安裝
+google-api-python-client>=2.100,<3
+google-auth>=2.23,<3
+Pillow>=10.0
