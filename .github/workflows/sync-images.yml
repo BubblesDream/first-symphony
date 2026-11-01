@@ -54,5 +54,6 @@ jobs:
             assets/images/members
             assets/images/site
             assets/images/gallery
+            assets/images/history
             data/gallery.json
             tools/image-sync-state.json

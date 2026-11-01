@@ -131,7 +131,7 @@ docs/
 
 1. **一個 JSON 檔對應試算表的一個分頁。** 每個檔案是物件陣列，每筆資料只有平面欄位（字串、數字、布林），**不准巢狀陣列或物件**。關聯用 id 欄位表示。
 2. 每筆資料都有穩定的 `id`（英數小寫與連字號）。
-3. 日期欄位是字串，允許 `YYYY`、`YYYY-MM`、`YYYY-MM-DD` 三種精度，顯示時依精度格式化。
+3. 日期欄位是字串，允許 `YYYY`、`YYYY-MM`、`YYYY-MM-DD` 三種精度，顯示時依精度格式化。`history.date` 另外允許模糊寫法：`2008 左右`、`約 2008`、`2008 前後`（也可搭配月份，如 `2008-09 左右`），一律顯示成「約 2008 年」「約 2008 年 9 月」；排序只看開頭的年（月）。
 4. 內文欄位是純文字，換行以 `white-space: pre-line` 呈現，不支援 HTML 或 Markdown。
 5. 示範資料一律 `is_demo: true`，畫面上要有明顯的「示範資料」標記。正式上線後不放示範資料，沒有資料的區塊顯示「整理中」。
 6. `game` 欄位值固定為 `mabinogi_m`、`mabinogi_pc`、`both` 其中之一，顯示名稱集中定義在一處。
@@ -143,8 +143,8 @@ docs/
 | `site.json` | `key`, `value`（公會名稱、一句介紹、橫幅圖、創立年份、故事摘要等設定，key/value 兩欄方便試算表維護） |
 | `members.json` | `id`, `nickname`, `aka`（選填，另一款遊戲的角色名）, `game`, `role`（選填）, `avatar`, `intro`, `joined`（選填）, `featured`, `sort_order`, `is_demo` |
 | `outfits.json` | `id`, `member_id`, `name`, `image`, `note`（選填）, `sort_order`, `is_demo` |
-| `history.json` | `id`, `date`, `title`, `body`, `image`（選填）, `video_url`（選填）, `game`, `is_demo` |
-| `leaders.json` | `id`, `nickname`, `member_id`（選填）, `term_start`, `term_end`（選填，空白代表現任）, `note`（選填）, `is_demo` |
+| `history.json` | `id`, `date`（允許模糊寫法）, `title`, `body`（選填，一兩句話）, `image`（選填，管理頁上傳配圖後自動填 `assets/images/history/<id>.webp`）, `video_url`（選填）, `game`, `is_demo` |
+| `leaders.json` | `id`, `nickname`, `member_id`（選填）, `period`（自由文字，原樣顯示，例如 `2005～2008 左右`、`2010 前後`、`現在`）, `sort_order`（數字，越小越前面，越早的會長越小）, `note`（選填）, `is_demo`。不記任期，故事頁依 `sort_order` 排序 |
 | `videos.json` | `id`, `youtube_url`, `title`, `published`, `game`, `category`, `summary`, `featured`, `is_demo` |
 | `albums.json` | `album`（必須與雲端硬碟相簿資料夾名稱完全相同）, `title`（選填，空白時用資料夾名稱去掉日期）, `caption`, `game`, `featured`, `is_demo`。一本相簿一列 |
 | `gallery.json` | `id`（＝雲端硬碟檔案 id）, `album`（相簿資料夾名稱，例如 `2010-08 夏日合奏`）, `category`（團體合照／副本／節日活動／演奏／日常／紀念日）, `date`（取自資料夾名稱開頭的 `YYYY-MM`）, `image`, `thumb`, `sort_order`。一張照片一列，由同步程式產生，不走試算表（見第八節） |
@@ -168,6 +168,7 @@ CSV 讀入的值全是字串，`data.js` 要負責型別轉換（`"TRUE"`/`"true
 | 成員造型 | `assets/images/members/<member_id>/outfit-<n>.webp`（n＝造型的 `sort_order`：1、2、3…） | `outfits.image` |
 | 首頁橫幅 | `assets/images/site/banner.webp` | `site` 的 `banner_image` |
 | 故事配圖 | `assets/images/site/story.webp` | `site` 的 `story_image` |
+| 歷史配圖 | `assets/images/history/<history_id>.webp`（網站不自動套用，需填入 `history.image`） | `history.image` |
 | 相簿照片 | `assets/images/gallery/<drive_file_id>.webp`，縮圖 `assets/images/gallery/<drive_file_id>-thumb.webp` | `gallery.image`／`gallery.thumb` |
 
 ### 資料載入模組
@@ -238,7 +239,8 @@ PR 說明要列出：完成項目、驗證結果（含略過的項目）、已�
 │   └─ 團體合照/ 副本/ 節日活動/ 演奏/ 日常/ 紀念日/   ← 固定 6 個分類
 │        └─ 2010-08 夏日合奏/   ← 一本相簿＝一個資料夾，「YYYY-MM 標題」
 │             └─ 任意檔名的照片
-└─ 橫幅與故事配圖/   橫幅.*、故事配圖.*
+├─ 橫幅與故事配圖/   橫幅.*、故事配圖.*
+└─ 歷史配圖/   <history_id>.*（主檔名＝歷史事件的 id，只能用英數、-、_）
 ```
 
 ### 圖片路徑
@@ -249,6 +251,7 @@ PR 說明要列出：完成項目、驗證結果（含略過的項目）、已�
 | `成員/mXX-*/造型-<n>.*` | `assets/images/members/<mXX>/outfit-<n>.webp` | 高 900 內，等比 |
 | `橫幅與故事配圖/橫幅.*` | `assets/images/site/banner.webp` | 寬 1600 內 |
 | `橫幅與故事配圖/故事配圖.*` | `assets/images/site/story.webp` | 寬 1200 內 |
+| `歷史配圖/<history_id>.*` | `assets/images/history/<history_id>.webp` | 寬 1200 內，等比 |
 | `網站相簿/<分類>/<相簿>/<照片>` | `assets/images/gallery/<drive_file_id>.webp`＋`<drive_file_id>-thumb.webp` | 長邊 1600／縮圖長邊 480 |
 
 ### `data/gallery.json`

@@ -29,9 +29,10 @@
 | `成員/mXX-*/造型-<n>.*` | `assets/images/members/<mXX>/outfit-<n>.webp` |
 | `橫幅與故事配圖/橫幅.*` | `assets/images/site/banner.webp` |
 | `橫幅與故事配圖/故事配圖.*` | `assets/images/site/story.webp` |
+| `歷史配圖/<history_id>.*` | `assets/images/history/<history_id>.webp` |
 | `網站相簿/<分類>/<YYYY-MM 標題>/<照片>` | `assets/images/gallery/<drive_file_id>.webp`、`<drive_file_id>-thumb.webp` |
 
-- `assets/images/members/`、`site/`、`gallery/`、`data/gallery.json`、`tools/image-sync-state.json` 由同步程式產生，不要手動修改。
+- `assets/images/members/`、`site/`、`history/`、`gallery/`、`data/gallery.json`、`tools/image-sync-state.json` 由同步程式產生，不要手動修改。
 - 細節見 `docs/spec.md`「圖片同步」與 `docs/指南-圖片同步設定.md`。
 
 ## 內容規則

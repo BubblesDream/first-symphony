@@ -17,10 +17,12 @@ GDRIVE_ROOT_FOLDER_ID 「管理員專用」資料夾的 id，例如 15kYNAy8PwyN
   成員/mXX-暱稱/頭像.*、造型-<n>.*
   網站相簿/<分類>/<YYYY-MM 標題>/<任意檔名的照片>
   橫幅與故事配圖/橫幅.*、故事配圖.*
+  歷史配圖/<history_id>.*
 
 輸出：
   assets/images/members/<mXX>/avatar.webp、outfit-<n>.webp
   assets/images/site/banner.webp、story.webp
+  assets/images/history/<history_id>.webp
   assets/images/gallery/<id>.webp、<id>-thumb.webp
   data/gallery.json（每次重新產生）
   tools/image-sync-state.json（記錄已同步的檔案，用來判斷有沒有變動）
@@ -45,11 +47,13 @@ STATE_PATH = 'tools/image-sync-state.json'
 GALLERY_JSON = 'data/gallery.json'
 
 # 只允許刪除／寫入這幾個資料夾底下的檔案
-OUTPUT_DIRS = ('assets/images/members/', 'assets/images/site/', 'assets/images/gallery/')
+OUTPUT_DIRS = ('assets/images/members/', 'assets/images/site/', 'assets/images/gallery/',
+               'assets/images/history/')
 
 DIR_MEMBERS = '成員'
 DIR_GALLERY = '網站相簿'
 DIR_SITE = '橫幅與故事配圖'
+DIR_HISTORY = '歷史配圖'
 
 # 相簿分類固定這 6 個，gallery.json 也照這個順序排
 CATEGORIES = ['團體合照', '副本', '節日活動', '演奏', '日常', '紀念日']
@@ -63,6 +67,7 @@ SIZE_AVATAR = (400, 400)
 SIZE_OUTFIT = (None, 900)
 SIZE_BANNER = (1600, None)
 SIZE_STORY = (1200, None)
+SIZE_HISTORY = (1200, None)
 SIZE_GALLERY = 1600        # 長邊
 SIZE_GALLERY_THUMB = 480   # 長邊
 
@@ -248,6 +253,8 @@ def scan(source):
             scan_gallery(source, top, targets, claimed, gallery_rows)
         elif name == DIR_SITE:
             scan_site(source, top, targets, claimed)
+        elif name == DIR_HISTORY:
+            scan_history(source, top, targets, claimed)
         else:
             warn(f'{name}/：不認得的資料夾，略過')
     return targets, gallery_rows
@@ -293,6 +300,19 @@ def scan_site(source, folder, targets, claimed):
             warn(f'{where}：檔名不是「橫幅」或「故事配圖」，略過')
             continue
         add_target(targets, claimed, f, [names[stem]], where)
+
+
+def scan_history(source, folder, targets, claimed):
+    """歷史配圖/<history_id>.* → assets/images/history/<history_id>.webp"""
+    for f in source.list(folder):
+        where = f"{DIR_HISTORY}/{norm(f['name'])}"
+        if not is_image(f, where):
+            continue
+        stem, _ = split_name(f['name'])
+        if not RE_SAFE_ID.match(stem):
+            warn(f'{where}：檔名（不含副檔名）要是歷史事件的 id，只能用英文字母、數字、- 和 _，略過')
+            continue
+        add_target(targets, claimed, f, [(f'assets/images/history/{stem}.webp', 'history')], where)
 
 
 def scan_gallery(source, folder, targets, claimed, gallery_rows):
@@ -371,6 +391,8 @@ def resize_for(img, kind):
         return fit(img, *SIZE_BANNER)
     if kind == 'story':
         return fit(img, *SIZE_STORY)
+    if kind == 'history':
+        return fit(img, *SIZE_HISTORY)
     if kind == 'gallery':
         return fit(img, SIZE_GALLERY, SIZE_GALLERY)
     if kind == 'gallery_thumb':

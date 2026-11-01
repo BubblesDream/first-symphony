@@ -1,6 +1,6 @@
 import { initLayout } from '../layout.js';
 import { loadSite, loadTable } from '../data.js';
-import { el, clear, formatDate, dateKey, matchesGame } from '../render.js';
+import { el, clear, formatDate, isExactDate, dateKey, matchesGame } from '../render.js';
 import { tapeTitle, polaroid, gameTag, demoBadge, filterGroup, errorBox, showStatus, tiltClass, pendingNote } from '../ui.js';
 import { parseYouTubeId, youTubeWatch } from '../validate.js';
 
@@ -20,7 +20,7 @@ function timelineItem(item, index) {
   return el('li', { className: 'timeline__item' },
     el('article', { className: 'timeline__card card' },
       el('p', { className: 'meta' },
-        el('time', { className: 'timeline__date', datetime: item.date, text: formatDate(item.date) }),
+        el('time', { className: 'timeline__date', datetime: isExactDate(item.date) ? item.date : null, text: formatDate(item.date) }),
         gameTag(item.game),
         demoBadge(item),
       ),
@@ -35,12 +35,6 @@ function timelineItem(item, index) {
       }) : null,
     ),
   );
-}
-
-function leaderTerm(l) {
-  const start = formatDate(l.term_start);
-  const end = l.term_end ? formatDate(l.term_end) : '至今';
-  return `${start} – ${end}`;
 }
 
 async function main() {
@@ -86,15 +80,14 @@ async function main() {
 
     // 歷任會長
     const leaderList = el('ol', { className: 'leaders' },
-      [...leaders].sort((a, b) => dateKey(a.term_start).localeCompare(dateKey(b.term_start))).map((l) => el('li', { className: 'leaders__item' },
+      [...leaders].sort((a, b) => (Number(a.sort_order) || 0) - (Number(b.sort_order) || 0)).map((l) => el('li', { className: 'leaders__item' },
         el('p', { className: 'leaders__name' },
           l.member_id && memberIds.has(l.member_id)
             ? el('a', { href: `member.html?id=${encodeURIComponent(l.member_id)}`, text: l.nickname || '' })
             : el('span', { text: l.nickname || '' }),
-          l.term_end ? null : el('span', { className: 'tag tag--plain', text: '現任' }),
           demoBadge(l),
         ),
-        el('p', { className: 'leaders__term', text: leaderTerm(l) }),
+        l.period ? el('p', { className: 'leaders__term', text: l.period }) : null,
         l.note ? el('p', { className: 'leaders__note', text: l.note }) : null,
       )),
     );
