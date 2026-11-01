@@ -1,7 +1,7 @@
 import { initLayout } from '../layout.js';
 import { loadSite, loadTable } from '../data.js';
-import { el, img, clear } from '../render.js';
-import { tapeTitle, polaroid, handNote, videoCard, errorBox, tiltClass } from '../ui.js';
+import { el, img, clear, dateKey, formatDate } from '../render.js';
+import { tapeTitle, polaroid, handNote, videoCard, errorBox, demoBadge } from '../ui.js';
 import { PLACEHOLDERS } from '../validate.js';
 
 initLayout();
@@ -25,6 +25,51 @@ function card({ id, title, text, button, href, visual, extra }) {
         el('a', { className: 'btn', href }, button, el('span', { 'aria-hidden': 'true', text: ' →' })),
       ),
       visual ? el('div', { className: 'home-card__visual' }, visual) : null,
+    ),
+  );
+}
+
+/** 精選回憶的一張照片：拍立得白邊、不傾斜，點了進紀念館打開燈箱 */
+function featuredItem(p, isLarge) {
+  const meta = el('p', { className: 'featured-photo__meta' },
+    p.date ? el('time', { datetime: p.date, text: formatDate(p.date) }) : null,
+    p.category ? el('span', { text: p.category }) : null,
+    demoBadge(p),
+  );
+  return el('li', { className: isLarge ? 'featured-photo featured-photo--large' : 'featured-photo' },
+    el('a', { href: `gallery.html#${encodeURIComponent(p.id)}` },
+      el('figure', { className: 'polaroid featured-photo__frame' },
+        el('span', { className: 'featured-photo__img' },
+          img(isLarge ? p.image || p.thumb : p.thumb || p.image, p.title || '紀念館照片'),
+        ),
+        el('figcaption', {},
+          el('span', { className: 'featured-photo__title', text: p.title || '（未命名照片）' }),
+          meta,
+        ),
+      ),
+    ),
+  );
+}
+
+/** 精選回憶：featured 照片依日期由新到舊取前 5 張；沒有照片就不顯示 */
+function featuredSection(gallery, site) {
+  const photos = gallery
+    .filter((g) => g.featured && g.id)
+    .sort((a, b) => dateKey(b.date).localeCompare(dateKey(a.date)))
+    .slice(0, 5);
+  if (!photos.length) return null;
+
+  const heading = tapeTitle('精選回憶', 'h2');
+  heading.id = 'home-memories-title';
+  return el('section', { className: 'home-featured', 'aria-labelledby': heading.id },
+    el('div', { className: 'home-featured__head' },
+      heading,
+      el('a', { className: 'btn', href: 'gallery.html' }, '走進紀念館', el('span', { 'aria-hidden': 'true', text: ' →' })),
+    ),
+    site.memories_intro ? el('p', { className: 'home-featured__lead', text: site.memories_intro }) : null,
+    el('ul', { className: 'featured-grid', dataset: { count: String(photos.length) } },
+      // 5 張：左大右四小；1 張：只有一張大圖；2–4 張：等分
+      photos.map((p, i) => featuredItem(p, i === 0 && (photos.length === 5 || photos.length === 1))),
     ),
   );
 }
@@ -56,22 +101,7 @@ async function main() {
       visual: polaroid({ src: site.story_image, alt: '公會故事配圖', tilt: 'tilt-b', tape: true }),
     });
 
-    // 2. 精選回憶（最多 3 張）
-    const photos = gallery.filter((g) => g.featured).slice(0, 3);
-    const memories = card({
-      id: 'memories', title: '精選回憶', text: site.memories_intro,
-      button: '走進紀念館', href: 'gallery.html',
-      visual: photos.length
-        ? el('ul', { className: 'photo-stack' },
-          photos.map((p, i) => el('li', {},
-            el('a', { href: 'gallery.html', 'aria-label': `在紀念館查看：${p.title || '照片'}` },
-              polaroid({ src: p.thumb || p.image, alt: p.title || '', tilt: tiltClass(i) }),
-            ),
-          )))
-        : null,
-    });
-
-    // 3. 成員預覽（最多 6 位）
+    // 2. 成員預覽（最多 6 位）
     const featured = members.filter((m) => m.featured).sort(sortMembers);
     const preview = (featured.length ? featured : [...members].sort(sortMembers)).slice(0, 6);
     const memberCard = card({
@@ -88,7 +118,7 @@ async function main() {
       ),
     });
 
-    // 4. 精選影片（膠卷框一支＋其他片名）
+    // 3. 精選影片（膠卷框一支＋其他片名）
     const featuredVideos = videos.filter((v) => v.featured);
     const cards = [];
     for (const v of featuredVideos) {
@@ -110,7 +140,10 @@ async function main() {
         : null,
     });
 
-    clear(root).append(hero, intro, el('div', { className: 'home-grid' }, story, memories, memberCard, videoSection));
+    const memories = featuredSection(gallery, site);
+    clear(root).append(
+      ...[hero, intro, memories, el('div', { className: 'home-grid' }, story, memberCard, videoSection)].filter(Boolean),
+    );
   } catch (error) {
     console.warn(error);
     clear(root).append(errorBox());
