@@ -11,11 +11,17 @@ const VALID_MARKS = new Set(['none', 'hat', 'ribbon', 'glasses', 'cape', 'headba
 const HAIR_STYLES = ['short', 'medium', 'long', 'ponytail', 'twintails', 'bun'];
 const TOP_STYLES = ['shirt', 'shirt', 'jacket', 'jacket', 'armor', 'robe', 'dress'];
 const BOTTOM_STYLES = ['pants', 'pants', 'shorts', 'longskirt', 'skirt'];
+const EYES = ['#6b4a2e', '#6b4a2e', '#3a2a22', '#3f6e9c', '#4f7a4a', '#8a5a9c', '#a8323a', '#c8963a'];
+const HEIGHTS = ['short', 'medium', 'medium', 'medium', 'tall'];
 
 // 問卷的款式（中文）→ 像素小人的部件名稱（pixelParts.js）
 const HAIR_STYLE = { 短髮: 'short', 中長髮: 'medium', 長髮: 'long', 馬尾: 'ponytail', 雙馬尾: 'twintails', 包包頭: 'bun' };
 const TOP_STYLE = { 襯衫: 'shirt', 外套: 'jacket', 輕鎧甲: 'armor', 長袍: 'robe', 洋裝: 'dress' };
 const BOTTOM_STYLE = { 長褲: 'pants', 短褲: 'shorts', 長裙: 'longskirt', 短裙: 'skirt' };
+// 臉（紙娃娃的臉部疊圖 face_<名稱>，要和 art.js 的 DOLL_PARTS 一致）與身高（imageAvatar.js 的 HEIGHT_SCALE）
+export const FACE_STYLE = { 溫和: 'base', 開朗: 'smile', 冷靜: 'cool' };
+const FACES = Object.values(FACE_STYLE);
+const HEIGHT = { 矮: 'short', 中: 'medium', 高: 'tall' };
 
 /** 沒有填外觀的成員：依 id 產生固定的顏色組合 */
 export function autoLook(id) {
@@ -38,6 +44,9 @@ function autoStyle(id) {
     topStyle: TOP_STYLES[(h >>> 4) % TOP_STYLES.length],
     bottomStyle: BOTTOM_STYLES[(h >>> 9) % BOTTOM_STYLES.length],
     bottom: BOTTOMS[(h >>> 14) % BOTTOMS.length],
+    face: FACES[(h >>> 18) % FACES.length],
+    eyes: EYES[(h >>> 21) % EYES.length],
+    height: HEIGHTS[(h >>> 25) % HEIGHTS.length],
   };
 }
 
@@ -53,19 +62,22 @@ const FAVORITE_CHANCE = 0.6; // 有填喜歡的房間時，分到那裡的機率
 
 /**
  * 資料表的外觀＋自動外觀合併；格式不對的欄位改用自動值。
- * 欄位見 docs/問卷-城堡成員外觀.md（top＝上衣色、bottom＝下身色、accessory＝配件）；
- * 舊欄位 outfit、mark 仍可用。款式（hair_style、top_style、bottom_style）沒填或不認得時用自動款式。
+ * 欄位見 docs/問卷-城堡成員外觀.md（top＝上衣色、bottom＝下身色、accessory＝配件、eyes＝眼睛顏色）；
+ * 舊欄位 outfit、mark 仍可用。款式（hair_style、top_style、bottom_style、face、height）沒填或不認得時用自動款式。
  */
 export function resolveLook(id, row) {
   const look = autoLook(id);
   if (!row) return look;
-  for (const k of ['skin', 'hair', 'outfit', 'accent', 'bottom', 'shoes']) {
+  if (row.is_demo === false) Object.assign(look, { face: 'base', eyes: '', height: 'medium' }); // 成員真的填了但沒填這幾項：母版的臉、預設眼睛顏色
+  for (const k of ['skin', 'hair', 'outfit', 'accent', 'bottom', 'shoes', 'eyes']) {
     if (isColor(row[k])) look[k] = row[k];
   }
   if (isColor(row.top)) look.outfit = row.top;
   if (HAIR_STYLE[row.hair_style]) look.hairStyle = HAIR_STYLE[row.hair_style];
   if (TOP_STYLE[row.top_style]) look.topStyle = TOP_STYLE[row.top_style];
   if (BOTTOM_STYLE[row.bottom_style]) look.bottomStyle = BOTTOM_STYLE[row.bottom_style];
+  if (FACE_STYLE[row.face]) look.face = FACE_STYLE[row.face];
+  if (HEIGHT[row.height]) look.height = HEIGHT[row.height];
   if (['長袍', '洋裝'].includes(row.top_style)) {
     look.bottom = look.outfit; // 連身：下身和上衣同色
     if (!BOTTOM_STYLE[row.bottom_style]) look.bottomStyle = '';

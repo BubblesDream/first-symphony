@@ -8,10 +8,11 @@
 2. 只取這個部件負責的像素：
    head（頭）＝脖子切線以上全部＋切線以下的頭髮、配件與它們的外框；
    outfit（衣服）＝切線以下全部＋切線以上的衣領；
-   over（眼鏡、披風）＝配件鍵色＋和母版不同的外框。
-3. 依顏色分成固定色與 6 個可染色區（頭髮、皮膚、上衣、下身、鞋子、配件）。
+   over（眼鏡、披風）＝配件鍵色＋和母版不同的外框；
+   face（臉部疊圖）＝正面、側面臉內側（母版皮膚範圍補滿眼睛、往內縮）的全部像素，眼珠畫成鍵色藍。
+3. 依顏色分成固定色與 6 個可染色區（頭髮、皮膚、上衣、下身、鞋子、配件）；臉部疊圖多一個第 7 區（眼睛，藍色鍵色）。
    可染色區只存明暗（OKLab 明度和鍵色的差＋0.5），遊戲裡再換成每個人挑的顏色（paperdoll.js）。
-4. 每層各自縮小（預乘透明度），存成 WebP：三個方向排一列，七層由上往下排。
+4. 每層各自縮小（預乘透明度），存成 WebP：三個方向排一列，七層（臉部疊圖八層）由上往下排。
 
 用法（在專案根目錄）：python tools/castle_paperdoll.py [部件名稱 ...]
 需要 Pillow、numpy。部件清單與格子大小只寫在 assets/js/castle/art.js 的 DOLL_PARTS、DOLL_CELL。
@@ -29,8 +30,8 @@ OUT = ROOT / 'assets' / 'images' / 'castle' / 'doll'
 ART_JS = ROOT / 'assets' / 'js' / 'castle' / 'art.js'
 
 VIEWS = [(0, 512), (512, 1024), (1024, 1536)]  # 原圖 1536×1024，三個方向各占三分之一
-REGIONS = ['hair', 'skin', 'top', 'bottom', 'shoes', 'acc']  # 第 1～6 層；第 0 層是固定色
-KEY_HEX = {'shoes': '#06b6d4', 'acc': '#facc15'}  # 其他區的基準明度從母版量
+REGIONS = ['hair', 'skin', 'top', 'bottom', 'shoes', 'acc', 'eyes']  # 第 1～7 層；第 0 層是固定色；eyes 只有臉部疊圖有
+KEY_HEX = {'shoes': '#06b6d4', 'acc': '#facc15', 'eyes': '#2563eb'}  # 其他區的基準明度從母版量
 
 
 def read_art():
@@ -135,6 +136,21 @@ def align(base, part, rows, ignore, x0, x1):
     return dx, dy
 
 
+_FACE = {}
+
+
+def face_area(base, x0, x1, cut):
+    """臉的內側：母版脖子切線以上的皮膚，補滿眼睛、眉毛的洞（閉運算），再往內縮，不碰到臉的外框與頭髮"""
+    if (x0, cut) not in _FACE:
+        skin = np.zeros(base.shape[:2], bool)
+        skin[:cut, x0:x1] = (classify(base) == 2)[:cut, x0:x1]
+        im = Image.fromarray(skin.astype(np.uint8) * 255)
+        im = im.filter(ImageFilter.MaxFilter(31)).filter(ImageFilter.MinFilter(31))  # 補洞
+        im = im.filter(ImageFilter.MinFilter(9))  # 往內縮 4 像素
+        _FACE[(x0, cut)] = np.asarray(im) > 0
+    return _FACE[(x0, cut)]
+
+
 def select(kind, part, cls, base, cuts):
     """這個部件負責的像素（0～1 的權重）"""
     h, w = cls.shape
@@ -155,6 +171,9 @@ def select(kind, part, cls, base, cuts):
             top = cls == 3
             collar = near(top, 8) & ~near(cls == 1, 4) & (cls != 2)
             keep |= view & (~above | top | collar)
+        elif kind == 'face':
+            if (x0, x1) != VIEWS[1]:  # 背面沒有臉
+                keep |= view & face_area(base, x0, x1, cut)
         else:  # over：眼鏡、披風
             acc = cls == 6
             diff = np.abs(part[..., :3] - base[..., :3]).max(-1) > 0.12
@@ -178,7 +197,8 @@ def shrink(layer, box, size):
 
 def make_part(name, base, base_cls, cuts, geo, cell, ref_l):
     cw, ch, _ = cell
-    kind = 'head' if name.startswith('head_') else 'outfit' if name.startswith('outfit_') else 'over'
+    kind = name.split('_')[0] if name.split('_')[0] in ('head', 'outfit', 'face') else 'over'
+    layers = 8 if kind == 'face' else 7
     part = base.copy() if name == 'head_short_none' else load(SRC / f'{name}.png')
     cls0 = classify(part)
     # 對齊：頭和配件比下半身，衣服比頭
@@ -194,12 +214,14 @@ def make_part(name, base, base_cls, cuts, geo, cell, ref_l):
         aligned[:, x0:x1] = shift(part, dx, dy)[:, x0:x1]
     part = aligned
     cls = classify(part)
+    if kind == 'face':
+        cls[cls == 4] = 7  # 臉上的藍色是眼珠
     keep = select(kind, part, cls, base, cuts)
     lab_l = ok_l(part[..., :3])
 
-    sheet = np.zeros((ch * 7, cw * 3, 4), np.float32)
+    sheet = np.zeros((ch * layers, cw * 3, 4), np.float32)
     for i, box in enumerate(geo):
-        for layer in range(7):
+        for layer in range(layers):
             m = keep & (cls == layer)
             if not m.any():
                 continue
