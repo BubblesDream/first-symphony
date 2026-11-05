@@ -29,6 +29,7 @@ export const FAVORITE_ROOM = {
   外庭: 'courtyard', 客房: 'guest', 圖書館: 'library', 觀星台: 'observatory',
 };
 const FAVORITE_CHANCE = 0.6; // 有填喜歡的房間時，分到那裡的機率
+const START_ROOM_MIN = 4; // 起始房間（大廳）至少幾個人（總人數夠的話）
 
 /**
  * 資料表的外觀＋自動外觀合併；格式不對的欄位改用自動值。
@@ -83,6 +84,22 @@ export function drawRoster({ members, looks, rooms, rng, max }) {
       look: resolveLook(m.id, lookById.get(m.id)),
     });
   });
+
+  // 起始房間（第一間，大廳）保底幾個人，一進城堡就熱鬧：
+  // 從人最多的房間（至少留 1 人）請人過來，優先請「不是待在自己喜歡房間」的人
+  const first = rooms[0]?.id;
+  const want = Math.min(START_ROOM_MIN, rooms[0]?.capacity || 0);
+  while (first && result[first].length < want) {
+    const from = rooms.filter((r) => r.id !== first && result[r.id].length > 1)
+      .sort((a, b) => result[b.id].length - result[a.id].length)[0];
+    if (!from) break; // 總人數不夠，就不勉強
+    const list = result[from.id];
+    let i = list.length - 1;
+    for (let j = list.length - 1; j >= 0; j--) {
+      if (FAVORITE_ROOM[lookById.get(list[j].id)?.favorite_room] !== from.id) { i = j; break; }
+    }
+    result[first].push(...list.splice(i, 1));
+  }
   return result;
 }
 
@@ -97,4 +114,28 @@ export function pickLines(lines, memberId, roomId, rng) {
   const count = rng.int(1, 3);
   const out = [...own, ...common].slice(0, count);
   return out.length ? out : [{ text: '……（微笑）', is_demo: false }];
+}
+
+/**
+ * 讓指定成員一定出現（網址 ?meet=）：放進他喜歡的房間，沒填就放 fallbackRoom（大廳）。
+ * 已經被抽到別的房間時移過去；那間房滿了，就請排在最後的一位改天再來。
+ * 回傳 { roomId, nickname }；找不到這位成員時回傳 null（名單不變）。
+ */
+export function placeMember({ roster, members, looks, memberId, capacities, fallbackRoom }) {
+  const member = members.find((m) => m.id === memberId && m.nickname);
+  if (!member) return null;
+  const row = looks.find((r) => r.member_id === memberId);
+  const favorite = FAVORITE_ROOM[row?.favorite_room];
+  const roomId = favorite && roster[favorite] ? favorite : fallbackRoom;
+  if (!roster[roomId]) return null;
+  for (const id of Object.keys(roster)) roster[id] = roster[id].filter((p) => p.id !== memberId);
+  const list = roster[roomId];
+  if (list.length >= (capacities[roomId] || 1)) list.pop();
+  list.unshift({
+    id: member.id,
+    nickname: member.nickname,
+    role: member.role || '',
+    look: resolveLook(member.id, row),
+  });
+  return { roomId, nickname: member.nickname };
 }

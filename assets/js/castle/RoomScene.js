@@ -21,7 +21,8 @@ export class RoomScene extends Phaser.Scene {
   }
 
   init(data) {
-    this.roomId = ROOMS[data?.roomId] ? data.roomId : START_ROOM;
+    // 第一次進場沒有指定房間：用網址的 ?room=／?meet= 決定（main.js 已檢查過）
+    this.roomId = ROOMS[data?.roomId] ? data.roomId : (this.registry.get('ctx')?.startRoom || START_ROOM);
     this.spawnId = data?.spawn || 'start';
   }
 
@@ -71,6 +72,7 @@ export class RoomScene extends Phaser.Scene {
       return zone;
     });
     this.physics.add.collider(this.player.feet, this.npcBodies);
+    this.meetOnArrival();
 
     // 鏡頭
     const cam = this.cameras.main;
@@ -172,16 +174,41 @@ export class RoomScene extends Phaser.Scene {
     }
   }
 
-  /** NPC 的起始位置：能走的空格子，避開門口與訪客附近 */
+  /**
+   * NPC 的起始位置：能走的空格子，避開門口與訪客附近。
+   * 用「今天＋房間 id」的固定亂數先洗牌再排除訪客附近，同一天從哪個門進來位置都幾乎一樣。
+   */
   pickStartTiles(count, sx, sy) {
     const { grid } = this;
     const tiles = [];
     for (let y = 0; y < grid.h; y++) {
       for (let x = 0; x < grid.w; x++) {
-        if (grid.npcWalkable(x, y) && Math.abs(x - sx) + Math.abs(y - sy) > 2) tiles.push([x, y]);
+        if (grid.npcWalkable(x, y)) tiles.push([x, y]);
       }
     }
-    return this.rng.shuffle(tiles).slice(0, count);
+    return this.ctx.dayRng(this.roomId, 'tiles').shuffle(tiles)
+      .filter(([x, y]) => Math.abs(x - sx) + Math.abs(y - sy) > 2)
+      .slice(0, count);
+  }
+
+  /** ?meet= 的成員在這個房間：訪客出生在他旁邊，並提示一句（只在第一次進場） */
+  meetOnArrival() {
+    const meet = this.ctx.meet;
+    if (!meet || meet.shown || meet.roomId !== this.roomId) return;
+    meet.shown = true;
+    const npc = this.npcs.find((n) => n.data.id === meet.id);
+    if (!npc) return;
+    const { grid } = this;
+    const near = [[0, 1], [-1, 0], [1, 0], [0, -1], [-1, 1], [1, 1], [0, 2], [-2, 0], [2, 0]]
+      .map(([dx, dy]) => [npc.tx + dx, npc.ty + dy])
+      .find(([x, y]) => grid.playerWalkable(x, y) && !grid.occupant(x, y) && grid.cell(x, y)?.kind !== 'door');
+    if (near) {
+      const p = tileFeet(...near);
+      this.player.feet.body.reset(p.x, p.y);
+      this.player.avatar.setPosition(p.x, p.y);
+      this.player.faceToward(npc.x, npc.y);
+    }
+    this.ctx.ui.toast(`${meet.nickname}今天在${this.room.name}。`, 4);
   }
 
   // ---------- 互動 ----------
@@ -228,7 +255,9 @@ export class RoomScene extends Phaser.Scene {
       dialog.open({
         title: npc.data.nickname,
         subtitle: npc.data.role,
-        lines: pickLines(this.ctx.lines, npc.data.id, this.roomId, this.rng),
+        memberId: npc.data.id,
+        // 今日台詞：同一天、同一間房，同一位成員說的話一樣
+        lines: pickLines(this.ctx.lines, npc.data.id, this.roomId, this.ctx.dayRng(this.roomId, npc.data.id, 'lines')),
         onClose: () => npc.endTalk(),
       });
     } else if (target.obj) {

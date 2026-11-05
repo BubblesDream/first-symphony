@@ -8,8 +8,11 @@ export function createDialog(stage) {
   const demo = el('span', { className: 'demo-badge castle-dialog__demo', text: '示範資料' });
   const text = el('p', { className: 'castle-dialog__text' });
   const hint = el('p', { className: 'castle-dialog__hint' });
+  // 和成員聊天時：連到成員介紹頁（點連結不要觸發「下一句」）
+  const profile = el('a', { className: 'text-link castle-dialog__link', text: '看成員頁', hidden: true });
+  profile.addEventListener('click', (e) => e.stopPropagation());
   const box = el('div', { className: 'castle-dialog', hidden: true, 'aria-live': 'polite' },
-    el('div', { className: 'castle-dialog__head' }, name, role, demo),
+    el('div', { className: 'castle-dialog__head' }, name, role, demo, profile),
     text,
     hint,
   );
@@ -28,14 +31,18 @@ export function createDialog(stage) {
 
   const api = {
     get isOpen() { return !box.hidden; },
-    /** 開啟對話。lines：[{ text, is_demo }] */
-    open({ title, subtitle = '', lines: list, onClose: done }) {
+    /** 開啟對話。lines：[{ text, is_demo }]；memberId：有的話顯示「看成員頁」連結 */
+    open({ title, subtitle = '', lines: list, onClose: done, memberId = '' }) {
       lines = list;
       index = 0;
       onClose = done || null;
       name.textContent = title;
       role.textContent = subtitle;
       role.hidden = !subtitle;
+      const validId = /^m\d+$/.test(memberId);
+      profile.hidden = !validId;
+      if (validId) profile.href = `member.html?id=${encodeURIComponent(memberId)}`;
+      else profile.removeAttribute('href');
       box.hidden = false;
       show();
     },
