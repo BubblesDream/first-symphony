@@ -3,6 +3,7 @@
 //   seated：   是否坐著
 //   bubbles：  演出時偶爾冒出的泡泡文字
 //   duration： 停留秒數範圍
+//   effect：   演出時的小效果（effects.js），例如射箭、火星；演出點可寫 target: [x, y] 指定效果出現的格子
 
 export const ACTIONS = {
   sit_chat:    { pose: 'idle',    seated: true, bubbles: ['…', '哈哈', '嗯嗯', '真的嗎？'], duration: [10, 20] },
@@ -33,17 +34,20 @@ export const ACTIONS = {
   look_telescope: { pose: 'idle',  seated: false, bubbles: ['☆', '看到了！', '…'], duration: [10, 20] },
   read_starmap:   { pose: 'read',  seated: true, bubbles: ['…', '這顆星是…'], duration: [10, 20] },
   stargaze:       { pose: 'idle',  seated: true, bubbles: ['☆', '…', '好美'], duration: [12, 24] },
-  // 後續：hammer、hit_dummy、shoot_arrow…
   // 1F：酒館／練習室／鍛造工坊
   drink:       { pose: 'idle',    seated: true, bubbles: ['咕嘟', '好喝！', '再來一杯'], duration: [10, 20] },
   cheers:      { pose: 'cheer',   seated: true, bubbles: ['乾杯！', '哈哈哈', '敬大家！'], duration: [10, 20] },
   serve_drink: { pose: 'work',    seated: false, bubbles: ['來了～', '請慢用', '…'], duration: [8, 16] },
   warm_hands:  { pose: 'idle',    seated: false, bubbles: ['好暖…', '呼～'], duration: [6, 12] },
-  hit_dummy:   { pose: 'work',    seated: false, bubbles: ['喝！', '哈！', '再一下！'], duration: [8, 16] },
-  shoot_arrow: { pose: 'play',    seated: false, bubbles: ['咻—', '中了！', '差一點…'], duration: [8, 16] },
+  hit_dummy:   { pose: 'work',    seated: false, bubbles: ['喝！', '哈！', '再一下！'], duration: [8, 16],
+                 effect: { type: 'bits', color: 0xd9b55a, count: 4, lift: 16 } }, // 掉下幾根稻草
+  shoot_arrow: { pose: 'play',    seated: false, bubbles: ['咻—'], duration: [8, 16],
+                 effect: { type: 'arrow', hitRate: 0.7, hitText: '中了！', missText: '差一點…' } },
   pick_weapon: { pose: 'idle',    seated: false, bubbles: ['用哪把好呢', '嗯…'], duration: [4, 8] },
   sit_rest:    { pose: 'idle',    seated: true, bubbles: ['呼…', '累了', '…'], duration: [8, 16] },
-  hammer:      { pose: 'work',    seated: false, bubbles: ['鏗！', '鏗鏗！', '…'], duration: [10, 20] },
+  hammer:      { pose: 'work',    seated: false, bubbles: ['鏗！', '鏗鏗！', '…'], duration: [10, 20],
+                 effect: { type: 'bits', color: 0xf0a040, count: 6 } }, // 鐵砧上的火星
   stoke_fire:  { pose: 'idle',    seated: false, bubbles: ['好熱…', '火要再大一點'], duration: [6, 12] },
-  sharpen:     { pose: 'work',    seated: false, bubbles: ['唰—唰—', '…'], duration: [6, 12] },
+  sharpen:     { pose: 'work',    seated: false, bubbles: ['唰—唰—', '…'], duration: [6, 12],
+                 effect: { type: 'bits', color: 0xf3d27a, count: 3, lift: 14 } },
 };

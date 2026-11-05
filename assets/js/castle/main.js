@@ -8,8 +8,8 @@ import { createDialog, createToast } from './dialog.js';
 
 /**
  * stage：放遊戲畫布的元素（要能取得焦點，鍵盤只在它取得焦點時作用）
- * data：{ members, looks, lines }
- * options：{ seed, npcs, debug, noArt, onRoomChange }
+ * data：{ members, looks, lines, history }
+ * options：{ seed, npcs, hour, debug, noArt, onRoomChange }
  */
 export function startCastle(stage, data, options = {}) {
   const rng = createRng(options.seed);
@@ -25,6 +25,8 @@ export function startCastle(stage, data, options = {}) {
   const ctx = {
     roster,
     lines: data.lines,
+    history: data.history || [], // 圖書館的公會歷史展示櫃
+    hour: Number.isInteger(options.hour) ? options.hour : undefined, // 測試時間氛圍用
     rng,
     debug: Boolean(options.debug),
     ui: {

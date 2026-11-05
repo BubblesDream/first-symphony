@@ -1,5 +1,6 @@
 // 虛擬公會城堡頁：讀資料 → 啟動遊戲。
-// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）
+// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）、
+//   ?hour=21 假裝現在是幾點（測試時間氛圍）
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
 import { createMusicPlayer } from '../castle/music.js';
@@ -29,16 +30,18 @@ async function main() {
   let members;
   let looks = [];
   let lines = [];
+  let history = [];
   try {
     members = await loadTable('members');
   } catch (error) {
     fail('成員資料讀取失敗，請稍後再試。', error);
     return;
   }
-  // 外觀與台詞讀不到也能玩（改用自動配色與預設台詞）
-  [looks, lines] = await Promise.all([
+  // 外觀、台詞、公會歷史讀不到也能玩（改用自動配色與預設台詞；圖書館展示櫃顯示「整理中」）
+  [looks, lines, history] = await Promise.all([
     loadTable('castle_looks').catch((e) => (console.warn(e), [])),
     loadTable('castle_lines').catch((e) => (console.warn(e), [])),
+    loadTable('history').catch((e) => (console.warn(e), [])),
   ]);
   if (!members.length) {
     fail('還沒有成員資料。');
@@ -48,9 +51,10 @@ async function main() {
   const params = new URLSearchParams(location.search);
   const num = (key) => (params.has(key) && /^\d+$/.test(params.get(key)) ? Number(params.get(key)) : undefined);
   loading.hidden = true;
-  startCastle(stage, { members, looks, lines }, {
+  startCastle(stage, { members, looks, lines, history }, {
     seed: num('seed'),
     npcs: num('npcs'),
+    hour: num('hour'),
     debug: params.get('debug') === '1',
     noArt: params.get('noart') === '1',
     onRoomChange: (name) => { roomName.textContent = `目前位置：${name}`; },

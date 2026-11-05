@@ -1,11 +1,13 @@
 // NPC 行為：簡單狀態機。
 //   idle（待機）→ 隨機選：繼續待機／walk 走到附近／walk 走向演出點 → perform（演出）→ idle
 //   任何時候被訪客搭話 → talk（停下、面向訪客）→ 回到原本狀態
+//   多人演出（groups.js）：被叫去某個演出點 → 走到後 ready（擺好姿勢等大家）→ 到齊後一起 perform
 // 所有生活動作都走同一套演出流程，差別只在 actions.js 的資料。
 import { NPC_SPEED, BEHAVIOR, IDLE_SECONDS, WANDER_RADIUS } from './config.js';
 import { ACTIONS } from './actions.js';
 import { tileFeet } from './grid.js';
 import { createAvatar } from './avatar.js';
+import { playEffect } from './effects.js';
 
 const WAIT_STEP = 0.5;   // 前面有人時等幾秒再試
 const MAX_TRIES = 4;     // 試幾次後放棄這次移動
@@ -50,9 +52,14 @@ export class Npc {
         this.bubbleTimer -= dt;
         if (this.bubbleTimer <= 0) {
           this.bubbleTimer = this.rng.range(3, 6);
-          if (this.action.bubbles?.length) this.avatar.say(this.rng.pick(this.action.bubbles));
+          const said = playEffect(this.scene, this.action, this, this.spot);
+          // 多人演出時泡泡由 groups.js 統一安排，自己只播效果
+          if (said) this.avatar.say(said);
+          else if (!this.group && this.action.bubbles?.length) this.avatar.say(this.rng.pick(this.action.bubbles));
         }
         if (this.timer <= 0) this.finishPerform();
+        break;
+      case 'ready': // 多人演出：已經就位，等其他人
         break;
       default: // talk：等訪客說完
         break;
@@ -169,32 +176,67 @@ export class Npc {
   }
 
   arrive() {
-    if (this.spot) this.startPerform();
+    if (this.spot && this.group) this.getReady();
+    else if (this.spot) this.startPerform();
     else this.toIdle(this.rng.range(...IDLE_SECONDS));
   }
 
   giveUp() {
     if (this.spot) this.spot.user = null;
     this.spot = null;
+    this.group = null;
     this.path = [];
     this.toIdle(this.rng.range(1, 2));
   }
 
   // ---------- 演出點 ----------
 
-  startPerform() {
+  /** seconds：多人演出時由群組指定同樣的長度 */
+  startPerform(seconds) {
     this.action = ACTIONS[this.spot.action] || ACTIONS.stand_guard;
     this.state = 'perform';
     this.avatar.setFacing(this.spot.facing);
     this.avatar.setPose(this.action.pose, this.action.seated);
-    this.timer = this.rng.range(...this.action.duration);
+    this.timer = seconds ?? this.rng.range(...this.action.duration);
     this.bubbleTimer = this.rng.range(1, 3);
   }
 
   finishPerform() {
     if (this.spot) this.spot.user = null;
     this.spot = null;
+    this.group = null;
     this.toIdle(this.rng.range(0.5, 1.5));
+  }
+
+  // ---------- 多人演出（groups.js 呼叫） ----------
+
+  /** 被叫去參加多人演出：走到指定的演出點。走不到就回傳 false。 */
+  joinGroup(group, spot) {
+    if (this.state !== 'idle') return false;
+    const path = this.grid.findPath(this.tx, this.ty, spot.x, spot.y, this.grid.npcWalkable);
+    if (!path) return false;
+    spot.user = this;
+    this.group = group;
+    if (!path.length) {
+      this.spot = spot;
+      this.getReady();
+      return true;
+    }
+    return this.startWalk(path, [spot.x, spot.y], spot);
+  }
+
+  /** 走到了：擺好姿勢，等大家到齊 */
+  getReady() {
+    this.action = ACTIONS[this.spot.action] || ACTIONS.stand_guard;
+    this.state = 'ready';
+    this.avatar.setFacing(this.spot.facing);
+    this.avatar.setPose('idle', this.action.seated);
+  }
+
+  /** 多人演出取消（等太久、人數不夠）：已經就位的人離開，走在路上的人改成自己演出 */
+  leaveGroup() {
+    this.group = null;
+    if (this.state === 'ready') this.finishPerform();
   }
 
   // ---------- 和訪客對話 ----------
@@ -213,7 +255,7 @@ export class Npc {
       this.avatar.setPosition(this.x, this.y);
     }
     this.state = 'talk';
-    if (this.saved.state === 'perform') return; // 演出中：維持姿勢，只停下計時
+    if (this.saved.state === 'perform' || this.saved.state === 'ready') return; // 演出中：維持姿勢，只停下計時
     this.avatar.setPose('idle');
     this.face(px - this.x, py - this.y);
   }
@@ -222,8 +264,9 @@ export class Npc {
     if (this.state !== 'talk') return;
     const saved = this.saved;
     this.saved = null;
-    if (saved.state === 'perform') {
-      this.state = 'perform';
+    if (saved.state === 'perform' || saved.state === 'ready') {
+      this.state = saved.state;
+      if (saved.state === 'ready' && !this.group) this.finishPerform(); // 說話時多人演出被取消了
       return;
     }
     if (saved.state === 'walk' && this.goal) {

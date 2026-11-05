@@ -8,6 +8,7 @@
 export default {
   id: 'courtyard',
   name: '城堡外庭',
+  outdoor: true, // 時間氛圍（ambience.js）在戶外比較明顯
   capacity: 10,
   map: [
     '#################OOOOOO#################', // 0  城牆；OOOOOO 正門（回大廳）
@@ -16,10 +17,10 @@ export default {
     'H................ssssss................H', // 3
     'H.FFFFFFFFFFFF....ssss....KKK...vZ.vZ..H', // 4  F 羊圈柵欄（G 直向）  KKK 晾衣架  v 小凳子  Z 紡車
     'H.GBBB.....YYG....ssss.................H', // 5  BBB 小棚子  Y 乾草
-    'H.GBBB..e....G.TT.ssss.TT..............H', // 6  e 羊
-    'H.G.......e..G....ssss.................H', // 7
-    'H.G..e.......G....ssss....JJJ..........H', // 8  JJJ 工作台
-    'H.G....e...e.G....ssss.........zzzzzzz.H', // 9  z 農作物
+    'H.GBBB.......G.TT.ssss.TT..............H', // 6  羊會在羊圈裡走動（critters）
+    'H.G..........G....ssss.................H', // 7
+    'H.G..........G....ssss....JJJ..........H', // 8  JJJ 工作台
+    'H.G..........G....ssss.........zzzzzzz.H', // 9  z 農作物
     'H.G..........G....ssss.........rrrrrrr.H', // 10 r 田間泥土小路
     'H.FFFFF..FFFFF.ssssssssss......zzzzzzz.H', // 11 羊圈入口在下方中間
     'H............wwssssssssssww....rrrrrrr.H', // 12 w 花圃
@@ -55,7 +56,6 @@ export default {
     F: { kind: 'furniture', color: 'fence', sprite: 'fence' },
     G: { kind: 'furniture', color: 'fence', sprite: 'fence_side' }, // 直向（左右兩側）的柵欄
     B: { kind: 'furniture', color: 'furniture', sprite: 'sheep_shed' },
-    e: { kind: 'furniture', color: 'sheep', sprite: 'sheep' },
     Y: { kind: 'furniture', color: 'hay', sprite: 'haystack' },
     K: { kind: 'furniture', color: 'laundry', sprite: 'laundry_line' },
     v: { kind: 'seat', color: 'seat', sprite: 'stool' },
@@ -101,8 +101,14 @@ export default {
     { action: 'sit_fountain', x: 20, y: 16, facing: 'down' },
   ],
   // play：訪客按 E 後，自己走到最近、沒人用的同動作演出點做這個動作（核心程式之後實作）
+  // 會走動的羊（critter.js）：只在羊圈裡走
+  critters: [
+    { name: '羊', sprite: 'sheep', color: 'sheep', at: [[8, 6], [10, 7], [5, 8], [7, 9], [11, 9]], area: [3, 5, 12, 10], bubbles: ['咩～', '咩—', '（嚼嚼）'] },
+  ],
   objects: [
-    { x: 19.5, y: 14, name: '噴泉', text: ['石砌的噴泉，中央立著一座豎琴形狀的雕像。', '水聲很好聽，常有人坐在旁邊休息。'], demo: true, play: 'sit_fountain' },
+    { x: 19.5, y: 14, name: '噴泉', text: ['石砌的噴泉，中央立著一座豎琴形狀的雕像。', '你丟了一枚硬幣，許了一個願……'], demo: true, play: 'sit_fountain',
+      // 許願結果：隨機抽一句
+      random: ['水面晃了一下，好像有人聽見了。', '硬幣沉到底，旁邊已經有好多枚了。', '一陣風吹過，豎琴雕像好像發出了一個音。', '願望：下次副本掉好東西！', '願望：公會歌練到不走音。'] },
     { x: 27.5, y: 13, name: '水井', text: ['一口老水井，旁邊放著木桶。', '澆花、澆菜的水都從這裡打。'], demo: true, play: 'draw_water' },
     { x: 7, y: 7, name: '羊圈', text: ['幾隻羊在吃草，毛看起來很蓬鬆。', '剪下來的羊毛會拿去旁邊的紡車紡成毛線。'], demo: true, play: 'shear_sheep' },
     { x: 33, y: 4, name: '紡車', text: ['木頭紡車，踏板踩起來喀啦喀啦響。'], demo: true, play: 'spin_wool' },
