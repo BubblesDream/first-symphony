@@ -25,6 +25,10 @@ FACES = {
     'sparkle': 'big round sparkling eyes with extra white highlights, eyebrows raised in wonder, a small open "o" mouth.',
     'determined': 'a determined look: eyebrows angled down toward the nose, focused eyes (irises visible), a confident closed smirk.',
     'sleepy': 'a sleepy, gentle look: droopy half-closed eyes (irises still a little visible), relaxed soft eyebrows, a small relaxed smile.',
+    'closed': 'a happy closed-eye smile: both eyes closed as upward curved arcs (^ ^ shape), cheerful raised eyebrows, a wide open smiling mouth.',
+    'shy': 'a shy look: rosy pink blush across both cheeks, eyes glancing down to the side (irises visible), worried slanted eyebrows, a small wavy mouth.',
+    'mischief': 'a mischievous look: one eyebrow raised higher than the other, eyes slightly narrowed with a sly glint (irises visible), a cat-like smug smile.',
+    'wink': 'a playful wink: in the front view the character’s right eye (viewer’s left) is closed as a curved line and the other eye is open; in the side view the visible eye is open; a big grin.',
 }
 
 def run(key):

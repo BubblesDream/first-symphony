@@ -19,7 +19,10 @@ const HAIR_STYLE = { 短髮: 'short', 中長髮: 'medium', 長髮: 'long', 馬�
 const TOP_STYLE = { 襯衫: 'shirt', 外套: 'jacket', 輕鎧甲: 'armor', 長袍: 'robe', 洋裝: 'dress' };
 const BOTTOM_STYLE = { 長褲: 'pants', 短褲: 'shorts', 長裙: 'longskirt', 短裙: 'skirt' };
 // 臉（紙娃娃的臉部疊圖 face_<名稱>，要和 art.js 的 DOLL_PARTS 一致）與身高（imageAvatar.js 的 HEIGHT_SCALE）
-export const FACE_STYLE = { 溫和: 'base', 開朗: 'smile', 冷靜: 'cool' };
+export const FACE_STYLE = {
+  溫和: 'base', 開朗: 'smile', 冷靜: 'cool', 閃亮: 'sparkle', 認真: 'determined',
+  愛睏: 'sleepy', 瞇眼笑: 'closed', 害羞: 'shy', 調皮: 'mischief', 眨眼: 'wink',
+};
 const FACES = Object.values(FACE_STYLE);
 const HEIGHT = { 矮: 'short', 中: 'medium', 高: 'tall' };
 

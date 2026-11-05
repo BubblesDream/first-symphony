@@ -133,7 +133,8 @@ export const DOLL_PARTS = [
   'outfit_jacket_pants', 'outfit_jacket_shorts', 'outfit_jacket_longskirt', 'outfit_jacket_skirt',
   'outfit_armor_pants', 'outfit_armor_shorts', 'outfit_armor_longskirt', 'outfit_armor_skirt',
   'outfit_robe', 'outfit_dress',
-  'face_base', 'face_smile', 'face_cool',
+  'face_base', 'face_smile', 'face_cool', 'face_sparkle', 'face_determined',
+  'face_sleepy', 'face_closed', 'face_shy', 'face_mischief', 'face_wink',
   'over_glasses', 'over_cape',
 ];
 export const dollPartKey = (name) => `${PREFIX}doll:${name}`;
