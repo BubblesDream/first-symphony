@@ -105,6 +105,9 @@ async function main() {
             el('h1', { className: 'profile__name', id: 'member-name', text: member.nickname || '（未命名）' }),
             demoBadge(member),
             info,
+            /^m\d+$/.test(member.id)
+              ? el('p', {}, el('a', { className: 'btn', href: `hall.html?meet=${encodeURIComponent(member.id)}`, text: '到城堡找他' }))
+              : null,
             member.intro ? el('p', { className: 'prose pre-line', text: member.intro }) : pendingNote('自我介紹整理中。'),
           ),
         ),

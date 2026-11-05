@@ -38,3 +38,8 @@ export function hashString(text) {
   }
   return h >>> 0;
 }
+
+/** 台灣時間的今天（YYYY-MM-DD）。台灣沒有日光節約時間，直接加 8 小時即可。 */
+export function taipeiDate(now = new Date()) {
+  return new Date(now.getTime() + 8 * 3600 * 1000).toISOString().slice(0, 10);
+}

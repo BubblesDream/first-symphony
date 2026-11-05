@@ -1,5 +1,6 @@
 // 虛擬公會城堡頁：讀資料 → 啟動遊戲。
-// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）
+// 網址參數：?room=music 從該房間開始、?meet=m03 這位成員今天一定在（從他所在的房間開始）
+// 測試用：?seed=123 固定抽選結果、?date=2026-01-01 假裝是那一天、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
 import { startCastle } from '../castle/main.js';
@@ -50,6 +51,9 @@ async function main() {
   startCastle(stage, { members, looks, lines }, {
     seed: num('seed'),
     npcs: num('npcs'),
+    date: /^\d{4}-\d{2}-\d{2}$/.test(params.get('date') || '') ? params.get('date') : undefined,
+    room: params.get('room') || undefined, // main.js 只接受開放中的房間
+    meet: /^m\d+$/.test(params.get('meet') || '') ? params.get('meet') : undefined,
     debug: params.get('debug') === '1',
     noArt: params.get('noart') === '1',
     onRoomChange: (name) => { roomName.textContent = `目前位置：${name}`; },

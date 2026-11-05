@@ -1,31 +1,48 @@
 // 啟動城堡遊戲：抽選成員 → 建立 Phaser 遊戲。
 import { MAX_NPCS, VIEW_W, VIEW_H, ZOOM, COLORS } from './config.js';
-import { createRng } from './rng.js';
-import { drawRoster } from './roster.js';
-import { ROOMS, OPEN_ROOMS } from './rooms/index.js';
+import { createRng, hashString, taipeiDate } from './rng.js';
+import { drawRoster, placeMember } from './roster.js';
+import { ROOMS, OPEN_ROOMS, START_ROOM } from './rooms/index.js';
 import { RoomScene } from './RoomScene.js';
 import { createDialog, createToast } from './dialog.js';
 
 /**
  * stage：放遊戲畫布的元素（要能取得焦點，鍵盤只在它取得焦點時作用）
  * data：{ members, looks, lines }
- * options：{ seed, npcs, debug, noArt, onRoomChange }
+ * options：{ seed, date, npcs, room, meet, debug, noArt, onRoomChange }
+ *
+ * 今日城堡：誰在哪個房間、站哪裡、說哪句台詞，用「台灣時間的今天」當種子，
+ * 同一天大家看到的城堡一樣（options.seed 可覆蓋，測試用）。NPC 走路等即時動作仍是隨機。
  */
 export function startCastle(stage, data, options = {}) {
-  const rng = createRng(options.seed);
+  const seeded = Number.isFinite(options.seed);
+  const dayKey = seeded ? `seed:${options.seed}` : (options.date || taipeiDate());
+  /** 依「今天＋其他部分（房間 id、成員 id…）」產生固定的亂數 */
+  const dayRng = (...parts) => createRng(hashString([dayKey, ...parts].join('|')));
   const max = Number.isInteger(options.npcs) && options.npcs > 0 ? options.npcs : MAX_NPCS;
+  const capacities = Object.fromEntries(OPEN_ROOMS.map((id) => [id, ROOMS[id].capacity]));
   const roster = drawRoster({
     members: data.members,
     looks: data.looks,
-    rooms: OPEN_ROOMS.map((id) => ({ id, capacity: ROOMS[id].capacity })),
-    rng,
+    rooms: OPEN_ROOMS.map((id) => ({ id, capacity: capacities[id] })),
+    rng: seeded ? createRng(options.seed) : dayRng('roster'),
     max,
   });
+
+  // ?meet=：這位成員今天一定在城堡裡，從他所在的房間開始
+  const meet = options.meet ? placeMember({
+    roster, members: data.members, looks: data.looks, memberId: options.meet, capacities, fallbackRoom: START_ROOM,
+  }) : null;
+  const startRoom = meet?.roomId || (OPEN_ROOMS.includes(options.room) ? options.room : START_ROOM);
 
   const ctx = {
     roster,
     lines: data.lines,
-    rng,
+    rng: createRng(options.seed), // 即時動作（走路、泡泡）；有 seed 時也固定，方便測試
+    dayRng,
+    dayKey,
+    startRoom,
+    meet: meet ? { id: options.meet, roomId: meet.roomId, nickname: meet.nickname, shown: false } : null,
     debug: Boolean(options.debug),
     ui: {
       dialog: createDialog(stage),

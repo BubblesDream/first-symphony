@@ -951,6 +951,10 @@
   font-size: var(--fs-xs);
 }
 
+.castle-dialog__link {
+  margin-left: auto;
+}
+
 .castle-dialog__text {
   margin: var(--sp-1) 0 0;
 }
