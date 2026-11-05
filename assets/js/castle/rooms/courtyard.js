@@ -14,13 +14,13 @@ export default {
     '######W#####W##f#OOOOOO#f##W#####W######', // 1  W 窗戶  f 公會旗幟
     'H...............LssssssL............TT.H', // 2  H 樹籬  L 路燈  TT 樹
     'H................ssssss................H', // 3
-    'H.FFFFFFFFFFFF....ssss....KKK...vZ.vZ..H', // 4  F 羊圈柵欄  KKK 晾衣架  v 小凳子  Z 紡車
-    'H.FBBB.....YYF....ssss.................H', // 5  BBB 小棚子  Y 乾草
-    'H.FBBB..e....F.TT.ssss.TT..............H', // 6  e 羊
-    'H.F.......e..F....ssss.................H', // 7
-    'H.F..e.......F....ssss....JJJ..........H', // 8  JJJ 工作台
-    'H.F....e...e.F....ssss.........zzzzzzz.H', // 9  z 農作物
-    'H.F..........F....ssss.........rrrrrrr.H', // 10 r 田間泥土小路
+    'H.FFFFFFFFFFFF....ssss....KKK...vZ.vZ..H', // 4  F 羊圈柵欄（G 直向）  KKK 晾衣架  v 小凳子  Z 紡車
+    'H.GBBB.....YYG....ssss.................H', // 5  BBB 小棚子  Y 乾草
+    'H.GBBB..e....G.TT.ssss.TT..............H', // 6  e 羊
+    'H.G.......e..G....ssss.................H', // 7
+    'H.G..e.......G....ssss....JJJ..........H', // 8  JJJ 工作台
+    'H.G....e...e.G....ssss.........zzzzzzz.H', // 9  z 農作物
+    'H.G..........G....ssss.........rrrrrrr.H', // 10 r 田間泥土小路
     'H.FFFFF..FFFFF.ssssssssss......zzzzzzz.H', // 11 羊圈入口在下方中間
     'H............wwssssssssssww....rrrrrrr.H', // 12 w 花圃
     'H........YY....sssQQQQsss..UU..zzzzzzz.H', // 13 QQQQ 噴泉（4×3）  UU 水井
@@ -53,6 +53,7 @@ export default {
     L: { kind: 'furniture', color: 'stand', sprite: 'lamp_post', under: 'stage' },
     T: { kind: 'furniture', color: 'tree', sprite: 'tree' },
     F: { kind: 'furniture', color: 'fence', sprite: 'fence' },
+    G: { kind: 'furniture', color: 'fence', sprite: 'fence' }, // 直向（左右兩側）的柵欄；有 fence_side 圖後改成 fence_side
     B: { kind: 'furniture', color: 'furniture', sprite: 'sheep_shed' },
     e: { kind: 'furniture', color: 'sheep', sprite: 'sheep' },
     Y: { kind: 'furniture', color: 'hay', sprite: 'haystack' },
