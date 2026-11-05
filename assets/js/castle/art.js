@@ -39,10 +39,12 @@ export const SPRITE_ART = {
   chair_back: { src: `${DIR}chair_back.webp`, w: 1, h: 1 },
   podium: { src: `${DIR}podium.webp`, w: 1, h: 1 },
   harp: { src: `${DIR}harp.webp`, w: 1, h: 2 },
+  chair_side: { src: `${DIR}chair_side.webp`, w: 1, h: 1 },
+  curtain_stage: { src: `${DIR}curtain_stage.webp`, w: 4, h: 2 },
 };
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
-export const WANTED_ART = ['chair_side'];
+export const WANTED_ART = [];
 
 /** 地圖的基本種類預設用哪張拼貼圖 */
 export const KIND_TILES = {
