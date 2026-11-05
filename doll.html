@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>捏娃娃：城堡角色外觀｜第一交響樂團</title>
+  <meta name="description" content="挑髮型、臉、衣服和顏色，捏出自己在虛擬公會城堡裡的角色，複製結果交給管理員。">
+  <link rel="icon" href="assets/images/icons/lyre.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC&amp;family=Noto+Serif+TC:wght@700&amp;display=swap">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <script type="module" src="assets/js/pages/doll.js"></script>
+</head>
+<body data-page="doll">
+  <a class="skip-link" href="#main">跳到主要內容</a>
+  <header id="site-header" class="site-header"></header>
+  <main id="main" class="page page--doll" tabindex="-1">
+    <div class="page-head">
+      <h1 class="page-title"><span class="tape">捏娃娃</span></h1>
+      <p class="page-lead">捏出你在<a href="hall.html">虛擬公會城堡</a>裡的樣子。捏好後按「複製」，貼到公會群組給管理員就完成了。</p>
+    </div>
+
+    <p class="status" id="doll-status">載入中…</p>
+
+    <div class="doll" id="doll" hidden>
+      <section class="doll__preview" aria-label="預覽">
+        <div class="doll__views" id="doll-views"></div>
+        <p class="doll__caption">放大的樣子（正面、背面、側面）</p>
+        <div class="doll__scene" id="doll-scene"></div>
+        <p class="doll__caption">在城堡裡的實際大小（右邊是中等身高的人，可以比比看）</p>
+      </section>
+
+      <form class="doll__form" id="doll-form" autocomplete="off">
+        <fieldset class="doll-group">
+          <legend>你是誰</legend>
+          <div class="doll-field">
+            <label class="doll-field__label" for="doll-member">遊戲暱稱</label>
+            <select id="doll-member"></select>
+          </div>
+          <div class="doll-field" id="doll-newname-field" hidden>
+            <label class="doll-field__label" for="doll-newname">名單上沒有你的話，寫在這裡</label>
+            <input type="text" id="doll-newname" maxlength="20">
+          </div>
+        </fieldset>
+
+        <fieldset class="doll-group" id="doll-looks">
+          <legend>外觀</legend>
+        </fieldset>
+
+        <fieldset class="doll-group" id="doll-colors">
+          <legend>顏色</legend>
+        </fieldset>
+
+        <fieldset class="doll-group" id="doll-extra">
+          <legend>其他</legend>
+        </fieldset>
+
+        <fieldset class="doll-group">
+          <legend>完成</legend>
+          <p class="doll-field__hint">下面這段文字就是你的角色。按「複製」，貼到公會群組給管理員。</p>
+          <textarea class="doll__output" id="doll-output" rows="8" readonly aria-label="角色資料"></textarea>
+          <div class="doll__actions">
+            <button type="button" class="btn" id="doll-copy">複製</button>
+            <span class="doll__copied" id="doll-copied" role="status"></span>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </main>
+  <footer id="site-footer" class="site-footer"></footer>
+</body>
+</html>

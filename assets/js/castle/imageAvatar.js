@@ -8,7 +8,7 @@ const SEAT_DEPTH = 14; // 坐著時往前排多少（椅子圖以格子下緣排
 
 const FRAME = { down: 0, up: 1, left: 2, right: 2 };
 const HEIGHT = CHAR_H * TILE; // 畫面上的高度（遊戲單位）
-export const HEIGHT_SCALE = { short: 0.95, medium: 1, tall: 1.05 }; // 問卷的身高：整個人縮放
+export const HEIGHT_SCALE = { short: 0.92, medium: 1, tall: 1.08 }; // 問卷的身高：整個人縮放
 const SIT_SHOW = 0.68; // 坐下時露出上面幾成
 const SIT_DROP = 6; // 坐下時往下移幾單位（臀部落在椅面）
 

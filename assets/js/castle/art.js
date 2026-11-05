@@ -138,7 +138,7 @@ export const DOLL_PARTS = [
   'over_glasses', 'over_cape',
 ];
 export const dollPartKey = (name) => `${PREFIX}doll:${name}`;
-const dollSrc = (name) => `${DIR}doll/${name}.webp`;
+export const dollSrc = (name) => `${DIR}doll/${name}.webp`;
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
 export const WANTED_ART = [];

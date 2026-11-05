@@ -36,6 +36,7 @@
 
   /* 示範資料標記 */
   --c-demo: #9c3a26;
+  --c-castle-floor: #d9c7a6; /* 城堡地板色（捏娃娃頁的預覽底色，和遊戲的 COLORS.floor 一樣） */
 
   /* 字型（標題與手寫字由 Google Fonts 分片載入，載不到時改用系統字型） */
   --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
