@@ -53,7 +53,7 @@ export default {
     L: { kind: 'furniture', color: 'stand', sprite: 'lamp_post', under: 'stage' },
     T: { kind: 'furniture', color: 'tree', sprite: 'tree' },
     F: { kind: 'furniture', color: 'fence', sprite: 'fence' },
-    G: { kind: 'furniture', color: 'fence', sprite: 'fence' }, // 直向（左右兩側）的柵欄；有 fence_side 圖後改成 fence_side
+    G: { kind: 'furniture', color: 'fence', sprite: 'fence_side' }, // 直向（左右兩側）的柵欄
     B: { kind: 'furniture', color: 'furniture', sprite: 'sheep_shed' },
     e: { kind: 'furniture', color: 'sheep', sprite: 'sheep' },
     Y: { kind: 'furniture', color: 'hay', sprite: 'haystack' },
