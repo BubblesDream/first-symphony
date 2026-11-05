@@ -2,7 +2,6 @@
 // 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
-import { startCastle } from '../castle/main.js';
 import { createMusicPlayer } from '../castle/music.js';
 
 initLayout();
@@ -23,6 +22,14 @@ function fail(message, error) {
 async function main() {
   if (!window.Phaser) {
     fail('遊戲程式載入失敗，請重新整理頁面再試一次。');
+    return;
+  }
+  // 城堡程式一載入就要用到 Phaser，所以確認有 Phaser 之後才載入（否則整頁都不會動）
+  let startCastle;
+  try {
+    ({ startCastle } = await import('../castle/main.js'));
+  } catch (error) {
+    fail('遊戲程式載入失敗，請重新整理頁面再試一次。', error);
     return;
   }
   let members;

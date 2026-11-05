@@ -31,7 +31,8 @@ const lightbox = (() => {
     className: 'lightbox', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'lightbox-title', hidden: true,
   }, figure, prevBtn, nextBtn, closeBtn);
 
-  image.addEventListener('error', () => { image.src = PLACEHOLDERS.image; });
+  // 佔位圖本身也載入失敗時不再重試，避免一直重送請求
+  image.addEventListener('error', () => { if (!image.src.endsWith(PLACEHOLDERS.image)) image.src = PLACEHOLDERS.image; });
 
   function show(i) {
     index = (i + items.length) % items.length;
