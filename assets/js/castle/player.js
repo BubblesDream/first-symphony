@@ -3,6 +3,7 @@
 import { PLAYER_SPEED } from './config.js';
 import { ACTIONS } from './actions.js';
 import { createAvatar } from './avatar.js';
+import { playEffect } from './effects.js';
 import { toTile, tileFeet } from './grid.js';
 
 const VISITOR_LOOK = { skin: '#f3d6bd', hair: '#4a3426', outfit: '#f5efe2', accent: '#c9a227', mark: 'visitor' };
@@ -18,7 +19,7 @@ export class Player {
     this.avatar.setNameVisible(true);
     this.route = []; // 點地板移動時的路線（格子）
     this.stuck = 0;
-    this.act = null; // 訪客自己演出：{ phase: 'go'|'do', spot, action, approach, bubble }
+    this.act = null; // 訪客自己演出：{ phase: 'go'|'do', spot, action, approach, bubble, fx, memo }
 
     this.keys = scene.input.keyboard.addKeys({
       up: 'W', down: 'S', left: 'A', right: 'D',
@@ -55,7 +56,7 @@ export class Player {
     const { grid } = this.scene;
     spot.user = this;
     grid.reserve(spot.x, spot.y, this);
-    this.act = { phase: 'go', spot, action: ACTIONS[spot.action] || ACTIONS.stand_guard, approach, bubble: 1 };
+    this.act = { phase: 'go', spot, action: ACTIONS[spot.action] || ACTIONS.stand_guard, approach, bubble: 1, fx: 0.8, memo: {} };
     const { x, y } = this.tile;
     if (x === approach[0] && y === approach[1]) this.route = [approach];
     else this.findRoute(...approach);
@@ -106,6 +107,15 @@ export class Player {
       act.bubble = 3 + Math.random() * 3;
       const list = act.action.bubbles || [];
       if (list.length) this.avatar.say(list[Math.floor(Math.random() * list.length)]);
+    }
+    // 演出效果（effects.js）：每隔幾秒一次
+    if (act.action.effect) {
+      act.fx -= dt;
+      if (act.fx <= 0) {
+        act.fx = playEffect(this.scene, act.action.effect, {
+          x: this.x, y: this.y, facing: act.spot.facing || 'down', spot: act.spot, who: this, isPlayer: true, memo: act.memo,
+        });
+      }
     }
   }
 

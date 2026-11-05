@@ -6,6 +6,7 @@ import { NPC_SPEED, BEHAVIOR, IDLE_SECONDS, WANDER_RADIUS } from './config.js';
 import { ACTIONS } from './actions.js';
 import { tileFeet } from './grid.js';
 import { createAvatar } from './avatar.js';
+import { playEffect } from './effects.js';
 
 const WAIT_STEP = 0.5;   // 前面有人時等幾秒再試
 const MAX_TRIES = 4;     // 試幾次後放棄這次移動
@@ -51,6 +52,15 @@ export class Npc {
         if (this.bubbleTimer <= 0) {
           this.bubbleTimer = this.rng.range(3, 6);
           if (this.action.bubbles?.length) this.avatar.say(this.rng.pick(this.action.bubbles));
+        }
+        // 演出效果：比訪客簡化、頻率低（畫面外不畫）
+        if (this.action.effect) {
+          this.fxTimer -= dt;
+          if (this.fxTimer <= 0) {
+            this.fxTimer = playEffect(this.scene, this.action.effect, {
+              x: this.x, y: this.y, facing: this.spot?.facing, spot: this.spot, who: this, isPlayer: false, memo: this.fxMemo,
+            });
+          }
         }
         if (this.timer <= 0) this.finishPerform();
         break;
@@ -189,6 +199,8 @@ export class Npc {
     this.avatar.setPose(this.action.pose, this.action.seated);
     this.timer = this.rng.range(...this.action.duration);
     this.bubbleTimer = this.rng.range(1, 3);
+    this.fxTimer = 1.5 + Math.random() * 3; // 不用場景的亂數，免得改變 NPC 的走位
+    this.fxMemo = {};
   }
 
   finishPerform() {

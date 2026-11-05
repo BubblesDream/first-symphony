@@ -15,6 +15,7 @@ export class RoomView {
   /** 畫出整個房間，回傳 { used, missing }：用到的圖、還沒有圖（畫色塊）的名稱 */
   draw() {
     this.artReport = { used: new Set(), missing: new Set() };
+    this.scene.roomProps = []; // 家具圖片的位置（effects.js 用來讓羊、稻草人抖一下）
     this.sprites = this.findSprites();
     this.drawFallback();
     this.drawTiles();
@@ -204,10 +205,11 @@ export class RoomView {
       this.scene.add.image(cx, bottom - 2, artKey(def.behind))
         .setOrigin(0.5, 1).setDisplaySize(b.w * TILE, b.h * TILE).setDepth(onWall ? -4.5 : bottom - 0.5);
     }
-    this.scene.add.image(cx, bottom, artKey(s.name))
+    const image = this.scene.add.image(cx, bottom, artKey(s.name))
       .setOrigin(0.5, 1)
       .setDisplaySize(art.w * TILE, art.h * TILE)
       .setFlipX(Boolean(def.flipX))
       .setDepth(onWall ? -4 : bottom);
+    this.scene.roomProps.push({ x0: s.x0, y0: s.y0, x1: s.x1, y1: s.y1, name: s.name, image });
   }
 }
