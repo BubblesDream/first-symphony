@@ -3,8 +3,11 @@
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
 import { startCastle } from '../castle/main.js';
+import { createMusicPlayer } from '../castle/music.js';
 
 initLayout();
+// 公會歌和遊戲各自獨立：遊戲載入失敗也能聽歌
+createMusicPlayer(document.getElementById('castle-music'));
 
 const stage = document.getElementById('castle-stage');
 const loading = document.getElementById('castle-loading');

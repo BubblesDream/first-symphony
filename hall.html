@@ -28,6 +28,7 @@
 
     <section class="castle" aria-label="虛擬公會城堡遊戲">
       <p class="castle__notice">第一版原型：目前開放「公會大廳」與「演奏室」。角色外觀與台詞多為<strong>示範資料</strong>，之後會換成成員提供的內容。</p>
+      <div class="castle__music" id="castle-music" aria-label="公會歌"></div>
       <div id="castle-stage" class="castle__stage" tabindex="0" aria-label="遊戲畫面。點一下或按 Tab 選取後，可用鍵盤操作。" aria-describedby="castle-help">
         <p class="castle__loading" id="castle-loading">城堡載入中…</p>
         <p class="castle__focus-hint" aria-hidden="true">點一下畫面開始操作</p>
@@ -39,6 +40,7 @@
           <li><kbd>E</kbd> 或空白鍵：和附近的成員聊天、查看物品</li>
           <li>滑鼠點地板：走過去；點成員：聊天（手機用手指點）</li>
           <li><kbd>Esc</kbd>：關閉對話</li>
+          <li>「播放公會歌」：聽公會歌（預設不出聲，可隨時暫停）</li>
           <li>走進打開的門：換房間（釘著木板的門還在整修中）</li>
         </ul>
         <p>每次重新整理頁面，城堡裡的成員都會重新抽選。</p>
