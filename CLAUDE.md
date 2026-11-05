@@ -60,5 +60,6 @@
 
 - 不要自行追加規格以外的功能；不要建立測試框架或 CI（唯一例外是上面的圖片同步 workflow）。
 - 不要修改與當前任務無關的檔案。
-- 本機預覽：`python3 -m http.server 8000`，開啟 `http://localhost:8000/`（直接雙擊 HTML 會因 fetch 限制無法讀取資料）。
+- 本機預覽：`python -m http.server 8020 --bind 127.0.0.1`，開啟 `http://127.0.0.1:8020/`（直接雙擊 HTML 會因 fetch 限制無法讀取資料）。管理員電腦上開埠前先查並登記 `D:\UserData\Documents\WS\共用指南\登記表-本機連接埠（ports）.md`。
+- 城堡改動後跑 `node tools/check_castle.mjs`（不用安裝套件的自動檢查，不是測試框架）。
 - 完成工作時在獨立分支提交並開 Pull Request，PR 說明列出完成項目、驗證結果、未完成項目。

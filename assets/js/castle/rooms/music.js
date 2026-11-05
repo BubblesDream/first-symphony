@@ -40,7 +40,7 @@ export default {
     p: { kind: 'furniture', color: 'plant', sprite: 'plant' },
   },
   doors: {
-    H: { to: 'hall', spawn: 'from_music', label: '大廳' },
+    H: { to: 'hall', spawn: 'from_music', label: '大廳', sprite: 'door_side_open' },
   },
   spawns: {
     start: [1, 8],

@@ -122,6 +122,7 @@ export class RoomScene extends Phaser.Scene {
     const pressed = Phaser.Input.Keyboard.JustDown(this.keyE) || Phaser.Input.Keyboard.JustDown(this.keySpace);
     if (pressed) {
       if (dialog.isOpen) dialog.next();
+      else if (this.player.act) this.player.stopAct(); // 演出中按 E：離開演出（附近沒有物件也可以）
       else if (target) this.interact(target);
     }
     if (Phaser.Input.Keyboard.JustDown(this.keyEsc)) dialog.close();

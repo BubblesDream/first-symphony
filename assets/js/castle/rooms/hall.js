@@ -8,11 +8,11 @@ export default {
   name: '公會大廳',
   capacity: 8,
   map: [
-    '############UUUU############', // 0  牆頂；UUUU 往 2F 的樓梯（整修中）
+    '############UUUU############', // 0  牆頂；UUUU 往 2F 的樓梯
     '##n##f##n#w#UUUU#w#n##f##n##', // 1  牆面，f 公會旗幟  n 窗戶  w 壁燈
     '#p.NN....L.rrrrrr.L.......p#', // 2  NN 公告板  L 燭台
     '#..........rrrrrr..........#', // 3
-    'T.........IrrrrrrI.........M', // 4  T 交流廳（整修中）  M 演奏室  I 石柱
+    'T.........IrrrrrrI.........M', // 4  T 交流廳  M 演奏室  I 石柱
     '#.......rr.rrrrrr.rr.......#', // 5  兩側細地毯
     '#.......rr.rrrrrr.rr.......#', // 6
     '#.......rrLrrrrrrLrr.......#', // 7
@@ -46,10 +46,10 @@ export default {
   // 門：to＝通往的房間，spawn＝到達後出現的位置；沒有 to 的門顯示 locked 訊息
   // sprite：門的圖片（預設：能走的門 door_open、整修中 door_locked）；under：門底下鋪什麼
   doors: {
-    M: { to: 'music', spawn: 'from_hall', label: '演奏室' },
-    T: { to: 'tavern', spawn: 'from_hall', label: '交流廳' },
-    K: { to: 'training', spawn: 'from_hall', label: '練習室' },
-    F: { to: 'forge', spawn: 'from_hall', label: '鍛造工坊' },
+    M: { to: 'music', spawn: 'from_hall', label: '演奏室', sprite: 'door_side_open', flipX: true },
+    T: { to: 'tavern', spawn: 'from_hall', label: '交流廳', sprite: 'door_side_open' },
+    K: { to: 'training', spawn: 'from_hall', label: '練習室', sprite: 'door_side_open', flipX: true },
+    F: { to: 'forge', spawn: 'from_hall', label: '鍛造工坊', sprite: 'door_side_open' },
     U: { to: 'guest', spawn: 'from_hall', label: '往 2F', sprite: 'stairs_up', under: 'wall' },
     O: { to: 'courtyard', spawn: 'from_hall', label: '往外庭', sprite: 'gate_main', under: 'wall' },
   },
@@ -93,7 +93,7 @@ export default {
     { x: 22, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
   ],
   labels: [
-    { x: 13.5, y: 2.2, text: '往 2F（整修中）' },
+    { x: 13.5, y: 2.2, text: '往 2F' },
     { x: 13.5, y: 17.2, text: '正門（往外庭）' },
     { x: 1.6, y: 3.3, text: '交流廳' },
     { x: 25.4, y: 3.3, text: '演奏室' },

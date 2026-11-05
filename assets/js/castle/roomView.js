@@ -64,6 +64,7 @@ export class RoomView {
         if (!name || seen.has(`${x},${y}`)) continue;
         const box = { x0: x, y0: y, x1: x, y1: y };
         const stack = [[x, y]];
+        const group = new Set([`${x},${y}`]);
         seen.add(`${x},${y}`);
         while (stack.length) {
           const [cx, cy] = stack.pop();
@@ -73,6 +74,7 @@ export class RoomView {
             const n = grid.cell(cx + dx, cy + dy);
             if (n && n.ch === c.ch && !seen.has(`${cx + dx},${cy + dy}`)) {
               seen.add(`${cx + dx},${cy + dy}`);
+              group.add(`${cx + dx},${cy + dy}`);
               stack.push([cx + dx, cy + dy]);
             }
           }
@@ -85,6 +87,8 @@ export class RoomView {
         const fh = ok ? art.foot || 1 : box.y1 - box.y0 + 1;
         for (let y0 = box.y0; y0 <= box.y1; y0 += fh) {
           for (let x0 = box.x0; x0 <= box.x1; x0 += fw) {
+            // 不是方塊的一片（例如圍成一圈的柵欄）：只在真的有這個字元的位置放
+            if (!group.has(`${x0},${y0}`)) continue;
             list.push({ x0, y0, x1: Math.min(x0 + fw - 1, box.x1), y1: Math.min(y0 + fh - 1, box.y1), name, cell: c, ok });
           }
         }
@@ -189,7 +193,8 @@ export class RoomView {
   /** 家具與門的圖片。牆上的東西永遠在角色後面；地上的依下緣排前後。 */
   placeSprite(s) {
     const art = SPRITE_ART[s.name];
-    const def = this.grid.legend[s.cell.ch] || {};
+    // 門的設定寫在 doors（可以有 flipX），其他寫在 legend
+    const def = (s.cell.kind === 'door' ? this.room.doors[s.cell.ch] : this.grid.legend[s.cell.ch]) || {};
     const cx = ((s.x0 + s.x1 + 1) / 2) * TILE;
     const bottom = (s.y1 + 1) * TILE;
     const onWall = s.cell.kind === 'wall' || s.cell.kind === 'door';
