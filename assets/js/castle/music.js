@@ -7,8 +7,8 @@
 const DIR = 'assets/audio/castle/';
 
 export const SONGS = [
-  { title: '公會歌（一）', src: `${DIR}guild_song_1.mp3` },
-  { title: '公會歌（二）', src: `${DIR}guild_song_2.mp3` },
+  { title: '第一交響樂團-公會主題歌', src: `${DIR}guild_song_1.mp3` },
+  { title: '第一交響樂團-公會抽卡祈禱歌', src: `${DIR}guild_song_2.mp3` },
 ];
 
 const VOLUME = 0.6;
