@@ -47,7 +47,14 @@ export const SPRITE_ART = {
 };
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
-export const WANTED_ART = [];
+export const WANTED_ART = [
+  // 外庭（第三批 A）
+  'ground_grass', 'ground_path', 'ground_dirt', 'fountain', 'sheep', 'well', 'spinning_wheel', 'tree', 'fence', 'hedge',
+  'sheep_shed', 'haystack', 'laundry_line', 'workbench', 'crop', 'flower_bed', 'lamp_post', 'banner_pole', 'gate_outer',
+  // 2F／3F（第三批 B～D）
+  'bed', 'nightstand', 'wardrobe', 'desk', 'stairs_down', 'door_double', 'bookshelf', 'history_case', 'table_long', 'globe',
+  'telescope', 'window_stars', 'star_table', 'bench', 'armillary',
+];
 
 /** 地圖的基本種類預設用哪張拼貼圖 */
 export const KIND_TILES = {

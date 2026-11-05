@@ -46,12 +46,6 @@ export default {
     carpet: ['dirt', 'dirtAlt'],
   },
   tiles: { floor: 'ground_grass', stage: 'ground_path', carpet: 'ground_dirt' },
-  // 這個房間指定了、但 art.js 還沒有的圖片名稱（除錯檢查用；有圖後在 art.js 登記即可）
-  wantedArt: [
-    'ground_grass', 'ground_path', 'ground_dirt', 'window_arch', 'hedge', 'lamp_post', 'tree', 'fence', 'sheep_shed',
-    'sheep', 'haystack', 'laundry_line', 'spinning_wheel', 'workbench', 'crop', 'flower_bed', 'fountain', 'well',
-    'banner_pole', 'gate_outer',
-  ],
   legend: {
     f: { kind: 'wall', color: 'banner', sprite: 'banner' },
     W: { kind: 'wall', color: 'water', sprite: 'window_arch' },
