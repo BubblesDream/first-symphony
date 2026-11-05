@@ -196,13 +196,6 @@
     "is_demo": true
   },
   {
-    "id": "l029",
-    "member_id": "m03",
-    "room": "",
-    "text": "今天想彈一首溫柔一點的曲子。",
-    "is_demo": true
-  },
-  {
     "id": "l501",
     "member_id": "",
     "room": "tavern",
@@ -390,5 +383,33 @@
     "room": "observatory",
     "text": "聽說對著星星許願，抽卡會比較順。",
     "is_demo": true
+  },
+  {
+    "id": "l101",
+    "member_id": "m03",
+    "room": "",
+    "text": "要合奏嗎？",
+    "is_demo": false
+  },
+  {
+    "id": "l102",
+    "member_id": "m20",
+    "room": "",
+    "text": "好好體驗自己的冒險！下次見囉",
+    "is_demo": false
+  },
+  {
+    "id": "l103",
+    "member_id": "m04",
+    "room": "",
+    "text": "豎笛的聲音很溫柔喔，要不要聽我吹一段？",
+    "is_demo": false
+  },
+  {
+    "id": "l104",
+    "member_id": "m04",
+    "room": "hall",
+    "text": "大廳人來人往的，我最喜歡待在這裡看大家了。",
+    "is_demo": false
   }
 ]
