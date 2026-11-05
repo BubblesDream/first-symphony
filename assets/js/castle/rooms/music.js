@@ -8,10 +8,10 @@ export default {
   map: [
     '######################', // 0  牆頂
     '###f#w#n#WWWW#n#w#f###', // 1  牆面，f 公會旗幟  W 舞台布幕＋徽章  n 窗戶  w 壁燈
-    '#CPPPsssssssssssssssC#', // 2  舞台；PPP 鋼琴（3×2）  C 燭台
-    '#sPPPsssbsssbsssbsYss#', // 3  b 樂手椅  Y 豎琴（裝飾）
-    '#ssBssssAsssAsssAssss#', // 4  B 琴椅  A 譜架
-    '#ssssssssssssssssssss#', // 5
+    '#sPPPssbssbsssbssbsss#', // 2 舞台
+    '#sPPPssAssAsssAssAsYs#', // 3 舞台
+    '#ssBsssssbsssssbsssss#', // 4 舞台
+    '#ssssssssAsssssAsssss#', // 5 舞台
     '#sssssssssssDssssssss#', // 6  D 指揮台
     '#....................#', // 7
     'H..ccccccc..ccccccc..#', // 8  H 回大廳；c 觀眾席座椅（中間是走道）
@@ -48,26 +48,26 @@ export default {
   },
   spots: [
     { action: 'play_piano', x: 3, y: 4, facing: 'up' },
-    { action: 'play_violin', x: 8, y: 3, facing: 'down' },
-    { action: 'play_flute', x: 12, y: 3, facing: 'down' },
-    { action: 'play_harp', x: 16, y: 3, facing: 'down' },
+    ...[[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4]].map(([x, y]) => ({ action: 'play_part', x, y, facing: 'down' })),
+    { action: 'play_harp', x: 19, y: 4, facing: 'up' },
     { action: 'conduct', x: 12, y: 6, facing: 'up' },
     ...[3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17, 18].flatMap((x) => [8, 10, 12].map((y) => (
       { action: 'sit_watch', x, y, facing: 'up' }
     ))),
   ],
-  // 多人演出（groups.js）：閒著的人湊到 2 位以上，就各自走到樂器旁，到齊後一起合奏
+  // 自動合奏只用六個聲部座位與指揮台，維持無聲；訪客召集時會取消。
+  ensemble: { conductor: [12, 6], parts: [[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4]], entrance: 'from_hall' },
   groups: [
-    { name: '合奏', spots: [[3, 4], [8, 3], [12, 3], [16, 3], [12, 6]], min: 2, every: [25, 50], duration: [18, 28],
+    { name: '合奏', spots: [[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4], [12, 6]], min: 2, every: [25, 50], duration: [18, 28],
       bubbles: ['預備——', '♪', '♫', '♬', '♪♫', '♬♪'], finale: '（掌聲）' },
   ],
   objects: [
     // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
     { x: 3, y: 2.5, name: '鋼琴', text: ['一架擦得發亮的鋼琴。要坐下來彈一曲嗎？'], demo: false, play: 'play_piano' },
-    { x: 12, y: 5, name: '指揮台', text: ['站上指揮台，帶大家合奏吧！'], demo: false, play: 'conduct' },
-    { x: 8, y: 3.5, name: '譜架', text: ['譜架上放著公會歌的樂譜。拿起小提琴試試看？'], demo: false, play: 'play_violin' },
+    { x: 12, y: 5, name: '指揮台', text: ['站上指揮台，就會召集大家來合奏！'], demo: false, play: 'conduct' },
+    ...[[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4]].map(([x, y]) => ({ x, y, name: '合奏座位', text: ['坐下來就會召集大家一起合奏'], demo: false, play: 'play_part' })),
     { x: 3, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
-    { x: 18, y: 3, name: '豎琴', text: ['一架木製豎琴，琴弦調得很準。'], demo: false, play: 'play_harp' },
+    { x: 19, y: 3, name: '豎琴', text: ['一架木製豎琴，琴弦調得很準。'], demo: false, play: 'play_harp' },
   ],
   labels: [
     { x: 3, y: 2.5, text: '鋼琴' },

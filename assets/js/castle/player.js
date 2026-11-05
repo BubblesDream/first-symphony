@@ -71,6 +71,7 @@ export class Player {
     const act = this.act;
     if (!act) return;
     this.act = null;
+    this.scene.onPlayerActEnd?.(act.spot);
     this.scene.grid.release(act.spot.x, act.spot.y, this);
     if (act.spot.user === this) act.spot.user = null;
     this.route = []; // 還在走過去的路上就取消，不要繼續走到演出點
@@ -113,6 +114,7 @@ export class Player {
       this.avatar.setFacing(act.spot.facing || 'down');
       this.avatar.setPose(act.action.pose, act.action.seated);
       this.scene.ctx.ui.toast('按方向鍵或點地板就會離開。');
+      this.scene.onPlayerAct?.(act.spot);
       return;
     }
     act.bubble -= dt;

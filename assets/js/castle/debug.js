@@ -40,6 +40,7 @@ export function updateDebug(scene) {
     })),
     critters: (scene.critters || []).map((c) => ({ tx: c.tx, ty: c.ty })),
     groups: scene.groups?.report() || [],
+    ensemble: scene.ensemble?.report() || null,
     mood: scene.mood?.name,
     roster: Object.fromEntries(Object.entries(scene.ctx.roster).map(([k, v]) => [k, v.map((p) => p.id)])),
   };

@@ -47,6 +47,20 @@ for (const [id, room] of Object.entries(ROOMS)) {
 }
 for (const id of OPEN_ROOMS) if (!ROOMS[id]) fail(`OPEN_ROOMS 裡的 ${id} 沒有房間定義`);
 
+// 合奏曲目與座位共用同一份聲部數，檔案必須齊全。
+const { ENSEMBLE_SONGS } = await load('assets/js/castle/music.js');
+for (const room of Object.values(ROOMS).filter((r) => r.ensemble)) {
+  const { parts, conductor } = room.ensemble;
+  for (const [x, y] of parts) {
+    if (!room.spots.some((s) => s.x === x && s.y === y && s.action === 'play_part')) fail(`合奏座位 (${x},${y}) 沒有 play_part 演出點`);
+  }
+  if (!room.spots.some((s) => s.x === conductor[0] && s.y === conductor[1] && s.action === 'conduct')) fail('合奏指揮台沒有 conduct 演出點');
+  for (const song of ENSEMBLE_SONGS) {
+    if (song.parts.length !== parts.length) fail(`曲目 ${song.title} 的聲部數與座位數不同`);
+    for (let i = 1; i <= parts.length; i++) if (!existsSync(at(song.dir, `part${i}.mp3`))) fail(`曲目 ${song.title} 缺少 part${i}.mp3`);
+  }
+}
+
 // 3. 圖片
 const registered = { ...TILE_ART, ...SPRITE_ART };
 for (const [name, art] of Object.entries(registered)) {

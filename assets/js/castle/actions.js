@@ -10,6 +10,7 @@ export const ACTIONS = {
   sit_watch:   { pose: 'idle',    seated: true, bubbles: ['♪', '好聽', '…'], duration: [12, 24] },
   read_notice: { pose: 'read',    seated: false, bubbles: ['？', '！', '喔～'], duration: [4, 8] },
   stand_guard: { pose: 'idle',    seated: false, bubbles: ['…'], duration: [8, 16] },
+  play_part:   { pose: 'play', seated: true, bubbles: ['♪', '♫', '♬'], duration: [14, 26] },
   play_piano:  { pose: 'play',    seated: true, instrument: 'piano', bubbles: ['♪', '♫', '♬'], duration: [14, 26] },
   play_violin: { pose: 'play',    seated: true, instrument: 'violin', bubbles: ['♪', '♫'], duration: [14, 26] },
   play_flute:  { pose: 'play',    seated: true, instrument: 'flute', bubbles: ['♪', '♬'], duration: [14, 26] },

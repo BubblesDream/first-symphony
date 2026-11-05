@@ -100,7 +100,7 @@ export class Npc {
   }
 
   goToSpot() {
-    const free = this.scene.spots.filter((s) => !s.user && this.grid.isFree(s.x, s.y, this));
+    const free = this.scene.spots.filter((s) => !(this.scene.ensemble?.active && this.scene.ensemble.isSpot(s)) && !s.user && this.grid.isFree(s.x, s.y, this));
     for (const spot of this.rng.shuffle(free).slice(0, 4)) {
       const path = this.grid.findPath(this.tx, this.ty, spot.x, spot.y, this.grid.npcWalkable);
       if (path) {
@@ -277,6 +277,23 @@ export class Npc {
       return;
     }
     this.toIdle(this.rng.range(1, 3));
+  }
+
+  /** 合奏結束：停在已預約的下一格，清掉路線與演出點。 */
+  leaveEnsemble() {
+    if (this.next) {
+      this.grid.release(this.tx, this.ty, this);
+      [this.tx, this.ty] = this.next;
+      const p = tileFeet(this.tx, this.ty);
+      this.x = p.x;
+      this.y = p.y;
+      this.avatar.setPosition(this.x, this.y);
+    }
+    this.next = null;
+    this.path = [];
+    this.goal = null;
+    this.saved = null;
+    this.finishPerform();
   }
 
   destroy() {

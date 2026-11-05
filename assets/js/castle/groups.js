@@ -25,6 +25,7 @@ export class Groups {
   }
 
   update(dt) {
+    if (this.scene.ensemble?.active) return;
     for (const g of this.list) {
       if (!g.phase) {
         g.timer -= dt;
