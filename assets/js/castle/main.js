@@ -4,12 +4,13 @@ import { createRng } from './rng.js';
 import { drawRoster } from './roster.js';
 import { ROOMS, OPEN_ROOMS } from './rooms/index.js';
 import { RoomScene } from './RoomScene.js';
-import { createDialog, createToast } from './dialog.js';
+import { createDialog, createPanel, createToast } from './dialog.js';
+import { loadTable } from '../data.js';
 
 /**
  * stage：放遊戲畫布的元素（要能取得焦點，鍵盤只在它取得焦點時作用）
  * data：{ members, looks, lines }
- * options：{ seed, npcs, debug, noArt, onRoomChange }
+ * options：{ seed, npcs, debug, noArt, moonAge, onRoomChange }
  */
 export function startCastle(stage, data, options = {}) {
   const rng = createRng(options.seed);
@@ -27,8 +28,13 @@ export function startCastle(stage, data, options = {}) {
     lines: data.lines,
     rng,
     debug: Boolean(options.debug),
+    load: loadTable,                 // 面板要用的資料（塔羅牌、鍛造材料、飲料）用到時才讀
+    moonAge: Number.isFinite(options.moonAge) ? options.moonAge : null, // ?moon= 指定月齡（測試用）
+    quota: null,                     // 靈感額度，RoomScene 每次進房間重新建立（quota.js）
+    drink: null,                     // 酒館點的飲料 { name, color }
     ui: {
       dialog: createDialog(stage),
+      panel: createPanel(stage),
       toast: createToast(stage),
       setRoomName: options.onRoomChange || (() => {}),
     },

@@ -1,0 +1,200 @@
+[
+  {
+    "id": "t00",
+    "number": 0,
+    "name": "愚者",
+    "keyword": "新的開始・自由",
+    "upright": "放下包袱出發吧，未知的路上也有好風景。",
+    "reversed": "先看清楚腳下再跳，衝動之前深呼吸一下。",
+    "is_demo": false
+  },
+  {
+    "id": "t01",
+    "number": 1,
+    "name": "魔術師",
+    "keyword": "行動・創造",
+    "upright": "手邊的東西已經夠用了，動手做就會有收穫。",
+    "reversed": "別急著表現，先把一件小事做好就很棒。",
+    "is_demo": false
+  },
+  {
+    "id": "t02",
+    "number": 2,
+    "name": "女祭司",
+    "keyword": "直覺・沉靜",
+    "upright": "安靜下來聽聽心裡的聲音，答案其實你早就知道。",
+    "reversed": "想太多會累，偶爾把心事說給信任的人聽。",
+    "is_demo": false
+  },
+  {
+    "id": "t03",
+    "number": 3,
+    "name": "皇后",
+    "keyword": "豐盛・照顧",
+    "upright": "好好照顧自己，也溫柔對待身邊的人，好事會慢慢長大。",
+    "reversed": "別只顧著付出，記得留一點時間給自己。",
+    "is_demo": false
+  },
+  {
+    "id": "t04",
+    "number": 4,
+    "name": "皇帝",
+    "keyword": "穩定・責任",
+    "upright": "訂個小計畫按部就班，你比想像中更可靠。",
+    "reversed": "太堅持規則會卡住，試著放鬆一點點。",
+    "is_demo": false
+  },
+  {
+    "id": "t05",
+    "number": 5,
+    "name": "教皇",
+    "keyword": "學習・傳承",
+    "upright": "向前輩請教或翻翻筆記，會找到很好的建議。",
+    "reversed": "別人的方法不一定適合你，走自己的步調也可以。",
+    "is_demo": false
+  },
+  {
+    "id": "t06",
+    "number": 6,
+    "name": "戀人",
+    "keyword": "選擇・連結",
+    "upright": "跟著真心做選擇，和夥伴的默契會更好。",
+    "reversed": "猶豫不決時，先想想自己真正在乎什麼。",
+    "is_demo": false
+  },
+  {
+    "id": "t07",
+    "number": 7,
+    "name": "戰車",
+    "keyword": "前進・決心",
+    "upright": "目標清楚就一鼓作氣，今天很適合往前衝。",
+    "reversed": "方向盤握太緊會累，偶爾停下來看看地圖。",
+    "is_demo": false
+  },
+  {
+    "id": "t08",
+    "number": 8,
+    "name": "力量",
+    "keyword": "勇氣・溫柔",
+    "upright": "溫柔也是一種力量，你能好好面對眼前的事。",
+    "reversed": "不用逞強，累了就休息，明天的你會更有力氣。",
+    "is_demo": false
+  },
+  {
+    "id": "t09",
+    "number": 9,
+    "name": "隱者",
+    "keyword": "獨處・思考",
+    "upright": "給自己一點安靜的時間，會想通很多事。",
+    "reversed": "一個人太久會寂寞，找朋友聊聊天吧。",
+    "is_demo": false
+  },
+  {
+    "id": "t10",
+    "number": 10,
+    "name": "命運之輪",
+    "keyword": "轉機・循環",
+    "upright": "風向正在轉變，順著節奏走會遇到好機會。",
+    "reversed": "事情不順只是暫時的，轉個彎就過去了。",
+    "is_demo": false
+  },
+  {
+    "id": "t11",
+    "number": 11,
+    "name": "正義",
+    "keyword": "平衡・公平",
+    "upright": "誠實面對自己，做出的決定會讓你安心。",
+    "reversed": "先把事情弄清楚再下判斷，不要急著怪自己。",
+    "is_demo": false
+  },
+  {
+    "id": "t12",
+    "number": 12,
+    "name": "倒吊人",
+    "keyword": "換個角度・等待",
+    "upright": "換個角度看，卡住的事情也許有新解法。",
+    "reversed": "等待也有意義，但別讓自己一直困在原地。",
+    "is_demo": false
+  },
+  {
+    "id": "t13",
+    "number": 13,
+    "name": "死神",
+    "keyword": "結束・新生",
+    "upright": "一段旅程告一段落，新的章節正要開始。",
+    "reversed": "捨不得放手很正常，慢慢來，一步一步告別。",
+    "is_demo": false
+  },
+  {
+    "id": "t14",
+    "number": 14,
+    "name": "節制",
+    "keyword": "調和・耐心",
+    "upright": "慢慢調整、剛剛好就好，今天的節奏很舒服。",
+    "reversed": "最近有點忙亂，記得喝水、好好吃飯。",
+    "is_demo": false
+  },
+  {
+    "id": "t15",
+    "number": 15,
+    "name": "惡魔",
+    "keyword": "誘惑・執著",
+    "upright": "承認自己的小慾望也沒關係，開心地玩但別過頭。",
+    "reversed": "有點被什麼綁住了嗎？鬆開一點會輕鬆很多。",
+    "is_demo": false
+  },
+  {
+    "id": "t16",
+    "number": 16,
+    "name": "高塔",
+    "keyword": "突破・改變",
+    "upright": "意外的變化會帶來新的視野，別怕重新開始。",
+    "reversed": "不安的時候先穩住自己，風雨很快就會停。",
+    "is_demo": false
+  },
+  {
+    "id": "t17",
+    "number": 17,
+    "name": "星星",
+    "keyword": "希望・療癒",
+    "upright": "許個願吧，今天的你被星星溫柔地照顧著。",
+    "reversed": "對自己有點沒信心？抬頭看看夜空，光一直都在。",
+    "is_demo": false
+  },
+  {
+    "id": "t18",
+    "number": 18,
+    "name": "月亮",
+    "keyword": "想像・不安",
+    "upright": "讓想像力自由飛翔，夢裡也許有靈感。",
+    "reversed": "心裡的擔心多半是想像出來的，天亮就好了。",
+    "is_demo": false
+  },
+  {
+    "id": "t19",
+    "number": 19,
+    "name": "太陽",
+    "keyword": "快樂・活力",
+    "upright": "充滿元氣的一天，和大家一起笑一笑吧。",
+    "reversed": "有點提不起勁也沒關係，曬曬太陽就會好起來。",
+    "is_demo": false
+  },
+  {
+    "id": "t20",
+    "number": 20,
+    "name": "審判",
+    "keyword": "覺醒・召喚",
+    "upright": "聽見心裡的呼喚了嗎？是時候回應它了。",
+    "reversed": "別太責怪過去的自己，當時的你已經很努力了。",
+    "is_demo": false
+  },
+  {
+    "id": "t21",
+    "number": 21,
+    "name": "世界",
+    "keyword": "完成・圓滿",
+    "upright": "努力終於開花結果，好好享受這份圓滿。",
+    "reversed": "只差最後一步了，再撐一下就能完成。",
+    "is_demo": false
+  }
+]

@@ -47,7 +47,7 @@ export default {
   ],
   objects: [
     { x: 1.5, y: 3, name: '火爐', text: ['爐火燒得正旺，靠近就覺得臉頰發燙。'], demo: true, play: 'stoke_fire' },
-    { x: 5, y: 4, name: '鐵砧', text: ['厚重的鐵砧，表面被敲得坑坑疤疤。'], demo: true, play: 'hammer' },
+    { x: 5, y: 4, name: '鐵砧', text: ['厚重的鐵砧，表面被敲得坑坑疤疤。', '要不要試著打一把武器？'], demo: true, play: 'hammer', show: 'forge' },
     { x: 12, y: 2, name: '工作台', text: ['桌上散著鉗子、銼刀和還沒完成的劍柄。'], demo: true },
     { x: 10, y: 6, name: '磨刀石', text: ['踩著踏板就會轉的磨刀石。'], demo: true, play: 'sharpen' },
     { x: 4, y: 2, name: '水桶', text: ['淬火用的水，表面浮著一層薄薄的灰。'], demo: true },

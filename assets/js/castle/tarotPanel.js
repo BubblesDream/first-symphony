@@ -43,21 +43,21 @@ export function buildTarotPanel(ctx) {
     clearTimers();
     share.hidden = true;
     last = null;
-    if (kind === 'three' && !ctx.quota.use()) {
-      status.textContent = OUT_OF_QUOTA;
-      return;
-    }
-    quota.textContent = quotaText(ctx.quota);
-    status.textContent = '洗牌中…';
-    spread.replaceChildren();
     let cards;
     try {
       cards = await loadCards();
     } catch (error) {
       console.warn(error);
+      spread.replaceChildren();
       status.textContent = '占卜牌暫時找不到。';
       return;
     }
+    if (kind === 'three' && !ctx.quota.use()) {
+      status.textContent = OUT_OF_QUOTA;
+      return;
+    }
+    quota.textContent = quotaText(ctx.quota);
+    spread.replaceChildren();
     let picks;
     if (kind === 'today') {
       // 同一天抽到同一張：用當地日期當種子
@@ -103,17 +103,12 @@ export function buildTarotPanel(ctx) {
 /** 一張牌：先蓋著，open() 時翻開並顯示解讀 */
 function renderPick({ card, reversed, label }) {
   const back = el('div', { className: 'castle-tarot__back' });
-  if (TAROT_ART.back) back.append(el('img', { src: `${TAROT_ART.dir}tarot_back.webp`, alt: '' }));
-  else back.append(el('span', { text: '☆' }));
+  withArt(back, TAROT_ART.back && `${TAROT_ART.dir}tarot_back.webp`, '', () => [el('span', { text: '☆' })]);
   const face = el('div', { className: 'castle-tarot__face' });
-  if (TAROT_ART.faces) {
-    face.append(el('img', { src: `${TAROT_ART.dir}tarot_${pad2(card.number)}.webp`, alt: card.name }));
-  } else {
-    face.append(
-      el('span', { className: 'castle-tarot__num', text: roman(card.number) }),
-      el('span', { className: 'castle-tarot__cardname', text: card.name }),
-    );
-  }
+  withArt(face, TAROT_ART.faces && `${TAROT_ART.dir}tarot_${pad2(card.number)}.webp`, card.name, () => [
+    el('span', { className: 'castle-tarot__num', text: roman(card.number) }),
+    el('span', { className: 'castle-tarot__cardname', text: card.name }),
+  ]);
   const inner = el('div', { className: 'castle-tarot__inner' }, back, face);
   const cardBox = el('div', { className: `castle-tarot__card${reversed ? ' is-reversed' : ''}`, 'aria-hidden': 'true' }, inner);
   const info = el('div', { className: 'castle-tarot__info', hidden: true },
@@ -133,6 +128,17 @@ function renderPick({ card, reversed, label }) {
       info.hidden = false;
     },
   };
+}
+
+/** 有圖就放圖，沒圖或載入失敗時改成 CSS 卡片的內容 */
+function withArt(box, src, alt, fallback) {
+  if (!src) {
+    box.append(...fallback());
+    return;
+  }
+  const img = el('img', { src, alt });
+  img.addEventListener('error', () => img.replaceWith(...fallback()), { once: true });
+  box.append(img);
 }
 
 /** 存成圖片的內容 */

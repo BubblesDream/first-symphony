@@ -2,6 +2,7 @@
 // 並把目前狀態放在 window.__castle，讓自動檢查（Playwright）不用看截圖也能判斷。
 import { TILE } from './config.js';
 import { TILE_ART, SPRITE_ART, WANTED_ART } from './art.js';
+import { PANELS } from './panels.js';
 
 export function drawDebug(scene) {
   const g = scene.add.graphics().setDepth(99999);
@@ -28,6 +29,11 @@ export function updateDebug(scene) {
     problems: scene.debugProblems,
     player: { ...scene.player.tile },
     dialogOpen: scene.ctx.ui.dialog.isOpen,
+    panel: scene.ctx.ui.panel.name, // 開著的面板名稱（沒有就是 null）
+    quota: scene.ctx.quota?.left,   // 剩下的靈感次數
+    acting: scene.player.act?.spot.action || null,
+    moon: scene.skyMoon || null,
+    drink: scene.ctx.drink,
     art: scene.artReport, // used：有用到的圖；missing：房間指定了、但還沒有圖（畫色塊）
     npcs: scene.npcs.map((npc) => ({
       id: npc.data.id,
@@ -58,6 +64,8 @@ export function checkRoom(scene) {
   // 物件的 play：要有同動作的演出點
   for (const obj of room.objects || []) {
     if (obj.play && !room.spots.some((s) => s.action === obj.play)) problems.push(`物件「${obj.name}」的 play「${obj.play}」沒有演出點`);
+    // 物件的 show：面板名稱要在 panels.js 登記
+    if (obj.show && !PANELS[obj.show]) problems.push(`物件「${obj.name}」的 show「${obj.show}」沒有在 panels.js 登記`);
   }
   for (const [id, [x, y]] of Object.entries(room.spawns)) {
     if (!grid.npcWalkable(x, y)) problems.push(`出生點 ${id} (${x},${y}) 不是地板`);

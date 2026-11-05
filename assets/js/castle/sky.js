@@ -46,6 +46,9 @@ export function isDaytime(date = new Date()) {
   return h >= 6 && h < 18;
 }
 
+/** 當地 18 點到隔天 6 點前算晚上（酒館的夜晚限定飲料） */
+export const isNight = (date = new Date()) => !isDaytime(date);
+
 /**
  * 月亮亮面的形狀：把半徑 1 的圓切成一條一條橫線，回傳每條亮的範圍 [y, x0, x1]（-1～1）。
  * 北半球（台灣）看到的方向：漸盈亮右邊、漸虧亮左邊。steps：切幾條。

@@ -33,6 +33,7 @@ export const ACTIONS = {
   look_telescope: { pose: 'idle',  seated: false, bubbles: ['☆', '看到了！', '…'], duration: [10, 20] },
   read_starmap:   { pose: 'read',  seated: true, bubbles: ['…', '這顆星是…'], duration: [10, 20] },
   stargaze:       { pose: 'idle',  seated: true, bubbles: ['☆', '…', '好美'], duration: [12, 24] },
+  read_tarot:     { pose: 'read',  seated: true, bubbles: ['☆', '嗯…', '原來如此'], duration: [10, 20] },
   // 後續：hammer、hit_dummy、shoot_arrow…
   // 1F：酒館／練習室／鍛造工坊
   drink:       { pose: 'idle',    seated: true, bubbles: ['咕嘟', '好喝！', '再來一杯'], duration: [10, 20] },

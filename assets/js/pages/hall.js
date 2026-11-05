@@ -1,9 +1,11 @@
 // 虛擬公會城堡頁：讀資料 → 啟動遊戲。
-// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）
+// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）、
+// ?moon=7.4 指定月齡（天）看不同月相
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
 import { startCastle } from '../castle/main.js';
 import { createMusicPlayer } from '../castle/music.js';
+import { parseMoonAge } from '../castle/sky.js';
 
 initLayout();
 // 公會歌和遊戲各自獨立：遊戲載入失敗也能聽歌
@@ -52,6 +54,7 @@ async function main() {
     npcs: num('npcs'),
     debug: params.get('debug') === '1',
     noArt: params.get('noart') === '1',
+    moonAge: parseMoonAge(params.get('moon')),
     onRoomChange: (name) => { roomName.textContent = `目前位置：${name}`; },
   });
 }
