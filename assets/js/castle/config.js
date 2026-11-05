@@ -65,5 +65,14 @@ export const COLORS = {
   starMap: 0x3c4f7a,
   starWindow: 0x24305e,
   windowGlass: 0x8fb3d1,
+  // 1F：酒館／練習室／鍛造工坊
+  bar: 0x6b4228,
+  barrel: 0x8a5a32,
+  fire: 0xc8552e,
+  iron: 0x55575c,
+  straw: 0xcfb15a,
+  target: 0xc94a3a,
+  rope: 0xb59a6a,
+  coal: 0x2e2b29,
   label: '#3a2a1f',
 };

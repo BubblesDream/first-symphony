@@ -54,6 +54,9 @@ export const WANTED_ART = [
   // 2F／3F（第三批 B～D）
   'bed', 'nightstand', 'wardrobe', 'desk', 'stairs_down', 'door_double', 'bookshelf', 'history_case', 'table_long', 'globe',
   'telescope', 'window_stars', 'star_table', 'bench', 'armillary',
+  // 1F 酒館、練習室、鍛造工坊（第三批 E；bench、workbench 與上面共用）
+  'bottle_shelf', 'menu_board', 'fireplace', 'barrel', 'bar_counter', 'long_table', 'weapon_rack', 'training_dummy',
+  'archery_target', 'rope_fence', 'tool_rack', 'forge_furnace', 'water_bucket', 'ore_crate', 'anvil', 'grindstone', 'coal_pile',
 ];
 
 /** 地圖的基本種類預設用哪張拼貼圖 */

@@ -203,6 +203,76 @@
     "is_demo": true
   },
   {
+    "id": "l501",
+    "member_id": "",
+    "room": "tavern",
+    "text": "老闆，再來一杯蘋果酒！",
+    "is_demo": true
+  },
+  {
+    "id": "l502",
+    "member_id": "",
+    "room": "tavern",
+    "text": "壁爐旁邊的位子最搶手了。",
+    "is_demo": true
+  },
+  {
+    "id": "l503",
+    "member_id": "",
+    "room": "tavern",
+    "text": "今天的冒險故事，換你說說看吧。",
+    "is_demo": true
+  },
+  {
+    "id": "l504",
+    "member_id": "",
+    "room": "tavern",
+    "text": "大家一起乾杯！",
+    "is_demo": true
+  },
+  {
+    "id": "l505",
+    "member_id": "",
+    "room": "training",
+    "text": "稻草人今天又被打歪了。",
+    "is_demo": true
+  },
+  {
+    "id": "l506",
+    "member_id": "",
+    "room": "training",
+    "text": "射箭要先穩住呼吸。",
+    "is_demo": true
+  },
+  {
+    "id": "l507",
+    "member_id": "",
+    "room": "training",
+    "text": "練完記得把木劍放回架子上喔。",
+    "is_demo": true
+  },
+  {
+    "id": "l508",
+    "member_id": "",
+    "room": "forge",
+    "text": "火候差一點，這把劍就打不好了。",
+    "is_demo": true
+  },
+  {
+    "id": "l509",
+    "member_id": "",
+    "room": "forge",
+    "text": "鏗鏗鏗……耳朵都嗡嗡響了。",
+    "is_demo": true
+  },
+  {
+    "id": "l510",
+    "member_id": "",
+    "room": "forge",
+    "text": "要修裝備的話放在工作台上就好。",
+    "is_demo": true
+  },
+  {
     "id": "l601",
     "member_id": "",
     "room": "courtyard",
