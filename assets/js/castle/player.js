@@ -4,6 +4,7 @@ import { PLAYER_SPEED } from './config.js';
 import { ACTIONS } from './actions.js';
 import { createAvatar } from './avatar.js';
 import { toTile, tileFeet } from './grid.js';
+import { playEffect } from './effects.js';
 
 const VISITOR_LOOK = { skin: '#f3d6bd', hair: '#4a3426', outfit: '#f5efe2', accent: '#c9a227', mark: 'visitor' };
 
@@ -117,8 +118,10 @@ export class Player {
     act.bubble -= dt;
     if (act.bubble <= 0) {
       act.bubble = 3 + Math.random() * 3;
+      const said = playEffect(this.scene, act.action, this, act.spot);
       const list = act.action.bubbles || [];
-      if (list.length) this.avatar.say(list[Math.floor(Math.random() * list.length)]);
+      if (said) this.avatar.say(said);
+      else if (list.length) this.avatar.say(list[Math.floor(Math.random() * list.length)]);
     }
   }
 

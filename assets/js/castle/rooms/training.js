@@ -38,9 +38,9 @@ export default {
     from_hall: [1, 7],
   },
   spots: [
-    ...[4, 8, 12].map((x) => ({ action: 'hit_dummy', x, y: 5, facing: 'up' })),
-    { action: 'shoot_arrow', x: 14, y: 9, facing: 'right' },
-    { action: 'shoot_arrow', x: 14, y: 11, facing: 'right' },
+    ...[4, 8, 12].map((x) => ({ action: 'hit_dummy', x, y: 5, facing: 'up', target: [x, 4] })), // target：效果出現的格子
+    { action: 'shoot_arrow', x: 14, y: 9, facing: 'right', target: [20, 9] },
+    { action: 'shoot_arrow', x: 14, y: 11, facing: 'right', target: [20, 11] },
     { action: 'pick_weapon', x: 5, y: 3, facing: 'up' },
     { action: 'pick_weapon', x: 13, y: 3, facing: 'up' },
     ...[2, 3, 4, 5].map((x) => ({ action: 'sit_rest', x, y: 12, facing: 'up' })),

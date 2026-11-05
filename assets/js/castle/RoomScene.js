@@ -10,6 +10,9 @@ import { pickLines } from './roster.js';
 import { drawDebug, updateDebug } from './debug.js';
 import { queueArt } from './art.js';
 import { RoomView } from './roomView.js';
+import { Critter } from './critter.js';
+import { Groups } from './groups.js';
+import { drawAmbience } from './ambience.js';
 
 
 export class RoomScene extends Phaser.Scene {
@@ -48,6 +51,21 @@ export class RoomScene extends Phaser.Scene {
     this.physics.add.collider(this.player.feet, this.solidBodies);
     this.physics.add.collider(this.player.feet, this.lockedBodies, (_, door) => this.ctx.ui.toast(door.message));
 
+    // 會走動的小動物（羊）：先放，NPC 的起始位置會避開牠們
+    this.critters = [];
+    for (const def of this.room.critters || []) {
+      for (const [x, y] of def.at) this.critters.push(new Critter(this, def, x, y));
+    }
+    this.critterBodies = this.critters.map((critter) => {
+      const zone = this.add.zone(critter.x, critter.y - 6, 20, 10);
+      this.physics.add.existing(zone);
+      zone.body.setImmovable(true);
+      zone.body.moves = false;
+      zone.critter = critter;
+      return zone;
+    });
+    this.physics.add.collider(this.player.feet, this.critterBodies);
+
     // NPC：只建立這個房間被分配到的人
     this.npcs = [];
     const people = this.ctx.roster[this.roomId] || [];
@@ -65,6 +83,10 @@ export class RoomScene extends Phaser.Scene {
       return zone;
     });
     this.physics.add.collider(this.player.feet, this.npcBodies);
+    this.groups = new Groups(this); // 多人演出（合奏、乾杯…）
+
+    // 時間氛圍：依訪客電腦的時間（?hour= 可測試）
+    this.mood = drawAmbience(this, width, height, this.ctx.hour ?? new Date().getHours(), this.room.outdoor);
 
     // 鏡頭
     const cam = this.cameras.main;
@@ -95,6 +117,7 @@ export class RoomScene extends Phaser.Scene {
     this.events.once('shutdown', () => {
       this.ctx.ui.dialog.close();
       for (const npc of this.npcs) npc.destroy();
+      for (const critter of this.critters) critter.destroy();
     });
 
     this.ctx.ui.setRoomName(this.room.name);
@@ -108,13 +131,16 @@ export class RoomScene extends Phaser.Scene {
     this.player.update(dt, dialog.isOpen || this.leaving);
     for (const npc of this.npcs) npc.update(dt);
     this.npcBodies.forEach((zone) => zone.setPosition(zone.npc.x, zone.npc.y));
+    for (const critter of this.critters) critter.update(dt);
+    this.critterBodies.forEach((zone) => zone.setPosition(zone.critter.x, zone.critter.y - 6));
+    this.groups.update(dt);
 
     // 最近的互動對象
     const target = this.nearestTarget();
     this.target = target;
     for (const npc of this.npcs) npc.avatar.setNameVisible(npc === this.hovered || target?.npc === npc);
     if (target && !dialog.isOpen) {
-      this.prompt.setPosition(target.x, target.y - (target.npc ? 46 : 18)).setVisible(true);
+      this.prompt.setPosition(target.x, target.y - (target.npc ? 46 : target.critter ? 34 : 18)).setVisible(true);
     } else {
       this.prompt.setVisible(false);
     }
@@ -167,7 +193,7 @@ export class RoomScene extends Phaser.Scene {
     const tiles = [];
     for (let y = 0; y < grid.h; y++) {
       for (let x = 0; x < grid.w; x++) {
-        if (grid.npcWalkable(x, y) && Math.abs(x - sx) + Math.abs(y - sy) > 2) tiles.push([x, y]);
+        if (grid.npcWalkable(x, y) && !grid.occupant(x, y) && Math.abs(x - sx) + Math.abs(y - sy) > 2) tiles.push([x, y]);
       }
     }
     return this.rng.shuffle(tiles).slice(0, count);
@@ -195,6 +221,13 @@ export class RoomScene extends Phaser.Scene {
         bestDist = d;
       }
     }
+    for (const critter of this.critters) {
+      const d = Math.hypot(critter.x - x, critter.y - y);
+      if (d < bestDist) {
+        best = { critter, x: critter.x, y: critter.y };
+        bestDist = d;
+      }
+    }
     for (const obj of this.room.objects || []) {
       const ox = (obj.x + 0.5) * TILE;
       const oy = (obj.y + 0.5) * TILE;
@@ -211,6 +244,10 @@ export class RoomScene extends Phaser.Scene {
   interact(target) {
     const { dialog } = this.ctx.ui;
     this.player.faceToward(target.x, target.y);
+    if (target.critter) {
+      target.critter.say(true);
+      return;
+    }
     if (target.npc) {
       const npc = target.npc;
       npc.startTalk(this.player.x, this.player.y);
@@ -229,10 +266,28 @@ export class RoomScene extends Phaser.Scene {
       }
       dialog.open({
         title: obj.name,
-        lines: obj.text.map((text) => ({ text, is_demo: obj.demo })),
+        lines: this.objectLines(obj),
         onClose: obj.play ? () => this.playAt(obj) : null,
       });
     }
+  }
+
+  /**
+   * 物件的文字：text 依序顯示；random 從裡面隨機抽一句接在後面（例如噴泉許願）；
+   * source: 'history' 接網站的公會歷史資料，一筆一頁（展示櫃翻頁）。
+   */
+  objectLines(obj) {
+    const lines = obj.text.map((text) => ({ text, is_demo: obj.demo }));
+    if (obj.random?.length) lines.push({ text: this.rng.pick(obj.random), is_demo: obj.demo });
+    if (obj.source === 'history') {
+      const items = this.ctx.history || [];
+      if (!items.length) lines.push({ text: '展示櫃裡還是空的，公會歷史整理中。' });
+      for (const item of [...items].sort((p, q) => String(p.date).localeCompare(String(q.date)))) {
+        const body = String(item.body || '').split(/\n/).map((s) => s.trim()).filter(Boolean).join(' ');
+        lines.push({ text: `【${item.date}】${item.title}${body ? `｜${body}` : ''}`, is_demo: item.is_demo });
+      }
+    }
+    return lines;
   }
 
   /** 物件的 play：訪客走到最近、沒人用的同動作演出點，自己演出 */

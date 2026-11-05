@@ -38,6 +38,9 @@ export function updateDebug(scene) {
       tileOk: scene.grid.npcWalkable(npc.tx, npc.ty) || (npc.spot && npc.spot.x === npc.tx && npc.spot.y === npc.ty)
         || scene.spots.some((s) => s.x === npc.tx && s.y === npc.ty),
     })),
+    critters: (scene.critters || []).map((c) => ({ tx: c.tx, ty: c.ty })),
+    groups: scene.groups?.report() || [],
+    mood: scene.mood?.name,
     roster: Object.fromEntries(Object.entries(scene.ctx.roster).map(([k, v]) => [k, v.map((p) => p.id)])),
   };
 }
@@ -59,13 +62,32 @@ export function checkRoom(scene) {
   for (const obj of room.objects || []) {
     if (obj.play && !room.spots.some((s) => s.action === obj.play)) problems.push(`物件「${obj.name}」的 play「${obj.play}」沒有演出點`);
   }
+  // 演出效果的 target 要在房間範圍內
+  for (const s of room.spots) {
+    if (s.target && !grid.cell(...s.target)) problems.push(`演出點 (${s.x},${s.y}) 的 target 在房間外`);
+  }
+  // 多人演出：位置要對得到演出點，人數下限不能比位置多
+  for (const g of room.groups || []) {
+    for (const [x, y] of g.spots) {
+      if (!room.spots.some((s) => s.x === x && s.y === y)) problems.push(`多人演出「${g.name}」的 (${x},${y}) 不是演出點`);
+    }
+    if ((g.min || 2) > g.spots.length) problems.push(`多人演出「${g.name}」的 min 比位置多`);
+  }
+  // 小動物：起始位置要在範圍內、是地板
+  for (const c of room.critters || []) {
+    const [x0, y0, x1, y1] = c.area;
+    for (const [x, y] of c.at) {
+      if (x < x0 || x > x1 || y < y0 || y > y1) problems.push(`${c.name} (${x},${y}) 不在 area 範圍內`);
+      else if (!grid.npcWalkable(x, y)) problems.push(`${c.name} (${x},${y}) 不是地板`);
+    }
+  }
   for (const [id, [x, y]] of Object.entries(room.spawns)) {
     if (!grid.npcWalkable(x, y)) problems.push(`出生點 ${id} (${x},${y}) 不是地板`);
   }
   // 圖片名稱：沒登記、也不在待補清單裡，多半是打錯字
   const known = new Set([...Object.keys(TILE_ART), ...Object.keys(SPRITE_ART), ...WANTED_ART]);
   const names = [...Object.values(room.legend || {}).map((d) => d.sprite), ...Object.values(room.doors).map((d) => d.sprite),
-    ...Object.values(room.tiles || {})];
+    ...Object.values(room.tiles || {}), ...(room.critters || []).map((c) => c.sprite)];
   for (const name of names) if (name && !known.has(name)) problems.push(`圖片名稱「${name}」不在 art.js`);
   for (const [ch, door] of Object.entries(room.doors)) {
     if (!room.map.some((row) => row.includes(ch))) problems.push(`門「${ch}」沒有出現在地圖上`);

@@ -63,6 +63,11 @@ export default {
     { action: 'warm_hands', x: 14, y: 2, facing: 'up' },
     { action: 'warm_hands', x: 15, y: 2, facing: 'up' },
   ],
+  // 多人演出（groups.js）：同一張圓桌湊到 2 位以上就一起乾杯
+  groups: [[12, 6], [17, 6], [12, 11], [17, 11]].map(([x, y]) => ({
+    name: '乾杯', spots: [[x, y], [x + 3, y], [x, y + 1], [x + 3, y + 1]], min: 2, every: [25, 55], duration: [12, 20],
+    bubbles: ['來，舉杯！', '乾杯！', '哈哈哈', '敬第一交響樂團！'], finale: '乾——杯！',
+  })),
   objects: [
     { x: 4.5, y: 4, name: '吧台', text: ['擦得發亮的木頭吧台，上面留著幾圈杯子的水痕。'], demo: true, play: 'drink' },
     { x: 1.5, y: 3, name: '酒桶', text: ['桶子上用粉筆寫著「蘋果酒」。'], demo: true },

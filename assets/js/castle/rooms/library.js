@@ -51,7 +51,8 @@ export default {
     { action: 'spin_globe', x: 9, y: 8, facing: 'up' },
   ],
   objects: [
-    { x: 9.5, y: 2, name: '公會歷史展示櫃', text: ['玻璃櫃裡放著公會的紀念品與照片。', '（之後可以接上網站的公會歷史資料。）'], demo: true, play: 'view_history' },
+    { x: 9.5, y: 2, name: '公會歷史展示櫃', text: ['玻璃櫃裡放著公會的紀念品與照片，旁邊夾著一本年表，一頁一頁翻……'], demo: true, play: 'view_history',
+      source: 'history' }, // 接網站的公會歷史資料（data/history.json），一筆一頁
     { x: 9, y: 7, name: '地球儀', text: ['畫著奇幻大陸的地球儀，有人在上面用鉛筆圈了幾個釣魚點。'], demo: true, play: 'spin_globe' },
     { x: 3.5, y: 2, name: '書架', text: ['書架上的書依樂器分類：魯特琴、長笛、小提琴……', '最下層塞滿了沒歸位的樂譜。'], demo: true, play: 'tidy_shelf' },
     { x: 15.5, y: 2, name: '書架', text: ['《合奏入門》、《如何在副本裡不迷路》、《羊毛的一百種用法》。'], demo: true },

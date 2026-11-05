@@ -56,6 +56,11 @@ export default {
       { action: 'sit_watch', x, y, facing: 'up' }
     ))),
   ],
+  // 多人演出（groups.js）：閒著的人湊到 2 位以上，就各自走到樂器旁，到齊後一起合奏
+  groups: [
+    { name: '合奏', spots: [[3, 4], [8, 3], [12, 3], [16, 3], [12, 6]], min: 2, every: [25, 50], duration: [18, 28],
+      bubbles: ['預備——', '♪', '♫', '♬', '♪♫', '♬♪'], finale: '（掌聲）' },
+  ],
   objects: [
     // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
     { x: 3, y: 2.5, name: '鋼琴', text: ['一架擦得發亮的鋼琴。要坐下來彈一曲嗎？'], demo: false, play: 'play_piano' },

@@ -41,6 +41,7 @@ for (const [id, room] of Object.entries(ROOMS)) {
     ...Object.values(room.legend || {}).flatMap((d) => [d.sprite, d.behind]),
     ...Object.values(room.doors || {}).map((d) => d.sprite),
     ...Object.values(room.tiles || {}),
+    ...(room.critters || []).map((c) => c.sprite),
   ];
   for (const n of names) if (n) usedNames.add(n);
 }
