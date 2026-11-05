@@ -10,6 +10,7 @@ export const PLAYER_SPEED = 120;   // 像素／秒
 export const NPC_SPEED = 55;
 export const INTERACT_RANGE = 48;  // 按 E 可互動的距離
 export const CLICK_RANGE = 96;     // 滑鼠點擊可直接對話的距離
+export const INSPIRATION = 3;      // 「靈感」次數：每次走進房間恢復（塔羅三張牌、鍛造各用 1 次）
 
 // NPC 待機結束後選下一個動作的機率（合計 1）
 export const BEHAVIOR = { idle: 0.4, wander: 0.35, spot: 0.25 };
@@ -74,5 +75,9 @@ export const COLORS = {
   target: 0xc94a3a,
   rope: 0xb59a6a,
   coal: 0x2e2b29,
+  // 3F 觀星台：占卜桌、星空窗裡的月亮
+  tarotTable: 0x4a3566,
+  moonLit: 0xf1ead2,
+  moonDark: 0x2f3757,
   label: '#3a2a1f',
 };

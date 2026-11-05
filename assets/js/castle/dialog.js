@@ -59,6 +59,57 @@ export function createDialog(stage) {
   return api;
 }
 
+/**
+ * 物件的面板（物件的 show，例如望遠鏡畫面、塔羅占卜）：蓋在遊戲區上的一般網頁元素。
+ * 面板內容由 panels.js 的建立函式產生；開著時訪客不能移動。Esc 或「關閉」按鈕關閉。
+ */
+export function createPanel(stage) {
+  const title = el('p', { className: 'castle-panel__title' });
+  const body = el('div', { className: 'castle-panel__body' });
+  const closeBtn = el('button', { type: 'button', className: 'btn castle-panel__close', text: '關閉' });
+  const box = el('div', { className: 'castle-panel', hidden: true, role: 'dialog', 'aria-modal': 'true', tabindex: '-1' },
+    el('div', { className: 'castle-panel__head' }, title, closeBtn),
+    body,
+  );
+  stage.append(box);
+
+  let current = null; // { name, onClose }
+
+  const api = {
+    get isOpen() { return !box.hidden; },
+    get name() { return current?.name || null; },
+    /** content：{ title, body（Node）, onClose } */
+    open(name, content) {
+      api.close();
+      current = { name, onClose: content.onClose || null };
+      title.textContent = content.title;
+      box.setAttribute('aria-label', content.title);
+      body.replaceChildren(content.body);
+      box.hidden = false;
+      box.scrollTop = 0;
+      // 焦點先放在面板本身（不放在按鈕上，免得關對話框的那一下空白鍵順便按到按鈕）
+      box.focus({ preventScroll: true });
+    },
+    close() {
+      if (box.hidden) return;
+      box.hidden = true;
+      const done = current?.onClose;
+      current = null;
+      body.replaceChildren();
+      if (done) done();
+      stage.focus({ preventScroll: true });
+    },
+  };
+  closeBtn.addEventListener('click', () => api.close());
+  // 面板裡的按鍵不傳給遊戲（空白鍵才按得到按鈕）；Esc 關閉
+  box.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') api.close();
+    event.stopPropagation();
+  });
+  box.addEventListener('pointerdown', (event) => event.stopPropagation());
+  return api;
+}
+
 /** 短暫顯示一行提示（例如「這裡還在整修中」） */
 export function createToast(stage) {
   const box = el('p', { className: 'castle-toast', hidden: true, role: 'status' });
