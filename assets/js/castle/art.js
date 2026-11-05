@@ -93,7 +93,7 @@ export const SPRITE_ART = {
   anvil: { src: `${DIR}anvil.webp`, w: 1, h: 1 },
   bottle_shelf: { src: `${DIR}bottle_shelf.webp`, w: 2, h: 1.5 },
   menu_board: { src: `${DIR}menu_board.webp`, w: 2, h: 1.5 },
-  long_table: { src: `${DIR}long_table.webp`, w: 2, h: 1.5 },
+  long_table: { src: `${DIR}long_table.webp`, w: 6, h: 1.5 },
   weapon_rack: { src: `${DIR}weapon_rack.webp`, w: 2, h: 2 },
   rope_fence: { src: `${DIR}rope_fence.webp`, w: 1, h: 1 },
   tool_rack: { src: `${DIR}tool_rack.webp`, w: 2, h: 1.5 },
