@@ -1,0 +1,17 @@
+A character sprite sheet for a warm fantasy 16-bit Japanese RPG style game, matching the style of the attached reference images exactly (same line weight: thin dark-brown outlines; same soft painterly pixel shading with light from the upper left; same medium saturation and warm palette). Top-down 3/4 RPG view.
+
+Draw ONE chibi character (about 2.5 heads tall, cute, friendly), full body, three times in a single horizontal row with wide transparent gaps between them, all at exactly the same size and with feet on the same baseline:
+1. left: facing the viewer (front view)
+2. middle: facing away (back view)
+3. right: facing right (side view, walking pose neutral, standing)
+Standing upright, arms relaxed at the sides, empty hands. No ground shadow, no floor, no background, no text, no frame. Transparent background. Image aspect ratio 3:2 (landscape). Completely original design, do not imitate any existing game character.
+
+IMPORTANT - this is a base template for a paper-doll system; some parts are painted in flat "key colors" so a program can recolor them later. Use these key colors exactly (with normal shading in lighter/darker versions of the SAME hue only, no other hues mixed in):
+- Hair: vivid key green (#22c55e).
+- Top (a simple short-sleeved tunic shirt, no collar, no buttons, no pattern): vivid key magenta (#d946ef).
+- Bottom (simple straight trousers): vivid key blue (#2563eb).
+Everything else in natural colors: skin light peach (#f2c9a0), plain brown shoes, dark-brown outlines.
+
+The character:
+- Hair: short hair, ear length, neat.
+- A gentle smiling expression. No accessories.
