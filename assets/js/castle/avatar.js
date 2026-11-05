@@ -29,8 +29,8 @@ class GeometricAvatar {
     const shadow = add.ellipse(0, 0, 20, 7, 0x000000, 0.22);
     this.cape = add.rectangle(0, -6, 18, 16, hex(look.accent)).setOrigin(0.5, 1).setVisible(look.mark === 'cape');
     this.legs = [
-      add.rectangle(-4, 0, 5, 6, DARK).setOrigin(0.5, 1),
-      add.rectangle(4, 0, 5, 6, DARK).setOrigin(0.5, 1),
+      add.rectangle(-4, 0, 5, 6, look.bottom ? hex(look.bottom) : DARK).setOrigin(0.5, 1),
+      add.rectangle(4, 0, 5, 6, look.bottom ? hex(look.bottom) : DARK).setOrigin(0.5, 1),
     ];
     this.body = add.rectangle(0, -5, 16, 16, hex(look.outfit)).setOrigin(0.5, 1);
     this.head = add.circle(0, -28, 8, hex(look.skin));
