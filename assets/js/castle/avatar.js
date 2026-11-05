@@ -23,7 +23,7 @@ export function createAvatar(scene, look, options = {}) {
     return new ImageAvatar(scene, { key: charKey(options.artId), cell: { ...CHAR_CELL, body: CHAR_CELL.h } }, options);
   }
   const doll = dollTexture(scene, options.artId, look); // 紙娃娃（部件不齊或 noart 時是 null）
-  if (doll) return new ImageAvatar(scene, { key: doll, cell: DOLL_CELL }, options);
+  if (doll) return new ImageAvatar(scene, { key: doll, cell: DOLL_CELL, height: look.height }, options);
   return new GeometricAvatar(scene, look, options);
 }
 

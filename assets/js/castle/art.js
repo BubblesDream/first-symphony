@@ -117,7 +117,7 @@ export const CHAR_ART = {
 /**
  * 紙娃娃部件（成員沒有個人角色圖時用）：原圖 docs/素材/城堡原圖/紙娃娃/<名稱>.png（Codex 用鍵色畫），
  * tools/castle_paperdoll.py 產生 assets/images/castle/doll/<名稱>.webp：三個方向一列、七層由上往下
- * （固定色、頭髮、皮膚、上衣、下身、鞋子、配件）。paperdoll.js 依每個人的款式與顏色組合染色。
+ * （固定色、頭髮、皮膚、上衣、下身、鞋子、配件；臉部疊圖 face_* 多一層眼睛）。paperdoll.js 依每個人的款式與顏色組合染色。
  * DOLL_CELL：每格 w×h 像素，母版角色身高 body 像素（上面留空給帽子、包包頭）。
  * 做法見 docs/研究-城堡紙娃娃.md；提示詞見 docs/提示詞-城堡紙娃娃.md。
  */
@@ -133,10 +133,12 @@ export const DOLL_PARTS = [
   'outfit_jacket_pants', 'outfit_jacket_shorts', 'outfit_jacket_longskirt', 'outfit_jacket_skirt',
   'outfit_armor_pants', 'outfit_armor_shorts', 'outfit_armor_longskirt', 'outfit_armor_skirt',
   'outfit_robe', 'outfit_dress',
+  'face_base', 'face_smile', 'face_cool', 'face_sparkle', 'face_determined',
+  'face_sleepy', 'face_closed', 'face_shy', 'face_mischief', 'face_wink',
   'over_glasses', 'over_cape',
 ];
 export const dollPartKey = (name) => `${PREFIX}doll:${name}`;
-const dollSrc = (name) => `${DIR}doll/${name}.webp`;
+export const dollSrc = (name) => `${DIR}doll/${name}.webp`;
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
 export const WANTED_ART = [];

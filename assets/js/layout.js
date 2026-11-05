@@ -18,8 +18,8 @@ const DEFAULTS = {
 
 export function initLayout() {
   const page = document.body.dataset.page || '';
-  // member.html 屬於「成員」
-  const current = page === 'member' ? 'members' : page;
+  // member.html 屬於「成員」、doll.html（捏娃娃）屬於「城堡」
+  const current = { member: 'members', doll: 'hall' }[page] || page;
 
   const header = document.getElementById('site-header');
   const tagline = el('p', { className: 'brand__tagline', text: DEFAULTS.tagline });

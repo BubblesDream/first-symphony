@@ -8,13 +8,18 @@ const SEAT_DEPTH = 14; // 坐著時往前排多少（椅子圖以格子下緣排
 
 const FRAME = { down: 0, up: 1, left: 2, right: 2 };
 const HEIGHT = CHAR_H * TILE; // 畫面上的高度（遊戲單位）
+export const HEIGHT_SCALE = { short: 0.92, medium: 1, tall: 1.08 }; // 問卷的身高：整個人縮放
 const SIT_SHOW = 0.68; // 坐下時露出上面幾成
 const SIT_DROP = 6; // 坐下時往下移幾單位（臀部落在椅面）
 
 export class ImageAvatar {
-  /** art：{ key: 貼圖名稱, cell: { w, h, body } }（每格像素；body＝角色身高的像素，上面可以留空給帽子） */
+  /**
+   * art：{ key: 貼圖名稱, cell: { w, h, body }, height }（每格像素；body＝角色身高的像素，上面可以留空給帽子；
+   * height＝身高 short／medium／tall，見 HEIGHT_SCALE）
+   */
   constructor(scene, art, { name = '', nameColor = '#fffaf0' } = {}) {
     this.cell = art.cell;
+    this.height = HEIGHT * (HEIGHT_SCALE[art.height] || 1);
     this.scene = scene;
     this.facing = 'down';
     this.pose = null;
@@ -25,7 +30,7 @@ export class ImageAvatar {
     this.root = add.container(0, 0);
     this.rig = add.container(0, 0);
     const shadow = add.ellipse(0, 0, 18, 6, 0x000000, 0.2);
-    this.sprite = add.image(0, 1, art.key, 0).setOrigin(0.5, 1).setScale(HEIGHT / art.cell.body);
+    this.sprite = add.image(0, 1, art.key, 0).setOrigin(0.5, 1).setScale(this.height / art.cell.body);
     // 道具：樂器、指揮棒、書（需要時才顯示）
     this.tool = add.rectangle(8, -10, 4, 12, 0x8a5a2b).setOrigin(0.5, 1).setVisible(false);
     this.book = add.rectangle(0, -12, 10, 7, 0xe8dcc4).setStrokeStyle(1, 0x7a5236).setVisible(false);
@@ -45,7 +50,7 @@ export class ImageAvatar {
 
   get x() { return this.root.x; }
   get y() { return this.root.y; }
-  get top() { return this.seated ? HEIGHT - SIT_DROP : HEIGHT + 2; }
+  get top() { return this.seated ? this.height - SIT_DROP : this.height + 2; }
 
   setPosition(x, y) {
     this.root.setPosition(x, y);

@@ -21,6 +21,7 @@ const { buildGrid } = await load('assets/js/castle/grid.js');
 const { checkRoom } = await load('assets/js/castle/debug.js');
 const { TILE_ART, SPRITE_ART, WANTED_ART, CHAR_ART, DOLL_PARTS } = await load('assets/js/castle/art.js');
 const { dollParts } = await load('assets/js/castle/paperdoll.js');
+const { FACE_STYLE } = await load('assets/js/castle/roster.js');
 
 const problems = [];
 const fail = (msg) => problems.push(msg);
@@ -117,6 +118,14 @@ for (const hairStyle of ['short', 'medium', 'long', 'ponytail', 'twintails', 'bu
     }
   }
 }
+// 臉：問卷的臉（roster.js 的 FACE_STYLE）和登記的臉部疊圖 face_* 一一對應
+const faceParts = DOLL_PARTS.filter((n) => n.startsWith('face_'));
+for (const face of Object.values(FACE_STYLE)) {
+  if (!faceParts.includes(`face_${face}`)) fail(`紙娃娃：roster.js 的臉 ${face} 沒有部件 face_${face}`);
+}
+for (const part of faceParts) {
+  if (!Object.values(FACE_STYLE).includes(part.slice(5))) fail(`紙娃娃：部件 ${part} 沒有對應 roster.js 的 FACE_STYLE（問卷選不到）`);
+}
 const charDir = at('assets/images/castle/members');
 if (existsSync(charDir)) {
   for (const f of readdirSync(charDir)) {
@@ -132,6 +141,8 @@ for (const table of ['castle_looks', 'castle_lines']) {
       if (typeof v === 'string' && v.startsWith('#') && !/^#[0-9a-fA-F]{6}$/.test(v)) fail(`${table} 第 ${i + 1} 列：${k} 不是 #rrggbb`);
     }
     if (row.member_id && !memberIds.has(row.member_id)) fail(`${table} 第 ${i + 1} 列：member_id ${row.member_id} 不在成員名單`);
+    if (row.face && !FACE_STYLE[row.face]) fail(`${table} 第 ${i + 1} 列：臉「${row.face}」不是問卷的選項（${Object.keys(FACE_STYLE).join('／')}）`);
+    if (row.height && !['矮', '中', '高'].includes(row.height)) fail(`${table} 第 ${i + 1} 列：身高「${row.height}」不是 矮／中／高`);
   });
 }
 

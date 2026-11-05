@@ -1245,3 +1245,236 @@ html.castle-gaming body {
   margin: var(--sp-6) auto;
   text-align: center;
 }
+
+/* ========== 捏娃娃（doll.html） ========== */
+.doll {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+@media (min-width: 860px) {
+  .doll {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .doll__preview {
+    position: sticky;
+    top: var(--sp-4);
+  }
+}
+
+.doll__preview {
+  background: var(--c-card);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  padding: var(--sp-4);
+}
+
+.doll__views {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-2);
+}
+
+.doll__big {
+  display: block;
+  max-width: calc((100% - 2 * var(--sp-2)) / 3);
+  height: auto;
+}
+
+.doll__scene {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-top: var(--sp-4);
+  padding: var(--sp-4) var(--sp-3) var(--sp-3);
+  border-radius: var(--radius-sm);
+  background-color: var(--c-castle-floor);
+}
+
+.doll__small {
+  display: block;
+}
+
+.doll__small--ref {
+  margin-left: var(--sp-4);
+  opacity: 0.75;
+}
+
+.doll__caption {
+  margin: var(--sp-1) 0 0;
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--c-ink-faint);
+}
+
+/* 手機：預覽固定在上面，縮小一點，邊捏邊看 */
+@media (max-width: 859px) {
+  .doll__preview {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: var(--sp-2);
+  }
+  .doll__big {
+    max-height: 30vh;
+    width: auto;
+  }
+  .doll__scene,
+  .doll__caption {
+    display: none;
+  }
+}
+
+.doll__form {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.doll-group {
+  margin: 0;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  background: var(--c-card);
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.doll-group legend {
+  padding: 0 var(--sp-2);
+  font-family: var(--font-title);
+  font-weight: 700;
+}
+
+.doll-field {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.doll-field[hidden] {
+  display: none;
+}
+
+.doll-field__label {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--c-ink-soft);
+}
+
+.doll-field__hint {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--c-ink-faint);
+}
+
+.doll-field select,
+.doll-field input[type="text"] {
+  font: inherit;
+  padding: 0.3em 0.5em;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-photo);
+  color: var(--c-ink);
+  max-width: 100%;
+}
+
+.doll-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.doll-chip {
+  padding: 0.3em 1em;
+}
+
+.doll-chip--thumb {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  border-radius: var(--radius);
+  padding: var(--sp-1) var(--sp-2);
+  min-width: 4.5rem;
+}
+
+.doll-chip__img {
+  display: block;
+  background: var(--c-castle-floor);
+  border-radius: var(--radius-sm);
+}
+
+.doll-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.doll-swatch {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(58, 42, 31, 0.35);
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+}
+
+.doll-swatch[aria-pressed="true"],
+.doll-custom-label.is-on {
+  outline: 3px solid var(--c-ink);
+  outline-offset: 2px;
+}
+
+.doll-custom-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  margin-left: var(--sp-2);
+  font-size: var(--fs-sm);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--sp-1);
+}
+
+.doll-custom {
+  width: 36px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--c-line);
+  background: none;
+  cursor: pointer;
+}
+
+.doll-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.doll-line input[type="text"] {
+  flex: 1 1 14rem;
+}
+
+.doll__output {
+  width: 100%;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: var(--fs-xs);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-photo);
+  color: var(--c-ink);
+  padding: var(--sp-2);
+}
+
+.doll__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.doll__copied {
+  font-size: var(--fs-sm);
+  color: var(--c-ink-soft);
+}
