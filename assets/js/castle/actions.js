@@ -14,5 +14,12 @@ export const ACTIONS = {
   play_flute:  { pose: 'play',    seated: true, instrument: 'flute', bubbles: ['♪', '♬'], duration: [14, 26] },
   play_harp:   { pose: 'play',    seated: true, instrument: 'harp', bubbles: ['♫', '♪'], duration: [14, 26] },
   conduct:     { pose: 'conduct', seated: false, bubbles: ['1、2、3…', '♪'], duration: [12, 22] },
-  // 後續：shear_sheep、spin_wool、hammer、hit_dummy、shoot_arrow、sleep_bed…
+  // 外庭
+  shear_sheep:  { pose: 'work',  seated: false, bubbles: ['咩～', '好蓬鬆', '乖乖別動'], duration: [10, 18] },
+  spin_wool:    { pose: 'play',  seated: true, bubbles: ['喀啦喀啦', '…', '毛線＋1'], duration: [14, 24] },
+  craft:        { pose: 'work',  seated: false, bubbles: ['叮叮', '快好了', '嗯…'], duration: [10, 20] },
+  draw_water:   { pose: 'work',  seated: false, bubbles: ['嘿咻', '好重', '水好冰'], duration: [6, 12] },
+  water_plants: { pose: 'work',  seated: false, bubbles: ['長大吧～', '♪', '開花了'], duration: [8, 14] },
+  sit_fountain: { pose: 'idle',  seated: true, bubbles: ['…', '好涼', '天氣真好'], duration: [12, 22] },
+  // 後續：hammer、hit_dummy、shoot_arrow、sleep_bed…
 };
