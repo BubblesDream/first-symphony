@@ -839,6 +839,7 @@
 /* ========== 虛擬公會城堡 ========== */
 .castle {
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* 畫布不會把版面撐寬（離開遊戲模式時） */
   gap: var(--sp-4);
 }
 
@@ -1010,6 +1011,214 @@
     bottom: var(--sp-1);
     padding: var(--sp-2) var(--sp-3);
     font-size: var(--fs-sm);
+  }
+}
+
+/* ---------- 城堡：全螢幕遊玩（遊戲模式）與操作列 ---------- */
+.castle__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+}
+
+.castle__play {
+  position: relative;
+}
+
+.castle-bar,
+.castle__exit {
+  touch-action: manipulation;
+}
+
+/* 觸控裝置：全螢幕按鈕做大、操作說明換成觸控版 */
+.castle__help-touch {
+  display: none;
+}
+
+@media (pointer: coarse) {
+  .castle__enter {
+    padding: 0.7em 1.4em;
+    border-color: var(--c-band);
+    background: var(--c-band);
+    color: var(--c-band-text);
+    font-size: var(--fs-base);
+  }
+
+  .castle__help-touch {
+    display: block;
+  }
+
+  .castle__help-keys,
+  .castle__focus-hint {
+    display: none;
+  }
+}
+
+html.castle-gaming,
+html.castle-gaming body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.castle__play.is-game {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--c-film);
+}
+
+.castle__play.is-game .castle__stage {
+  flex: 1 1 0;
+  min-height: 0;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.castle__play.is-game .castle__focus-hint {
+  display: none;
+}
+
+.castle__exit {
+  position: absolute;
+  top: calc(var(--sp-2) + env(safe-area-inset-top, 0px));
+  right: calc(var(--sp-2) + env(safe-area-inset-right, 0px));
+  z-index: 2;
+  min-height: 2.5rem;
+  padding: 0 var(--sp-3);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-card);
+  color: var(--c-ink);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+
+.castle-bar {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: var(--sp-2);
+  height: clamp(10rem, 30dvh, 15rem);
+  padding: var(--sp-2) var(--sp-3) calc(var(--sp-2) + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--c-line);
+  background: var(--c-paper);
+  color: var(--c-ink);
+}
+
+.castle-bar[hidden] {
+  display: none;
+}
+
+.castle-bar__room {
+  margin: 0;
+  color: var(--c-ink-faint);
+  font-size: var(--fs-xs);
+}
+
+.castle-bar__talk {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.castle-bar__hint {
+  margin: 0;
+  color: var(--c-ink-soft);
+  font-size: var(--fs-sm);
+}
+
+.castle-bar .castle-dialog:not([hidden]) + .castle-bar__hint {
+  display: none;
+}
+
+/* 遊戲模式的對話框放在操作列裡，不蓋住遊戲畫面 */
+.castle-bar .castle-dialog {
+  position: static;
+  max-width: none;
+  margin: 0;
+  padding: var(--sp-2) var(--sp-3);
+  box-shadow: none;
+  font-size: var(--fs-base);
+}
+
+.castle-bar__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.castle-bar__act {
+  flex: 1 1 12rem;
+  min-height: 3rem;
+  padding: 0 var(--sp-3);
+  overflow: hidden;
+  border: 1px solid var(--c-band);
+  border-radius: var(--radius);
+  background: var(--c-band);
+  color: var(--c-band-text);
+  font-size: var(--fs-md);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.castle-bar__act:disabled {
+  border-color: var(--c-line);
+  background: var(--c-paper-deep);
+  color: var(--c-ink-faint);
+  cursor: default;
+}
+
+.castle-bar .castle__music {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+}
+
+.castle-bar .castle__music .btn {
+  min-height: 3rem;
+}
+
+.castle-bar .castle__music-status {
+  display: none;
+}
+
+/* 橫拿手機：操作列改放右側 */
+@media (orientation: landscape) and (max-height: 540px) {
+  .castle__play.is-game {
+    flex-direction: row;
+  }
+
+  .castle-bar {
+    width: clamp(11rem, 30vw, 16rem);
+    height: auto;
+    padding: var(--sp-2) calc(var(--sp-2) + env(safe-area-inset-right, 0px)) calc(var(--sp-2) + env(safe-area-inset-bottom, 0px)) var(--sp-2);
+    border-top: 0;
+    border-left: 1px solid var(--c-line);
+  }
+
+  .castle-bar__room {
+    padding-right: 4.5rem; /* 讓出右上角的「離開」按鈕 */
+  }
+
+  .castle-bar__buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .castle-bar__act {
+    flex: 0 0 auto;
+  }
+
+  .castle-bar .castle__music {
+    justify-content: space-between;
   }
 }
 
