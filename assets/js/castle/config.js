@@ -76,3 +76,6 @@ export const COLORS = {
   coal: 0x2e2b29,
   label: '#3a2a1f',
 };
+
+// 演出效果（effects.js）：同時存在的效果物件上限（音符、火花、羊毛…）
+export const MAX_FX = 60;
