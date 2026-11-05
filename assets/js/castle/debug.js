@@ -27,6 +27,7 @@ export function updateDebug(scene) {
     problems: scene.debugProblems,
     player: { ...scene.player.tile },
     dialogOpen: scene.ctx.ui.dialog.isOpen,
+    art: scene.artReport, // used：有用到的圖；missing：房間指定了、但還沒有圖（畫色塊）
     npcs: scene.npcs.map((npc) => ({
       id: npc.data.id,
       tx: npc.tx,
