@@ -67,7 +67,19 @@ export const WANTED_ART = [
   // 1F 酒館、練習室、鍛造工坊（第三批 E；bench、workbench 與上面共用）
   'bottle_shelf', 'menu_board', 'fireplace', 'barrel', 'bar_counter', 'long_table', 'weapon_rack', 'training_dummy',
   'archery_target', 'rope_fence', 'tool_rack', 'forge_furnace', 'water_bucket', 'ore_crate', 'anvil', 'grindstone', 'coal_pile',
+  // 3F 觀星台：占卜桌
+  'tarot_table',
 ];
+
+/**
+ * 塔羅牌的圖（面板用，不經 Phaser）：tarot_00.webp～tarot_21.webp（牌面）、tarot_back.webp（牌背）。
+ * 圖片放進資料夾後，把 faces／back 改成 true；沒圖時畫 CSS 卡片（深藍底、羅馬數字＋牌名）。
+ */
+export const TAROT_ART = {
+  dir: `${DIR}tarot/`,
+  faces: false,
+  back: false,
+};
 
 /** 地圖的基本種類預設用哪張拼貼圖 */
 export const KIND_TILES = {

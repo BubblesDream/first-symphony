@@ -37,6 +37,11 @@
   /* 示範資料標記 */
   --c-demo: #9c3a26;
 
+  /* 虛擬公會城堡：夜空色（望遠鏡、塔羅牌面） */
+  --c-night: #1d2547;
+  --c-night-line: #8d93b8;
+  --c-night-ink: #eee3d0;
+
   /* 字型（標題與手寫字由 Google Fonts 分片載入，載不到時改用系統字型） */
   --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
   --font-title: "Noto Serif TC", "Source Han Serif TC", "Songti TC", "PMingLiU", serif;

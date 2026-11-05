@@ -1,0 +1,290 @@
+[
+  {
+    "id": "f001",
+    "kind": "material",
+    "name": "木",
+    "weight": 3,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f002",
+    "kind": "material",
+    "name": "鐵",
+    "weight": 4,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f003",
+    "kind": "material",
+    "name": "銅",
+    "weight": 3,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f004",
+    "kind": "material",
+    "name": "銀",
+    "weight": 2,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f005",
+    "kind": "material",
+    "name": "水晶",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f006",
+    "kind": "material",
+    "name": "秘銀",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f007",
+    "kind": "material",
+    "name": "星鐵",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f008",
+    "kind": "weapon",
+    "name": "劍",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f009",
+    "kind": "weapon",
+    "name": "斧",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f010",
+    "kind": "weapon",
+    "name": "槍",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f011",
+    "kind": "weapon",
+    "name": "弓",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f012",
+    "kind": "weapon",
+    "name": "杖",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f013",
+    "kind": "weapon",
+    "name": "盾",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f014",
+    "kind": "weapon",
+    "name": "鐵鎚",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f015",
+    "kind": "weapon",
+    "name": "豎琴",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f016",
+    "kind": "weapon",
+    "name": "長笛",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f017",
+    "kind": "weapon",
+    "name": "魯特琴",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f018",
+    "kind": "weapon",
+    "name": "短劍",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f019",
+    "kind": "weapon",
+    "name": "雙手劍",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f020",
+    "kind": "rarity",
+    "name": "普通",
+    "weight": 50,
+    "plus_min": 0,
+    "plus_max": 2,
+    "is_demo": false
+  },
+  {
+    "id": "f021",
+    "kind": "rarity",
+    "name": "精良",
+    "weight": 30,
+    "plus_min": 2,
+    "plus_max": 4,
+    "is_demo": false
+  },
+  {
+    "id": "f022",
+    "kind": "rarity",
+    "name": "稀有",
+    "weight": 14,
+    "plus_min": 4,
+    "plus_max": 6,
+    "is_demo": false
+  },
+  {
+    "id": "f023",
+    "kind": "rarity",
+    "name": "傳說",
+    "weight": 5,
+    "plus_min": 6,
+    "plus_max": 8,
+    "is_demo": false
+  },
+  {
+    "id": "f024",
+    "kind": "rarity",
+    "name": "神兵利器",
+    "weight": 1,
+    "plus_min": 8,
+    "plus_max": 10,
+    "is_demo": false
+  },
+  {
+    "id": "f025",
+    "kind": "comment",
+    "name": "敲得很用心，拿起來剛剛好。",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f026",
+    "kind": "comment",
+    "name": "有一點點歪，但很有個性。",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f027",
+    "kind": "comment",
+    "name": "閃閃發亮，忍不住多看兩眼。",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f028",
+    "kind": "comment",
+    "name": "鍛造師傅點了點頭。",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f029",
+    "kind": "comment",
+    "name": "拿去合奏好像也不錯。",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f030",
+    "kind": "comment",
+    "name": "聽說會帶來好運。",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f031",
+    "kind": "comment",
+    "name": "握把上留著你的手溫。",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  },
+  {
+    "id": "f032",
+    "kind": "comment",
+    "name": "火候剛好，連自己都嚇一跳。",
+    "weight": 1,
+    "plus_min": "",
+    "plus_max": "",
+    "is_demo": false
+  }
+]

@@ -64,7 +64,7 @@ export default {
     { action: 'warm_hands', x: 15, y: 2, facing: 'up' },
   ],
   objects: [
-    { x: 4.5, y: 4, name: '吧台', text: ['擦得發亮的木頭吧台，上面留著幾圈杯子的水痕。'], demo: true, play: 'drink' },
+    { x: 4.5, y: 4, name: '吧台', text: ['擦得發亮的木頭吧台，上面留著幾圈杯子的水痕。', '酒保遞來一張菜單：「想喝點什麼？」'], demo: true, play: 'drink', show: 'drink' },
     { x: 1.5, y: 3, name: '酒桶', text: ['桶子上用粉筆寫著「蘋果酒」。'], demo: true },
     { x: 14.5, y: 1, name: '壁爐', text: ['柴火劈啪作響，整間酒館都暖暖的。'], demo: true, play: 'warm_hands' },
     { x: 13.5, y: 6.5, name: '圓桌', text: ['桌上擺著幾杯還在冒泡的飲料。'], demo: true, play: 'cheers' },

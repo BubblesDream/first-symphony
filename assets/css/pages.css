@@ -1003,6 +1003,319 @@
   text-align: center;
 }
 
+/* 物件的面板（望遠鏡、占卜桌、鍛造台、酒館菜單）：蓋在遊戲區上 */
+.castle-panel {
+  position: absolute;
+  inset: var(--sp-3) var(--sp-3) auto;
+  max-height: calc(100% - 2 * var(--sp-3));
+  max-width: 34rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: var(--c-card);
+  color: var(--c-ink);
+  box-shadow: var(--shadow-photo);
+  overflow: hidden;
+  z-index: 5;
+}
+
+.castle-panel:focus {
+  outline: none;
+}
+
+.castle-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-bottom: 1px solid var(--c-line);
+}
+
+.castle-panel__title {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 700;
+}
+
+.castle-panel__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  overscroll-behavior: contain;
+}
+
+.castle-panel__body p {
+  margin: 0 0 var(--sp-2);
+}
+
+.castle-panel__lead {
+  color: var(--c-ink-soft);
+}
+
+.castle-panel__small {
+  color: var(--c-ink-faint);
+  font-size: var(--fs-xs);
+}
+
+.castle-panel__foot {
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-2);
+  border-top: 1px dashed var(--c-line);
+}
+
+.castle-panel__status:empty {
+  display: none;
+}
+
+.castle-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+.castle-panel__field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+.castle-panel__input {
+  width: 12em;
+  max-width: 100%;
+  padding: 0.25em 0.5em;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-photo);
+  color: var(--c-ink);
+  font: inherit;
+}
+
+.castle-panel__share {
+  margin-top: var(--sp-2);
+}
+
+.castle-panel .btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* 望遠鏡 */
+.castle-moon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-4);
+}
+
+.castle-moon__view {
+  width: 220px;
+  max-width: 100%;
+  aspect-ratio: 1;
+  border: 3px solid var(--c-ink-soft);
+  border-radius: 50%;
+}
+
+.castle-moon__text {
+  flex: 1 1 12rem;
+}
+
+.castle-moon__name {
+  font-size: var(--fs-base);
+  font-weight: 700;
+}
+
+/* 塔羅牌 */
+.castle-tarot__spread {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3);
+}
+
+.castle-tarot__pick {
+  flex: 0 1 9.5rem;
+  text-align: center;
+}
+
+.castle-tarot__label {
+  font-weight: 700;
+}
+
+.castle-tarot__card {
+  width: 6rem;
+  height: 9.6rem;
+  margin: 0 auto var(--sp-2);
+  perspective: 600px;
+}
+
+.castle-tarot__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+}
+
+.castle-tarot__card.is-open .castle-tarot__inner {
+  transform: rotateY(180deg);
+}
+
+.castle-tarot__back,
+.castle-tarot__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  overflow: hidden;
+  border: 1px solid var(--c-night-line);
+  border-radius: var(--radius);
+  background: var(--c-night);
+  color: var(--c-night-ink);
+  backface-visibility: hidden;
+}
+
+.castle-tarot__back {
+  outline: 1px solid var(--c-night-line);
+  outline-offset: -6px;
+}
+
+.castle-tarot__face {
+  transform: rotateY(180deg);
+}
+
+.castle-tarot__card.is-reversed .castle-tarot__face {
+  transform: rotateY(180deg) rotate(180deg);
+}
+
+.castle-tarot__back img,
+.castle-tarot__face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.castle-tarot__num {
+  font-family: var(--font-title);
+  font-size: var(--fs-lg);
+}
+
+.castle-tarot__cardname {
+  font-family: var(--font-title);
+  font-weight: 700;
+}
+
+.castle-tarot__title {
+  font-weight: 700;
+}
+
+/* 鍛造台 */
+.castle-forge__hits {
+  min-height: 1.6em;
+  font-family: var(--font-title);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.castle-forge__result {
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-photo);
+}
+
+.castle-forge__head {
+  font-family: var(--font-title);
+  font-size: var(--fs-md);
+  font-weight: 700;
+}
+
+.castle-forge__result[data-rarity="神兵利器"] .castle-forge__head,
+.castle-forge__result[data-rarity="傳說"] .castle-forge__head {
+  color: var(--c-accent);
+}
+
+.castle-forge__item {
+  font-size: var(--fs-lg);
+}
+
+/* 酒館菜單 */
+.castle-drinks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.castle-drinks__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+  width: 100%;
+  height: 100%;
+  padding: var(--sp-2);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-photo);
+  color: var(--c-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.castle-drinks__item:hover {
+  background: var(--c-paper-deep);
+}
+
+.castle-drinks__swatch {
+  flex: none;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: 0.25em;
+  border: 1px solid var(--c-ink-soft);
+  border-radius: var(--radius-sm);
+}
+
+.castle-drinks__text {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--sp-2);
+}
+
+.castle-drinks__name {
+  font-weight: 700;
+}
+
+.castle-drinks__tag {
+  color: var(--c-accent);
+  font-size: var(--fs-xs);
+}
+
+.castle-drinks__desc {
+  flex-basis: 100%;
+  color: var(--c-ink-soft);
+  font-size: var(--fs-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .castle-tarot__inner {
+    transition: none;
+  }
+}
+
 @media (max-width: 600px) {
   .castle-dialog {
     left: var(--sp-1);
@@ -1010,6 +1323,20 @@
     bottom: var(--sp-1);
     padding: var(--sp-2) var(--sp-3);
     font-size: var(--fs-sm);
+  }
+
+  /* 手機的遊戲區太矮，面板改成蓋住整個螢幕 */
+  .castle-panel {
+    position: fixed;
+    inset: var(--sp-2) var(--sp-2) auto;
+    max-height: calc(100% - 2 * var(--sp-2));
+    max-width: none;
+    z-index: 50;
+  }
+
+  .castle-tarot__card {
+    width: 5rem;
+    height: 8rem;
   }
 }
 

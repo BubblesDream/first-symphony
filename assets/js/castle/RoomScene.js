@@ -10,6 +10,9 @@ import { pickLines } from './roster.js';
 import { drawDebug, updateDebug } from './debug.js';
 import { queueArt } from './art.js';
 import { RoomView } from './roomView.js';
+import { openPanel, panelOrder } from './panels.js';
+import { createQuota } from './quota.js';
+import { drawSkyWindow } from './skyWindow.js';
 
 
 export class RoomScene extends Phaser.Scene {
@@ -33,12 +36,15 @@ export class RoomScene extends Phaser.Scene {
     this.grid = buildGrid(this.room);
     this.spots = this.room.spots.map((s) => ({ ...s, user: null }));
     this.leaving = false;
+    this.arrival = null; // 訪客走去演出、到了之後要做的事（例如打開面板）
+    this.ctx.quota = createQuota(); // 每次走進房間，靈感恢復
 
     const width = this.grid.w * TILE;
     const height = this.grid.h * TILE;
     this.physics.world.setBounds(0, 0, width, height);
 
     this.artReport = new RoomView(this, this.grid, this.room).draw();
+    if (this.room.sky) drawSkyWindow(this, this.ctx.moonAge); // 觀星台的星空窗：今天的月亮
     this.buildColliders();
 
     // 訪客
@@ -94,6 +100,8 @@ export class RoomScene extends Phaser.Scene {
 
     this.events.once('shutdown', () => {
       this.ctx.ui.dialog.close();
+      this.ctx.ui.panel.close();
+      this.arrival = null;
       for (const npc of this.npcs) npc.destroy();
     });
 
@@ -103,9 +111,10 @@ export class RoomScene extends Phaser.Scene {
 
   update(_time, deltaMs) {
     const dt = Math.min(deltaMs / 1000, 0.1);
-    const { dialog } = this.ctx.ui;
+    const { dialog, panel } = this.ctx.ui;
 
-    this.player.update(dt, dialog.isOpen || this.leaving);
+    this.player.update(dt, dialog.isOpen || panel.isOpen || this.leaving);
+    this.checkArrival();
     for (const npc of this.npcs) npc.update(dt);
     this.npcBodies.forEach((zone) => zone.setPosition(zone.npc.x, zone.npc.y));
 
@@ -113,18 +122,21 @@ export class RoomScene extends Phaser.Scene {
     const target = this.nearestTarget();
     this.target = target;
     for (const npc of this.npcs) npc.avatar.setNameVisible(npc === this.hovered || target?.npc === npc);
-    if (target && !dialog.isOpen) {
+    if (target && !dialog.isOpen && !panel.isOpen) {
       this.prompt.setPosition(target.x, target.y - (target.npc ? 46 : 18)).setVisible(true);
     } else {
       this.prompt.setVisible(false);
     }
 
     const pressed = Phaser.Input.Keyboard.JustDown(this.keyE) || Phaser.Input.Keyboard.JustDown(this.keySpace);
-    if (pressed) {
+    if (pressed && !panel.isOpen) {
       if (dialog.isOpen) dialog.next();
       else if (target) this.interact(target);
     }
-    if (Phaser.Input.Keyboard.JustDown(this.keyEsc)) dialog.close();
+    if (Phaser.Input.Keyboard.JustDown(this.keyEsc)) {
+      if (panel.isOpen) panel.close();
+      else dialog.close();
+    }
 
     this.checkDoor();
     if (this.ctx.debug) updateDebug(this);
@@ -222,20 +234,68 @@ export class RoomScene extends Phaser.Scene {
     } else if (target.obj) {
       const { obj } = target;
       if (this.player.act) {
-        // 演出中再按 E：離開演出
+        // 演出中再按 E：有面板的物件重新打開面板（繼續坐著）；其他情況離開演出
+        const same = this.player.act.spot.action === obj.play;
+        if (same && obj.show && this.player.acting) {
+          this.afterObject(obj, true);
+          return;
+        }
         this.player.stopAct();
-        return;
+        if (same) return;
       }
       dialog.open({
         title: obj.name,
         lines: obj.text.map((text) => ({ text, is_demo: obj.demo })),
-        onClose: obj.play ? () => this.playAt(obj) : null,
+        onClose: obj.play || obj.show ? () => this.afterObject(obj) : null,
       });
     }
   }
 
-  /** 物件的 play：訪客走到最近、沒人用的同動作演出點，自己演出 */
-  playAt(obj) {
+  /**
+   * 看完物件說明之後：有 play 就去演出；有 show 就打開面板（panels.js）。
+   * 兩個都有時，預設先走過去演出、到了再打開面板；面板登記 order: 'panel-first' 時反過來，由面板呼叫 env.play()。
+   */
+  afterObject(obj, seated = false) {
+    const { show } = obj;
+    if (!show) {
+      this.playAt(obj);
+      return;
+    }
+    const env = {
+      obj,
+      close: () => this.ctx.ui.panel.close(),
+      // 已經坐在這個演出點上（seated）就不用再走一次
+      play: (onArrive) => (obj.play && !seated ? this.playAt(obj, onArrive) : (onArrive?.(), seated)),
+    };
+    const open = () => openPanel(this.ctx, show, env);
+    if (seated || !obj.play || panelOrder(show) === 'panel-first') open();
+    else this.playAt(obj, open);
+  }
+
+  /**
+   * 訪客走到演出點、開始演出時，執行 playAt 留下的 onArrive。
+   * 訪客自己走開（方向鍵、點地板）就取消；路上被擋住沒走到，就在原地照樣執行（面板還是打得開）。
+   */
+  checkArrival() {
+    const wait = this.arrival;
+    if (!wait) return;
+    const act = this.player.act;
+    if (!act || act.spot !== wait.spot) {
+      this.arrival = null;
+      const body = this.player.feet.body;
+      const walkingAway = this.player.route.length > 0 || body.velocity.x !== 0 || body.velocity.y !== 0;
+      if (!act && !walkingAway) wait.then();
+    } else if (this.player.acting && !this.ctx.ui.dialog.isOpen) {
+      this.arrival = null;
+      wait.then();
+    }
+  }
+
+  /**
+   * 物件的 play：訪客走到最近、沒人用的同動作演出點，自己演出。
+   * onArrive：開始演出時要做的事（演出點都有人在用時，直接執行）。回傳是否成功出發。
+   */
+  playAt(obj, onArrive = null) {
     const { grid } = this;
     const ox = Math.floor(obj.x);
     const oy = Math.floor(obj.y);
@@ -246,10 +306,16 @@ export class RoomScene extends Phaser.Scene {
       if (approach) options.push({ spot, approach, d: Math.abs(spot.x - ox) + Math.abs(spot.y - oy) });
     }
     options.sort((a, b) => a.d - b.d);
+    this.arrival = null;
     for (const { spot, approach } of options) {
-      if (this.player.startAct(spot, approach)) return;
+      if (this.player.startAct(spot, approach)) {
+        if (onArrive) this.arrival = { spot, then: onArrive };
+        return true;
+      }
     }
     this.ctx.ui.toast(`${obj.name}現在有人在用，等一下再來吧。`);
+    if (onArrive) onArrive();
+    return false;
   }
 
   /** 演出點本身能走就直接走上去；否則找旁邊能走、沒人的格子 */
@@ -263,7 +329,7 @@ export class RoomScene extends Phaser.Scene {
   }
 
   onPointerDown(pointer) {
-    if (this.ctx.ui.dialog.isOpen || this.leaving) return;
+    if (this.ctx.ui.dialog.isOpen || this.ctx.ui.panel.isOpen || this.leaving) return;
     const wx = pointer.worldX;
     const wy = pointer.worldY;
     const npc = this.npcAt(wx, wy);

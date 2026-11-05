@@ -1,0 +1,82 @@
+[
+  {
+    "id": "d01",
+    "name": "熱可可",
+    "desc": "濃濃的巧克力香，喝完整個人暖起來。",
+    "color": "#6b4228",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d02",
+    "name": "蜂蜜牛奶",
+    "desc": "溫溫的牛奶加一匙蜂蜜，睡前最適合。",
+    "color": "#efe3c2",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d03",
+    "name": "蘋果氣泡飲",
+    "desc": "酸甜的蘋果汁加上細細的氣泡。",
+    "color": "#e0b84f",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d04",
+    "name": "薰衣草花茶",
+    "desc": "淡淡的花香，讓心情慢慢放鬆。",
+    "color": "#9a88c2",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d05",
+    "name": "麥茶",
+    "desc": "冰冰涼涼的麥茶，練習完來一杯。",
+    "color": "#a9743c",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d06",
+    "name": "莓果果汁",
+    "desc": "酸酸甜甜的紅色果汁，顏色很漂亮。",
+    "color": "#b8394a",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d07",
+    "name": "黑麥啤酒",
+    "desc": "酒館老闆自己釀的，泡沫綿密。",
+    "color": "#5a3a1e",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d08",
+    "name": "薄荷檸檬水",
+    "desc": "清爽的檸檬水，加了幾片薄荷葉。",
+    "color": "#c9dc8a",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d09",
+    "name": "烤棉花糖奶茶",
+    "desc": "奶茶上漂著烤得焦焦的棉花糖。",
+    "color": "#c79a6b",
+    "night_only": false,
+    "is_demo": false
+  },
+  {
+    "id": "d10",
+    "name": "星光特調",
+    "desc": "只在夜晚出現的特調，杯底像有星星在閃。",
+    "color": "#2f4a86",
+    "night_only": true,
+    "is_demo": false
+  }
+]
