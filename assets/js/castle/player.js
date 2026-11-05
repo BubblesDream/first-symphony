@@ -72,12 +72,25 @@ export class Player {
     this.act = null;
     this.scene.grid.release(act.spot.x, act.spot.y, this);
     if (act.spot.user === this) act.spot.user = null;
+    this.route = []; // 還在走過去的路上就取消，不要繼續走到演出點
+    this.stuck = 0;
     if (act.phase === 'do') {
-      const back = tileFeet(...act.approach);
+      const back = tileFeet(...this.leaveTile(act));
       this.feet.body.enable = true;
       this.feet.body.reset(back.x, back.y);
       this.avatar.setPose('idle');
+    } else {
+      this.feet.body.setVelocity(0, 0);
     }
+  }
+
+  /** 離開演出點要站到哪一格：原本走來的那格被 NPC 佔了，就換演出點旁邊另一格空的 */
+  leaveTile(act) {
+    const { grid } = this.scene;
+    const free = ([x, y]) => grid.playerWalkable(x, y) && !grid.occupant(x, y);
+    if (free(act.approach)) return act.approach;
+    const { x, y } = act.spot;
+    return [[x, y + 1], [x, y - 1], [x + 1, y], [x - 1, y]].find(free) || act.approach;
   }
 
   get acting() { return this.act?.phase === 'do'; }
@@ -115,15 +128,22 @@ export class Player {
     let vy = (k.down.isDown || k.down2.isDown ? 1 : 0) - (k.up.isDown || k.up2.isDown ? 1 : 0);
     let speed = PLAYER_SPEED;
 
+    if (this.act && !frozen) {
+      this.updateAct(dt, Boolean(vx || vy));
+    }
     if (this.act) {
-      this.updateAct(dt, !frozen && Boolean(vx || vy));
       if (this.acting) {
         this.avatar.setPosition(this.feet.x, this.feet.y);
         return;
       }
     }
 
-    if (vx || vy) {
+    if (frozen) {
+      // 對話中先停下；正要走去演出點的話保留路線，對話結束再繼續走
+      vx = 0;
+      vy = 0;
+      if (!this.act) this.route = [];
+    } else if (vx || vy) {
       this.route = []; // 用鍵盤就取消自動走路
     } else if (this.route.length) {
       const target = tileFeet(...this.route[0]);
@@ -143,12 +163,6 @@ export class Player {
         this.stuck += dt;
         if (this.stuck > 1.5) this.route = []; // 被擋住太久就停下
       }
-    }
-
-    if (frozen) {
-      vx = 0;
-      vy = 0;
-      this.route = [];
     }
 
     const len = Math.hypot(vx, vy) || 1;

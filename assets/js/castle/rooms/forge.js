@@ -32,7 +32,7 @@ export default {
     p: { kind: 'furniture', color: 'plant', sprite: 'plant' },
   },
   doors: {
-    H: { to: 'hall', spawn: 'from_forge', label: '大廳' },
+    H: { to: 'hall', spawn: 'from_forge', label: '大廳', sprite: 'door_side_open', flipX: true },
   },
   spawns: {
     start: [16, 5],

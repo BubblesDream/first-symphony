@@ -2,7 +2,6 @@
 // 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
-import { startCastle } from '../castle/main.js';
 import { createMusicPlayer } from '../castle/music.js';
 
 initLayout();
@@ -25,6 +24,8 @@ async function main() {
     fail('遊戲程式載入失敗，請重新整理頁面再試一次。');
     return;
   }
+  // 遊戲程式要等 Phaser 確定載入後才讀（它一讀進來就會用到 Phaser）
+  const { startCastle } = await import('../castle/main.js');
   let members;
   let looks = [];
   let lines = [];
