@@ -5,7 +5,7 @@ export const VIEW_W = 640;         // 訪客看到的範圍（遊戲世界單位
 export const VIEW_H = 360;
 export const ZOOM = 2;             // 畫布實際用 1280×720 繪製，文字較清楚
 
-export const MAX_NPCS = 10;        // 第一版上限（網址加 ?npcs=40 可測試更多人）
+export const MAX_NPCS = 22;        // 城堡裡同時出現的成員上限（網址加 ?npcs=40 可測試更多人）
 export const PLAYER_SPEED = 120;   // 像素／秒
 export const NPC_SPEED = 55;
 export const INTERACT_RANGE = 48;  // 按 E 可互動的距離
