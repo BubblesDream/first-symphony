@@ -1,7 +1,7 @@
 // 唯一的房間場景：所有房間都用這一個場景，差別只在房間定義檔（rooms/*.js）。
 // 進入房間時：畫地圖（roomView.js）→ 放牆壁碰撞 → 放訪客 → 只建立這個房間的 NPC。
 // 走進門 → 淡出 → 用新的房間 id 重新啟動這個場景。
-import { TILE, ZOOM, COLORS, FONT, INTERACT_RANGE, CLICK_RANGE } from './config.js';
+import { TILE, VIEW_W, VIEW_H, ZOOM, COLORS, FONT, INTERACT_RANGE, CLICK_RANGE } from './config.js';
 import { ROOMS, START_ROOM } from './rooms/index.js';
 import { buildGrid, tileFeet, toTile } from './grid.js';
 import { Npc } from './npc.js';
@@ -69,7 +69,10 @@ export class RoomScene extends Phaser.Scene {
     // 鏡頭
     const cam = this.cameras.main;
     cam.setZoom(ZOOM);
-    cam.setBounds(0, 0, width, height);
+    // 房間比畫面小時置中（兩側露出背景色），比畫面大時鏡頭跟著訪客
+    const padX = Math.max(0, (VIEW_W - width) / 2);
+    const padY = Math.max(0, (VIEW_H - height) / 2);
+    cam.setBounds(-padX, -padY, width + padX * 2, height + padY * 2);
     cam.startFollow(this.player.feet, true, 0.15, 0.15);
     cam.setBackgroundColor(COLORS.background);
     cam.fadeIn(200);
