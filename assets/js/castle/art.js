@@ -14,6 +14,10 @@ export const TILE_ART = {
   floor_wood: { src: `${DIR}floor_wood.webp`, cols: 2, rows: 2 },
   carpet_red: { src: `${DIR}carpet_red.webp`, cols: 6, rows: 6, edges: true }, // edges：左右滾邊依地毯寬度對齊
   wall_stone: { src: `${DIR}wall_stone.webp`, cols: 1, rows: 1 },
+  // 外庭地面：一張涵蓋 4×4 格，細節比較不會被縮掉
+  ground_grass: { src: `${DIR}ground_grass.webp`, cols: 4, rows: 4 },
+  ground_path: { src: `${DIR}ground_path.webp`, cols: 4, rows: 4 },
+  ground_dirt: { src: `${DIR}ground_dirt.webp`, cols: 4, rows: 4 },
 };
 
 /**
@@ -49,7 +53,7 @@ export const SPRITE_ART = {
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
 export const WANTED_ART = [
   // 外庭（第三批 A）
-  'ground_grass', 'ground_path', 'ground_dirt', 'fountain', 'sheep', 'well', 'spinning_wheel', 'tree', 'fence', 'hedge',
+  'fountain', 'sheep', 'well', 'spinning_wheel', 'tree', 'fence', 'hedge',
   'sheep_shed', 'haystack', 'laundry_line', 'workbench', 'crop', 'flower_bed', 'lamp_post', 'banner_pole', 'gate_outer',
   // 2F／3F（第三批 B～D）
   'bed', 'nightstand', 'wardrobe', 'desk', 'stairs_down', 'door_double', 'bookshelf', 'history_case', 'table_long', 'globe',
