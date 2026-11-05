@@ -5,9 +5,10 @@
 //   setNameVisible(bool)  setTag(text)  destroy()
 // 姿勢：idle、walk、play、conduct、read、work、sleep、cheer
 
+import { FONT } from './config.js';
+
 const hex = (color) => Number.parseInt(String(color).slice(1), 16);
 const DARK = 0x2e2420;
-const FONT = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif';
 
 export function createAvatar(scene, look, options = {}) {
   return new GeometricAvatar(scene, look, options);

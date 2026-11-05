@@ -16,6 +16,9 @@ export const BEHAVIOR = { idle: 0.4, wander: 0.35, spot: 0.25 };
 export const IDLE_SECONDS = [2, 5];
 export const WANDER_RADIUS = 6;
 
+// 畫布上的文字字型（名字、泡泡、標籤）
+export const FONT = '"Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif';
+
 // 地圖配色（只用在畫布上；網頁其他部分的顏色在 tokens.css）
 export const COLORS = {
   background: 0x2b2119,

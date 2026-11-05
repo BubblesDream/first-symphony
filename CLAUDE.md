@@ -45,6 +45,7 @@
 
 - 只有 `hall.html` 載入這些函式庫，其他頁面不准引用。
 - 仍要遵守：相對路徑、資料透過 `data.js` 讀取、資料表平面結構、外部資料只用 `textContent`／`createElement`（畫布上的文字用 Phaser 的文字物件，不經 HTML）、內容規則。
+- 城堡圖片：原圖放 `docs/素材/城堡原圖/`，用 `tools/castle_images.py`（手動執行）產生 `assets/images/castle/*.webp`；圖片清單與大小只寫在 `assets/js/castle/art.js`。沒登記或載入失敗的圖一律退回色塊。
 - 所有房間共用 `RoomScene.js`；新增房間＝在 `assets/js/castle/rooms/` 加定義檔並登記；新增生活動作＝在 `actions.js` 加一行。
 - 規劃與決定見 `docs/規劃-虛擬城堡.md`。
 
