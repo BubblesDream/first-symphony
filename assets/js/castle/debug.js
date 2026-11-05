@@ -59,7 +59,7 @@ export function checkRoom(scene) {
     if (!grid.npcWalkable(x, y)) problems.push(`出生點 ${id} (${x},${y}) 不是地板`);
   }
   // 圖片名稱：沒登記、也不在待補清單裡，多半是打錯字
-  const known = new Set([...Object.keys(TILE_ART), ...Object.keys(SPRITE_ART), ...WANTED_ART]);
+  const known = new Set([...Object.keys(TILE_ART), ...Object.keys(SPRITE_ART), ...WANTED_ART, ...(room.wantedArt || [])]);
   const names = [...Object.values(room.legend || {}).map((d) => d.sprite), ...Object.values(room.doors).map((d) => d.sprite),
     ...Object.values(room.tiles || {})];
   for (const name of names) if (name && !known.has(name)) problems.push(`圖片名稱「${name}」不在 art.js`);

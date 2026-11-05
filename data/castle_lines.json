@@ -201,5 +201,47 @@
     "room": "",
     "text": "今天想彈一首溫柔一點的曲子。",
     "is_demo": true
+  },
+  {
+    "id": "l601",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "羊毛剪下來軟綿綿的，好想拿來當枕頭。",
+    "is_demo": true
+  },
+  {
+    "id": "l602",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "噴泉旁邊好涼，坐著就不想動了。",
+    "is_demo": true
+  },
+  {
+    "id": "l603",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "今天輪到我澆花，花圃的花都開了。",
+    "is_demo": true
+  },
+  {
+    "id": "l604",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "紡車踩久了腳好痠，換你來試試？",
+    "is_demo": true
+  },
+  {
+    "id": "l605",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "水井的水好冰，夏天拿來泡西瓜剛好。",
+    "is_demo": true
+  },
+  {
+    "id": "l606",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "工作台上那個小東西是誰做到一半的？",
+    "is_demo": true
   }
 ]
