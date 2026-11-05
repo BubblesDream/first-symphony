@@ -39,8 +39,10 @@ export const SPRITE_ART = {
   chair_back: { src: `${DIR}chair_back.webp`, w: 1, h: 1 },
   podium: { src: `${DIR}podium.webp`, w: 1, h: 1 },
   harp: { src: `${DIR}harp.webp`, w: 1, h: 2 },
-  // 還沒有圖（會畫色塊）：chair_side
 };
+
+/** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
+export const WANTED_ART = ['chair_side'];
 
 /** 地圖的基本種類預設用哪張拼貼圖 */
 export const KIND_TILES = {

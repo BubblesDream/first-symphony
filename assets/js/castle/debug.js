@@ -1,6 +1,7 @@
 // 除錯圖層（網址加 ?debug=1）：標出不能走的格子、門、演出點，NPC 頭上顯示狀態，
 // 並把目前狀態放在 window.__castle，讓自動檢查（Playwright）不用看截圖也能判斷。
 import { TILE } from './config.js';
+import { TILE_ART, SPRITE_ART, WANTED_ART } from './art.js';
 
 export function drawDebug(scene) {
   const g = scene.add.graphics().setDepth(99999);
@@ -57,6 +58,11 @@ export function checkRoom(scene) {
   for (const [id, [x, y]] of Object.entries(room.spawns)) {
     if (!grid.npcWalkable(x, y)) problems.push(`出生點 ${id} (${x},${y}) 不是地板`);
   }
+  // 圖片名稱：沒登記、也不在待補清單裡，多半是打錯字
+  const known = new Set([...Object.keys(TILE_ART), ...Object.keys(SPRITE_ART), ...WANTED_ART]);
+  const names = [...Object.values(room.legend || {}).map((d) => d.sprite), ...Object.values(room.doors).map((d) => d.sprite),
+    ...Object.values(room.tiles || {})];
+  for (const name of names) if (name && !known.has(name)) problems.push(`圖片名稱「${name}」不在 art.js`);
   for (const [ch, door] of Object.entries(room.doors)) {
     if (!room.map.some((row) => row.includes(ch))) problems.push(`門「${ch}」沒有出現在地圖上`);
     if (door.to && !door.spawn) problems.push(`門「${ch}」缺少 spawn`);

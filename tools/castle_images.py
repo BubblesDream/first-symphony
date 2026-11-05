@@ -4,9 +4,11 @@
 用法（在專案根目錄）：python3 tools/castle_images.py
 需要 Pillow（pip install pillow）。
 
-新增一張圖：在下面的 SPRITES 或 TILES 加一行，執行本程式，
-再到 assets/js/castle/art.js 登記同名的圖片，遊戲就會改用圖片。
+新增一張圖：原圖放進 docs/素材/城堡原圖/<名稱>.png，
+在 assets/js/castle/art.js 加一行（寫上大小），執行本程式，遊戲就會改用圖片。
+（遊戲裡沒登記的圖會畫色塊，所以可以一張一張補。）
 """
+import re
 import sys
 from pathlib import Path
 
@@ -17,34 +19,21 @@ SRC = ROOT / 'docs' / '素材' / '城堡原圖'
 OUT = ROOT / 'assets' / 'images' / 'castle'
 PX = 64  # 遊戲一格 32 單位、畫面放大 2 倍，所以一格 = 64 像素
 
-# 透明背景的家具：(寬格數, 高格數)。圖片等比縮進這個框，下緣置中對齊。
-SPRITES = {
-    'banner': (1, 2),
-    'candle_stand': (1, 2),
-    'pillar': (1, 2),
-    'notice_board': (2, 1.5),
-    'table_round': (2, 2),
-    'plant': (1, 1),
-    'door_open': (1, 1.5),
-    'door_locked': (1, 1.5),
-    'gate_main': (6, 2),
-    'stairs_up': (4, 2),
-    'piano': (3, 2),
-    'piano_bench': (1, 1),
-    'music_stand': (1, 1.5),
-    'stool': (1, 1),
-    'chair_back': (1, 1),
-    'podium': (1, 1),
-    'harp': (1, 2),
-}
+ART_JS = ROOT / 'assets' / 'js' / 'castle' / 'art.js'
 
-# 拼貼用的圖：一張圖涵蓋幾格 (寬, 高)
-TILES = {
-    'floor_stone': (2, 2),  # 原圖約 4×4 塊石磚，一張鋪 2×2 格，石磚才不會太小
-    'floor_wood': (2, 2),
-    'carpet_red': (6, 6),   # 地毯寬 6 格（左右滾邊），往下重複
-    'wall_stone': (1, 1),
-}
+
+def read_art():
+    """從 art.js 讀每張圖的大小（遊戲與本程式共用同一份設定，只要改 art.js）。
+    家具：w×h 格（等比縮進這個框，下緣置中）；拼貼圖：cols×rows 格。"""
+    text = ART_JS.read_text(encoding='utf-8')
+    sprites, tiles = {}, {}
+    for name, fields in re.findall(r"(\w+): \{ src: `\$\{DIR\}\w+\.webp`,([^}]*)\}", text):
+        values = dict((k, float(v)) for k, v in re.findall(r"(\w+): ([\d.]+)", fields))
+        if 'cols' in values:
+            tiles[name] = (int(values['cols']), int(values['rows']))
+        else:
+            sprites[name] = (values['w'], values['h'])
+    return sprites, tiles
 
 
 def resize(im, size):
@@ -87,7 +76,8 @@ def make_tile(name, w, h):
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     problems = []
-    jobs = [(n, make_sprite, s) for n, s in SPRITES.items()] + [(n, make_tile, s) for n, s in TILES.items()]
+    sprites, tiles = read_art()
+    jobs = [(n, make_sprite, s) for n, s in sprites.items()] + [(n, make_tile, s) for n, s in tiles.items()]
     for name, func, size in jobs:
         if not (SRC / f'{name}.png').exists():
             print(f'略過 {name}：還沒有原圖')
