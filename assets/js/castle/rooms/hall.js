@@ -9,7 +9,7 @@ export default {
   capacity: 8,
   map: [
     '############UUUU############', // 0  牆頂；UUUU 往 2F 的樓梯（整修中）
-    '#####f######UUUU######f#####', // 1  牆面，f 公會旗幟
+    '##n##f##n#w#UUUU#w#n##f##n##', // 1  牆面，f 公會旗幟  n 窗戶  w 壁燈
     '#p.NN....L.rrrrrr.L.......p#', // 2  NN 公告板  L 燭台
     '#..........rrrrrr..........#', // 3
     'T.........IrrrrrrI.........M', // 4  T 交流廳（整修中）  M 演奏室  I 石柱
@@ -33,6 +33,8 @@ export default {
   // sprite 是 art.js 的圖片名稱；還沒有圖時自動畫色塊。flipX：左右翻轉。
   legend: {
     f: { kind: 'wall', color: 'banner', sprite: 'banner' },
+    n: { kind: 'wall', color: 'wallTop', sprite: 'window_arch' },
+    w: { kind: 'wall', color: 'notice', sprite: 'wall_lamp' },
     N: { kind: 'furniture', color: 'notice', sprite: 'notice_board' },
     I: { kind: 'furniture', color: 'wallTop', sprite: 'pillar' },
     L: { kind: 'furniture', color: 'stand', sprite: 'candle_stand' },
@@ -45,15 +47,20 @@ export default {
   // sprite：門的圖片（預設：能走的門 door_open、整修中 door_locked）；under：門底下鋪什麼
   doors: {
     M: { to: 'music', spawn: 'from_hall', label: '演奏室' },
-    T: { locked: '交流廳（酒館）還在整修中，敬請期待。', label: '交流廳' },
-    K: { locked: '戰鬥練習室還在整修中，敬請期待。', label: '練習室' },
-    F: { locked: '鍛造工坊還在規劃中。', label: '鍛造工坊' },
-    U: { locked: '2F 公會客房還在整修中，樓梯暫時封起來了。', label: '往 2F', sprite: 'stairs_up', under: 'wall' },
-    O: { locked: '城堡外庭還在整理中，先在城堡裡逛逛吧。', label: '往外庭', sprite: 'gate_main', under: 'wall' },
+    T: { to: 'tavern', spawn: 'from_hall', label: '交流廳' },
+    K: { to: 'training', spawn: 'from_hall', label: '練習室' },
+    F: { to: 'forge', spawn: 'from_hall', label: '鍛造工坊' },
+    U: { to: 'guest', spawn: 'from_hall', label: '往 2F', sprite: 'stairs_up', under: 'wall' },
+    O: { to: 'courtyard', spawn: 'from_hall', label: '往外庭', sprite: 'gate_main', under: 'wall' },
   },
   spawns: {
     start: [13, 16],
     from_music: [26, 4],
+    from_courtyard: [13, 17],
+    from_guest: [13, 3],
+    from_tavern: [1, 4],
+    from_forge: [1, 14],
+    from_training: [26, 14],
   },
   // 演出點：x、y 是格子座標，facing 是演出時面向的方向
   spots: [
@@ -78,7 +85,10 @@ export default {
   ],
   // 訪客可以按 E 查看的物件（文字是網站自己寫的固定內容）
   objects: [
-    { x: 3.5, y: 2, name: '公告板', text: ['【公告】歡迎來到第一交響樂團的公會城堡！', '城堡還在整修中，目前開放公會大廳與演奏室。'], demo: true },
+    { x: 3.5, y: 2, name: '公告板', text: ['【公告】歡迎來到第一交響樂團的公會城堡！', '城堡還在整修中，家具會陸續換新。到處走走看吧！'], demo: true, play: 'read_notice' },
+    // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
+    { x: 3, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
+    { x: 22, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
     { x: 5, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
     { x: 22, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
   ],

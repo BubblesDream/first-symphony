@@ -111,7 +111,10 @@ export class RoomView {
         const def = grid.legend[c.ch] || {};
         const alt = (x + y) % 2 === 0;
         const under = this.underOf(c);
-        if (under === 'wall') {
+        const custom = room.groundColors?.[under]; // 戶外房間換地面顏色，例如 floor → 草地
+        if (custom) {
+          ground.fillStyle(COLORS[custom[alt ? 0 : 1] || custom[0]]).fillRect(px, py, TILE, TILE);
+        } else if (under === 'wall') {
           ground.fillStyle(COLORS.wall).fillRect(px, py, TILE, TILE);
           ground.fillStyle(COLORS.wallTop).fillRect(px, py, TILE, 6);
         } else if (under === 'carpet') {
@@ -150,7 +153,9 @@ export class RoomView {
     const { grid } = this;
     const tileName = (under) => {
       const name = this.room.tiles?.[under] || KIND_TILES[under];
-      return hasArt(this.scene, name) ? name : null;
+      if (hasArt(this.scene, name)) return name;
+      if (this.room.tiles?.[under]) this.artReport.missing.add(name); // 房間指定的地面圖還沒有，畫色塊
+      return null;
     };
     if (!Object.keys(KIND_TILES).some((k) => tileName(k))) return;
     const S = TILE * 2; // 畫布上一格 64 像素
@@ -191,6 +196,13 @@ export class RoomView {
     if (!onWall) {
       // 遊戲自己加的淡淡影子
       this.scene.add.ellipse(cx, bottom - 3, art.w * TILE * 0.8, 8, 0x000000, 0.16).setDepth(-3);
+    }
+    // behind：同一位置、畫在這張圖後面的另一張圖（例如布幕中間的徽章）
+    if (def.behind && hasArt(this.scene, def.behind)) {
+      const b = SPRITE_ART[def.behind];
+      this.artReport.used.add(def.behind);
+      this.scene.add.image(cx, bottom - 2, artKey(def.behind))
+        .setOrigin(0.5, 1).setDisplaySize(b.w * TILE, b.h * TILE).setDepth(onWall ? -4.5 : bottom - 0.5);
     }
     this.scene.add.image(cx, bottom, artKey(s.name))
       .setOrigin(0.5, 1)

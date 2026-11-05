@@ -39,10 +39,25 @@ export const SPRITE_ART = {
   chair_back: { src: `${DIR}chair_back.webp`, w: 1, h: 1 },
   podium: { src: `${DIR}podium.webp`, w: 1, h: 1 },
   harp: { src: `${DIR}harp.webp`, w: 1, h: 2 },
+  chair_side: { src: `${DIR}chair_side.webp`, w: 1, h: 1 },
+  curtain_stage: { src: `${DIR}curtain_stage.webp`, w: 4, h: 2 },
+  wall_emblem: { src: `${DIR}wall_emblem.webp`, w: 1.5, h: 1.5 }, // 掛在布幕中間（布幕的 behind）
+  window_arch: { src: `${DIR}window_arch.webp`, w: 1, h: 2 },
+  wall_lamp: { src: `${DIR}wall_lamp.webp`, w: 1, h: 1 },
 };
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
-export const WANTED_ART = ['chair_side'];
+export const WANTED_ART = [
+  // 外庭（第三批 A）
+  'ground_grass', 'ground_path', 'ground_dirt', 'fountain', 'sheep', 'well', 'spinning_wheel', 'tree', 'fence', 'hedge',
+  'sheep_shed', 'haystack', 'laundry_line', 'workbench', 'crop', 'flower_bed', 'lamp_post', 'banner_pole', 'gate_outer',
+  // 2F／3F（第三批 B～D）
+  'bed', 'nightstand', 'wardrobe', 'desk', 'stairs_down', 'door_double', 'bookshelf', 'history_case', 'table_long', 'globe',
+  'telescope', 'window_stars', 'star_table', 'bench', 'armillary',
+  // 1F 酒館、練習室、鍛造工坊（第三批 E；bench、workbench 與上面共用）
+  'bottle_shelf', 'menu_board', 'fireplace', 'barrel', 'bar_counter', 'long_table', 'weapon_rack', 'training_dummy',
+  'archery_target', 'rope_fence', 'tool_rack', 'forge_furnace', 'water_bucket', 'ore_crate', 'anvil', 'grindstone', 'coal_pile',
+];
 
 /** 地圖的基本種類預設用哪張拼貼圖 */
 export const KIND_TILES = {

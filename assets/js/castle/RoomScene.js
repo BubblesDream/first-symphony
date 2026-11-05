@@ -1,7 +1,7 @@
 // 唯一的房間場景：所有房間都用這一個場景，差別只在房間定義檔（rooms/*.js）。
 // 進入房間時：畫地圖（roomView.js）→ 放牆壁碰撞 → 放訪客 → 只建立這個房間的 NPC。
 // 走進門 → 淡出 → 用新的房間 id 重新啟動這個場景。
-import { TILE, ZOOM, COLORS, FONT, INTERACT_RANGE, CLICK_RANGE } from './config.js';
+import { TILE, VIEW_W, VIEW_H, ZOOM, COLORS, FONT, INTERACT_RANGE, CLICK_RANGE } from './config.js';
 import { ROOMS, START_ROOM } from './rooms/index.js';
 import { buildGrid, tileFeet, toTile } from './grid.js';
 import { Npc } from './npc.js';
@@ -69,7 +69,10 @@ export class RoomScene extends Phaser.Scene {
     // 鏡頭
     const cam = this.cameras.main;
     cam.setZoom(ZOOM);
-    cam.setBounds(0, 0, width, height);
+    // 房間比畫面小時置中（兩側露出背景色），比畫面大時鏡頭跟著訪客
+    const padX = Math.max(0, (VIEW_W - width) / 2);
+    const padY = Math.max(0, (VIEW_H - height) / 2);
+    cam.setBounds(-padX, -padY, width + padX * 2, height + padY * 2);
     cam.startFollow(this.player.feet, true, 0.15, 0.15);
     cam.setBackgroundColor(COLORS.background);
     cam.fadeIn(200);
@@ -218,8 +221,45 @@ export class RoomScene extends Phaser.Scene {
       });
     } else if (target.obj) {
       const { obj } = target;
-      dialog.open({ title: obj.name, lines: obj.text.map((text) => ({ text, is_demo: obj.demo })) });
+      if (this.player.act) {
+        // 演出中再按 E：離開演出
+        this.player.stopAct();
+        return;
+      }
+      dialog.open({
+        title: obj.name,
+        lines: obj.text.map((text) => ({ text, is_demo: obj.demo })),
+        onClose: obj.play ? () => this.playAt(obj) : null,
+      });
     }
+  }
+
+  /** 物件的 play：訪客走到最近、沒人用的同動作演出點，自己演出 */
+  playAt(obj) {
+    const { grid } = this;
+    const ox = Math.floor(obj.x);
+    const oy = Math.floor(obj.y);
+    const options = [];
+    for (const spot of this.spots) {
+      if (spot.action !== obj.play || spot.user || grid.occupant(spot.x, spot.y)) continue;
+      const approach = this.approachOf(spot);
+      if (approach) options.push({ spot, approach, d: Math.abs(spot.x - ox) + Math.abs(spot.y - oy) });
+    }
+    options.sort((a, b) => a.d - b.d);
+    for (const { spot, approach } of options) {
+      if (this.player.startAct(spot, approach)) return;
+    }
+    this.ctx.ui.toast(`${obj.name}現在有人在用，等一下再來吧。`);
+  }
+
+  /** 演出點本身能走就直接走上去；否則找旁邊能走、沒人的格子 */
+  approachOf(spot) {
+    const { grid } = this;
+    if (grid.playerWalkable(spot.x, spot.y)) return [spot.x, spot.y];
+    const near = [[0, 1], [0, -1], [-1, 0], [1, 0]]
+      .map(([dx, dy]) => [spot.x + dx, spot.y + dy])
+      .filter(([x, y]) => grid.npcWalkable(x, y) && !grid.occupant(x, y));
+    return near[0] || null;
   }
 
   onPointerDown(pointer) {

@@ -38,7 +38,7 @@
     "id": "l006",
     "member_id": "",
     "room": "",
-    "text": "聽說樓上的客房還在整修。",
+    "text": "客房的床好軟，一躺下就不想起來了。",
     "is_demo": true
   },
   {
@@ -200,6 +200,195 @@
     "member_id": "m03",
     "room": "",
     "text": "今天想彈一首溫柔一點的曲子。",
+    "is_demo": true
+  },
+  {
+    "id": "l501",
+    "member_id": "",
+    "room": "tavern",
+    "text": "老闆，再來一杯蘋果酒！",
+    "is_demo": true
+  },
+  {
+    "id": "l502",
+    "member_id": "",
+    "room": "tavern",
+    "text": "壁爐旁邊的位子最搶手了。",
+    "is_demo": true
+  },
+  {
+    "id": "l503",
+    "member_id": "",
+    "room": "tavern",
+    "text": "今天的冒險故事，換你說說看吧。",
+    "is_demo": true
+  },
+  {
+    "id": "l504",
+    "member_id": "",
+    "room": "tavern",
+    "text": "大家一起乾杯！",
+    "is_demo": true
+  },
+  {
+    "id": "l505",
+    "member_id": "",
+    "room": "training",
+    "text": "稻草人今天又被打歪了。",
+    "is_demo": true
+  },
+  {
+    "id": "l506",
+    "member_id": "",
+    "room": "training",
+    "text": "射箭要先穩住呼吸。",
+    "is_demo": true
+  },
+  {
+    "id": "l507",
+    "member_id": "",
+    "room": "training",
+    "text": "練完記得把木劍放回架子上喔。",
+    "is_demo": true
+  },
+  {
+    "id": "l508",
+    "member_id": "",
+    "room": "forge",
+    "text": "火候差一點，這把劍就打不好了。",
+    "is_demo": true
+  },
+  {
+    "id": "l509",
+    "member_id": "",
+    "room": "forge",
+    "text": "鏗鏗鏗……耳朵都嗡嗡響了。",
+    "is_demo": true
+  },
+  {
+    "id": "l510",
+    "member_id": "",
+    "room": "forge",
+    "text": "要修裝備的話放在工作台上就好。",
+    "is_demo": true
+  },
+  {
+    "id": "l601",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "羊毛剪下來軟綿綿的，好想拿來當枕頭。",
+    "is_demo": true
+  },
+  {
+    "id": "l602",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "噴泉旁邊好涼，坐著就不想動了。",
+    "is_demo": true
+  },
+  {
+    "id": "l603",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "今天輪到我澆花，花圃的花都開了。",
+    "is_demo": true
+  },
+  {
+    "id": "l604",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "紡車踩久了腳好痠，換你來試試？",
+    "is_demo": true
+  },
+  {
+    "id": "l605",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "水井的水好冰，夏天拿來泡西瓜剛好。",
+    "is_demo": true
+  },
+  {
+    "id": "l606",
+    "member_id": "",
+    "room": "courtyard",
+    "text": "工作台上那個小東西是誰做到一半的？",
+    "is_demo": true
+  },
+  {
+    "id": "l701",
+    "member_id": "",
+    "room": "guest",
+    "text": "樓下好熱鬧，我先上來躺一下。",
+    "is_demo": true
+  },
+  {
+    "id": "l702",
+    "member_id": "",
+    "room": "guest",
+    "text": "這張床好軟，差點就睡著了。",
+    "is_demo": true
+  },
+  {
+    "id": "l703",
+    "member_id": "",
+    "room": "guest",
+    "text": "我把今天的團練寫進日記了。",
+    "is_demo": true
+  },
+  {
+    "id": "l704",
+    "member_id": "",
+    "room": "guest",
+    "text": "隔壁床的鼾聲也太有節奏感了吧。",
+    "is_demo": true
+  },
+  {
+    "id": "l705",
+    "member_id": "",
+    "room": "library",
+    "text": "這裡的書好多，看不完啦。",
+    "is_demo": true
+  },
+  {
+    "id": "l706",
+    "member_id": "",
+    "room": "library",
+    "text": "我在找以前的合奏譜，你有看到嗎？",
+    "is_demo": true
+  },
+  {
+    "id": "l707",
+    "member_id": "",
+    "room": "library",
+    "text": "展示櫃裡的照片，好多都是當年的回憶。",
+    "is_demo": true
+  },
+  {
+    "id": "l708",
+    "member_id": "",
+    "room": "library",
+    "text": "圖書館要保持安靜喔……（小聲）",
+    "is_demo": true
+  },
+  {
+    "id": "l709",
+    "member_id": "",
+    "room": "observatory",
+    "text": "今晚的星星特別亮。",
+    "is_demo": true
+  },
+  {
+    "id": "l710",
+    "member_id": "",
+    "room": "observatory",
+    "text": "剛剛好像看到流星了！",
+    "is_demo": true
+  },
+  {
+    "id": "l711",
+    "member_id": "",
+    "room": "observatory",
+    "text": "聽說對著星星許願，抽卡會比較順。",
     "is_demo": true
   }
 ]

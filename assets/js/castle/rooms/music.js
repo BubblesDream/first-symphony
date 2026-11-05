@@ -7,7 +7,7 @@ export default {
   capacity: 8,
   map: [
     '######################', // 0  牆頂
-    '###f##############f###', // 1  牆面，f 公會旗幟
+    '###f#w#n#WWWW#n#w#f###', // 1  牆面，f 公會旗幟  W 舞台布幕＋徽章  n 窗戶  w 壁燈
     '#CPPPsssssssssssssssC#', // 2  舞台；PPP 鋼琴（3×2）  C 燭台
     '#sPPPsssbsssbsssbsYss#', // 3  b 樂手椅  Y 豎琴（裝飾）
     '#ssBssssAsssAsssAssss#', // 4  B 琴椅  A 譜架
@@ -25,6 +25,9 @@ export default {
   // under：家具底下鋪什麼（舞台上的家具鋪木地板）
   legend: {
     f: { kind: 'wall', color: 'banner', sprite: 'banner' },
+    W: { kind: 'wall', color: 'carpet', sprite: 'curtain_stage', behind: 'wall_emblem' },
+    n: { kind: 'wall', color: 'wallTop', sprite: 'window_arch' },
+    w: { kind: 'wall', color: 'notice', sprite: 'wall_lamp' },
     P: { kind: 'furniture', color: 'piano', sprite: 'piano', under: 'stage' },
     B: { kind: 'seat', color: 'seat', sprite: 'piano_bench', under: 'stage' },
     A: { kind: 'furniture', color: 'stand', sprite: 'music_stand', under: 'stage' },
@@ -54,9 +57,12 @@ export default {
     ))),
   ],
   objects: [
-    { x: 3, y: 2.5, name: '鋼琴', text: ['一架擦得發亮的鋼琴。', '（第一版還沒有聲音，之後會加入。）'], demo: false },
+    // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
+    { x: 3, y: 2.5, name: '鋼琴', text: ['一架擦得發亮的鋼琴。要坐下來彈一曲嗎？'], demo: false, play: 'play_piano' },
+    { x: 12, y: 5, name: '指揮台', text: ['站上指揮台，帶大家合奏吧！'], demo: false, play: 'conduct' },
+    { x: 8, y: 3.5, name: '譜架', text: ['譜架上放著公會歌的樂譜。拿起小提琴試試看？'], demo: false, play: 'play_violin' },
     { x: 3, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
-    { x: 18, y: 3, name: '豎琴', text: ['一架木製豎琴，琴弦調得很準。'], demo: false },
+    { x: 18, y: 3, name: '豎琴', text: ['一架木製豎琴，琴弦調得很準。'], demo: false, play: 'play_harp' },
   ],
   labels: [
     { x: 3, y: 2.5, text: '鋼琴' },
