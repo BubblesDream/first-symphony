@@ -41,6 +41,9 @@ export const SPRITE_ART = {
   harp: { src: `${DIR}harp.webp`, w: 1, h: 2 },
   chair_side: { src: `${DIR}chair_side.webp`, w: 1, h: 1 },
   curtain_stage: { src: `${DIR}curtain_stage.webp`, w: 4, h: 2 },
+  wall_emblem: { src: `${DIR}wall_emblem.webp`, w: 1.5, h: 1.5 }, // 掛在布幕中間（布幕的 behind）
+  window_arch: { src: `${DIR}window_arch.webp`, w: 1, h: 2 },
+  wall_lamp: { src: `${DIR}wall_lamp.webp`, w: 1, h: 1 },
 };
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */

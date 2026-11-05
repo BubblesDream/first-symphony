@@ -9,7 +9,7 @@ export default {
   capacity: 8,
   map: [
     '############UUUU############', // 0  牆頂；UUUU 往 2F 的樓梯（整修中）
-    '#####f######UUUU######f#####', // 1  牆面，f 公會旗幟
+    '##n##f##n#w#UUUU#w#n##f##n##', // 1  牆面，f 公會旗幟  n 窗戶  w 壁燈
     '#p.NN....L.rrrrrr.L.......p#', // 2  NN 公告板  L 燭台
     '#..........rrrrrr..........#', // 3
     'T.........IrrrrrrI.........M', // 4  T 交流廳（整修中）  M 演奏室  I 石柱
@@ -33,6 +33,8 @@ export default {
   // sprite 是 art.js 的圖片名稱；還沒有圖時自動畫色塊。flipX：左右翻轉。
   legend: {
     f: { kind: 'wall', color: 'banner', sprite: 'banner' },
+    n: { kind: 'wall', color: 'wallTop', sprite: 'window_arch' },
+    w: { kind: 'wall', color: 'notice', sprite: 'wall_lamp' },
     N: { kind: 'furniture', color: 'notice', sprite: 'notice_board' },
     I: { kind: 'furniture', color: 'wallTop', sprite: 'pillar' },
     L: { kind: 'furniture', color: 'stand', sprite: 'candle_stand' },

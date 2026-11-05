@@ -192,6 +192,13 @@ export class RoomView {
       // 遊戲自己加的淡淡影子
       this.scene.add.ellipse(cx, bottom - 3, art.w * TILE * 0.8, 8, 0x000000, 0.16).setDepth(-3);
     }
+    // behind：同一位置、畫在這張圖後面的另一張圖（例如布幕中間的徽章）
+    if (def.behind && hasArt(this.scene, def.behind)) {
+      const b = SPRITE_ART[def.behind];
+      this.artReport.used.add(def.behind);
+      this.scene.add.image(cx, bottom - 2, artKey(def.behind))
+        .setOrigin(0.5, 1).setDisplaySize(b.w * TILE, b.h * TILE).setDepth(onWall ? -4.5 : bottom - 0.5);
+    }
     this.scene.add.image(cx, bottom, artKey(s.name))
       .setOrigin(0.5, 1)
       .setDisplaySize(art.w * TILE, art.h * TILE)

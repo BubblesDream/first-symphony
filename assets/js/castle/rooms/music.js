@@ -7,7 +7,7 @@ export default {
   capacity: 8,
   map: [
     '######################', // 0  牆頂
-    '###f#####WWWW#####f###', // 1  牆面，f 公會旗幟  W 舞台布幕（4 格寬）
+    '###f#w#n#WWWW#n#w#f###', // 1  牆面，f 公會旗幟  W 舞台布幕＋徽章  n 窗戶  w 壁燈
     '#CPPPsssssssssssssssC#', // 2  舞台；PPP 鋼琴（3×2）  C 燭台
     '#sPPPsssbsssbsssbsYss#', // 3  b 樂手椅  Y 豎琴（裝飾）
     '#ssBssssAsssAsssAssss#', // 4  B 琴椅  A 譜架
@@ -25,7 +25,9 @@ export default {
   // under：家具底下鋪什麼（舞台上的家具鋪木地板）
   legend: {
     f: { kind: 'wall', color: 'banner', sprite: 'banner' },
-    W: { kind: 'wall', color: 'carpet', sprite: 'curtain_stage' },
+    W: { kind: 'wall', color: 'carpet', sprite: 'curtain_stage', behind: 'wall_emblem' },
+    n: { kind: 'wall', color: 'wallTop', sprite: 'window_arch' },
+    w: { kind: 'wall', color: 'notice', sprite: 'wall_lamp' },
     P: { kind: 'furniture', color: 'piano', sprite: 'piano', under: 'stage' },
     B: { kind: 'seat', color: 'seat', sprite: 'piano_bench', under: 'stage' },
     A: { kind: 'furniture', color: 'stand', sprite: 'music_stand', under: 'stage' },
