@@ -39,6 +39,15 @@
 
 `tools/admin/`（`Code.gs`、`Logic.gs`、`*.html`、`appsscript.json`）是給管理員用的 Google Apps Script 網頁應用程式，綁在「網站用」試算表上，只在 Apps Script 內執行。它**不部署到 GitHub Pages、網站頁面不引用它**，也不受「純 HTML／CSS／原生 JS」與「只用 `/` 相對路徑」等網站規則限制；但仍要遵守：介面簡單實用、繁體中文（台灣用語）、外部資料只用 `textContent`／`createElement`、Drive 動作只限管理員資料夾與投稿區、刪除一律移到垃圾桶、不把任何檔案改成公開分享。說明見 `docs/指南-管理頁.md`。
 
+## 虛擬公會城堡（第三個例外）
+
+`hall.html`（虛擬公會城堡）與 `assets/js/castle/`、`assets/vendor/` 整個屬於例外（管理員已同意）：可以依需要導入遊戲框架或函式庫，不受「純原生 JS、不用框架」限制。目前使用 Phaser 3.90.0，檔案放在 `assets/vendor/phaser/`（本機一份、固定版本，不從外部 CDN 載入）。
+
+- 只有 `hall.html` 載入這些函式庫，其他頁面不准引用。
+- 仍要遵守：相對路徑、資料透過 `data.js` 讀取、資料表平面結構、外部資料只用 `textContent`／`createElement`（畫布上的文字用 Phaser 的文字物件，不經 HTML）、內容規則。
+- 所有房間共用 `RoomScene.js`；新增房間＝在 `assets/js/castle/rooms/` 加定義檔並登記；新增生活動作＝在 `actions.js` 加一行。
+- 規劃與決定見 `docs/規劃-虛擬城堡.md`。
+
 ## 內容規則
 
 - 只放遊戲暱稱、遊戲截圖、願意公開的遊戲影片；不放真實姓名或聯絡方式。

@@ -23,6 +23,9 @@ export const TABLES = {
   quotes:  { ...SHEET, url: '', fallback: 'data/quotes.json' },   // 分頁：語錄
   // 相簿照片清單（一張照片一列）由同步程式從雲端硬碟產生，固定讀本地檔，不走試算表。
   gallery: { source: 'json', url: 'data/gallery.json' },
+  // 虛擬公會城堡（hall.html）專用：成員外觀與台詞。第一版只讀本地檔，日後可改成試算表分頁。
+  castle_looks: { source: 'json', url: 'data/castle_looks.json' },
+  castle_lines: { source: 'json', url: 'data/castle_lines.json' },
 };
 
 // 各表欄位型別：沒列出的欄位一律當作字串。
@@ -36,6 +39,8 @@ export const FIELD_TYPES = {
   albums:  { featured: 'boolean', is_demo: 'boolean' },
   gallery: { sort_order: 'number' },
   quotes:  { is_demo: 'boolean' },
+  castle_looks: { is_demo: 'boolean' },
+  castle_lines: { is_demo: 'boolean' },
 };
 
 // game 欄位的顯示名稱（全站只在這裡定義）

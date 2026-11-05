@@ -1,0 +1,205 @@
+[
+  {
+    "id": "l001",
+    "member_id": "",
+    "room": "",
+    "text": "今天天氣真好，適合去外面剪羊毛。",
+    "is_demo": true
+  },
+  {
+    "id": "l002",
+    "member_id": "",
+    "room": "",
+    "text": "你也是來找人合奏的嗎？",
+    "is_demo": true
+  },
+  {
+    "id": "l003",
+    "member_id": "",
+    "room": "",
+    "text": "好久沒上線了，大家都還在呢。",
+    "is_demo": true
+  },
+  {
+    "id": "l004",
+    "member_id": "",
+    "room": "",
+    "text": "城堡好大，我剛剛差點迷路。",
+    "is_demo": true
+  },
+  {
+    "id": "l005",
+    "member_id": "",
+    "room": "",
+    "text": "肚子有點餓，等等去酒館吃點東西。",
+    "is_demo": true
+  },
+  {
+    "id": "l006",
+    "member_id": "",
+    "room": "",
+    "text": "聽說樓上的客房還在整修。",
+    "is_demo": true
+  },
+  {
+    "id": "l007",
+    "member_id": "",
+    "room": "",
+    "text": "嗨！歡迎來玩～",
+    "is_demo": true
+  },
+  {
+    "id": "l008",
+    "member_id": "",
+    "room": "",
+    "text": "昨天的團練好累，但很開心。",
+    "is_demo": true
+  },
+  {
+    "id": "l009",
+    "member_id": "",
+    "room": "",
+    "text": "你看起來有點眼熟耶。",
+    "is_demo": true
+  },
+  {
+    "id": "l010",
+    "member_id": "",
+    "room": "",
+    "text": "我在等朋友上線。",
+    "is_demo": true
+  },
+  {
+    "id": "l011",
+    "member_id": "",
+    "room": "",
+    "text": "有空一起去打副本嗎？",
+    "is_demo": true
+  },
+  {
+    "id": "l012",
+    "member_id": "",
+    "room": "",
+    "text": "這套衣服是我新換的，好看嗎？",
+    "is_demo": true
+  },
+  {
+    "id": "l013",
+    "member_id": "",
+    "room": "",
+    "text": "今天也要好好練琴。",
+    "is_demo": true
+  },
+  {
+    "id": "l014",
+    "member_id": "",
+    "room": "",
+    "text": "咦，你是新來的嗎？",
+    "is_demo": true
+  },
+  {
+    "id": "l015",
+    "member_id": "",
+    "room": "",
+    "text": "要不要坐下來聊聊天？",
+    "is_demo": true
+  },
+  {
+    "id": "l016",
+    "member_id": "",
+    "room": "hall",
+    "text": "公告板上又貼了新東西。",
+    "is_demo": true
+  },
+  {
+    "id": "l017",
+    "member_id": "",
+    "room": "hall",
+    "text": "會長今天好像有事要宣布。",
+    "is_demo": true
+  },
+  {
+    "id": "l018",
+    "member_id": "",
+    "room": "hall",
+    "text": "大廳的紅地毯是不是又換新的了？",
+    "is_demo": true
+  },
+  {
+    "id": "l019",
+    "member_id": "",
+    "room": "hall",
+    "text": "這張討論桌每次都坐滿人。",
+    "is_demo": true
+  },
+  {
+    "id": "l020",
+    "member_id": "",
+    "room": "music",
+    "text": "下一首要練什麼曲子呢？",
+    "is_demo": true
+  },
+  {
+    "id": "l021",
+    "member_id": "",
+    "room": "music",
+    "text": "我的小提琴好像走音了。",
+    "is_demo": true
+  },
+  {
+    "id": "l022",
+    "member_id": "",
+    "room": "music",
+    "text": "安靜，演奏要開始了。",
+    "is_demo": true
+  },
+  {
+    "id": "l023",
+    "member_id": "",
+    "room": "music",
+    "text": "指揮的手勢好帥。",
+    "is_demo": true
+  },
+  {
+    "id": "l024",
+    "member_id": "",
+    "room": "music",
+    "text": "坐在這裡聽大家練習最舒服了。",
+    "is_demo": true
+  },
+  {
+    "id": "l025",
+    "member_id": "",
+    "room": "music",
+    "text": "剛剛那段合奏好好聽！",
+    "is_demo": true
+  },
+  {
+    "id": "l026",
+    "member_id": "m01",
+    "room": "",
+    "text": "大家都到了嗎？等等開會喔。",
+    "is_demo": true
+  },
+  {
+    "id": "l027",
+    "member_id": "m01",
+    "room": "",
+    "text": "看到大家還在，就覺得很開心。",
+    "is_demo": true
+  },
+  {
+    "id": "l028",
+    "member_id": "m02",
+    "room": "",
+    "text": "有什麼事都可以找我。",
+    "is_demo": true
+  },
+  {
+    "id": "l029",
+    "member_id": "m03",
+    "room": "",
+    "text": "今天想彈一首溫柔一點的曲子。",
+    "is_demo": true
+  }
+]

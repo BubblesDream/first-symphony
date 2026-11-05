@@ -9,7 +9,7 @@
 
 - 更新頻率低，不以公告或即時消息為中心。
 - 內容只有遊戲暱稱、遊戲截圖與願意公開的遊戲影片，不含真實個資或聯絡方式。
-- 未來會加入可走動的 2D 虛擬公會大廳（第一版只做入口）。
+- 有一個可走動的 2D 虛擬公會城堡（`hall.html`，目前是第一版原型）。
 
 部署網址：`https://bubblesdream.github.io/first-symphony/`
 repo：`https://github.com/BubblesDream/first-symphony`
@@ -72,7 +72,7 @@ repo：`https://github.com/BubblesDream/first-symphony`
 | 成員詳情 | `member.html?id=<member_id>` | 頭像、介紹、職位、造型收藏切換 |
 | 影片回顧 | `videos.html` | 影片卡片，可依年份或遊戲篩選 |
 | 紀念館 | `gallery.html` | 相簿，可依年份或分類篩選，點擊放大並顯示說明；另有經典語錄區 |
-| 虛擬大廳 | `hall.html` | 預留入口與構想介紹，不實作遊戲 |
+| 虛擬公會城堡 | `hall.html` | 2D 俯視角的城堡小遊戲（第一版原型：公會大廳＋演奏室），見 `docs/規劃-虛擬城堡.md` |
 | 找不到頁面 | `404.html` | 提供回首頁連結 |
 
 首頁保持簡潔：每個區塊只放少量精選（例如 3–6 筆）並附「查看全部」連結。
@@ -87,7 +87,7 @@ repo：`https://github.com/BubblesDream/first-symphony`
 
 **紀念館**：燈箱放大要能用 Esc 關閉、左右鍵切換，手機可點擊關閉；開啟時鎖定背景捲動，關閉後焦點回到原本的縮圖。
 
-**虛擬大廳**：說明構想（操控小角色走動、與物品和成員互動、看公告板與相簿、支援鍵盤與觸控），標示「籌備中」。未來可能使用 Godot Web Export 或 HTML5 Canvas。
+**虛擬公會城堡**：用 Phaser 製作的 2D 俯視角小遊戲。訪客操作小角色走動，隨機抽出的公會成員以幾何色塊 NPC 在各房間生活（走動、坐椅子、演奏），可按 E 或點擊聊天。這一頁屬於 `CLAUDE.md` 的第三個例外，可使用框架與函式庫。設計與擴充計畫見 `docs/規劃-虛擬城堡.md`。
 
 ## 四、技術要求
 
@@ -149,6 +149,8 @@ docs/
 | `albums.json` | `album`（必須與雲端硬碟相簿資料夾名稱完全相同）, `title`（選填，空白時用資料夾名稱去掉日期）, `caption`, `game`, `featured`, `is_demo`。一本相簿一列 |
 | `gallery.json` | `id`（＝雲端硬碟檔案 id）, `album`（相簿資料夾名稱，例如 `2010-08 夏日合奏`）, `category`（團體合照／副本／節日活動／演奏／日常／紀念日）, `date`（取自資料夾名稱開頭的 `YYYY-MM`）, `image`, `thumb`, `sort_order`。一張照片一列，由同步程式產生，不走試算表（見第八節） |
 | `quotes.json` | `id`, `text`, `speaker`, `date`（選填）, `context`（選填）, `is_demo` |
+| `castle_looks.json` | 城堡用成員外觀：`member_id`, `hair`, `outfit`, `skin`（選填）, `accent`（選填）, `mark`（`none`／`hat`／`ribbon`／`glasses`／`cape`，選填）, `is_demo`。顏色格式 `#rrggbb`；沒有列的成員依 id 自動配色。目前只讀本地檔 |
+| `castle_lines.json` | 城堡用台詞：`id`, `member_id`（空白＝通用）, `room`（空白＝任何房間）, `text`, `is_demo`。目前只讀本地檔 |
 
 試算表分頁與資料表的對應：成員→`members`、造型→`outfits`、相簿→`albums`、影片→`videos`、歷史→`history`、歷任會長→`leaders`、語錄→`quotes`、公會設定→`site`（「填寫說明」分頁網站不讀）。
 

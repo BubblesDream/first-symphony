@@ -21,7 +21,7 @@ python3 -m http.server 8000
 
 | 位置 | 內容 |
 |---|---|
-| `*.html` | 各頁面（首頁、故事、成員、成員詳情、影片、紀念館、大廳、404） |
+| `*.html` | 各頁面（首頁、故事、成員、成員詳情、影片、紀念館、虛擬公會城堡、404） |
 | `data/*.json` | 所有內容資料，一個檔案＝試算表的一個分頁 |
 | `assets/css/tokens.css` | 配色、字型、字級、間距（換版只要改這裡） |
 | `assets/css/` 其他檔案 | `base.css` 基本樣式、`components.css` 共用元件、`pages.css` 各頁版面 |
@@ -113,6 +113,13 @@ python3 -m http.server 8000
 ### 網站文字 `data/site.json`
 
 `key` / `value` 兩欄，例如首頁橫幅圖 `banner_image`、橫幅引言 `banner_quote`、故事摘要 `story_summary`、創立緣由 `story_origin`、名稱由來 `story_name`、頁尾短句 `footer_quote` 等。直接改 `value` 即可。
+
+### 虛擬公會城堡 `data/castle_looks.json`、`data/castle_lines.json`
+
+- 外觀：一位成員一列，`member_id` 對應成員 id；顏色填 `#rrggbb`（`hair` 髮色、`outfit` 衣服、`skin` 膚色、`accent` 配件色），`mark` 可填 `none`、`hat`、`ribbon`、`glasses`、`cape`。沒有填的成員會依 id 自動配色。
+- 台詞：`member_id` 空白＝所有人都可能說；`room` 填 `hall` 或 `music` 表示只在那個房間說。聊天時會先挑本人的台詞，不夠再補通用台詞，一次 1～3 句。
+- 測試：`hall.html?seed=1` 固定抽選結果，`?debug=1` 顯示不能走的格子、演出點與 NPC 狀態。
+- 房間地圖與演出點在 `assets/js/castle/rooms/`，說明見 `docs/規劃-虛擬城堡.md`。
 
 ## 素材與更新流程
 
