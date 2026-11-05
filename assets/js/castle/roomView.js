@@ -85,6 +85,8 @@ export class RoomView {
         const fh = ok ? art.foot || 1 : box.y1 - box.y0 + 1;
         for (let y0 = box.y0; y0 <= box.y1; y0 += fh) {
           for (let x0 = box.x0; x0 <= box.x1; x0 += fw) {
+            // 圍成一圈的（例如柵欄）外框會包住中間的空地，空地不放
+            if (grid.cell(x0, y0)?.ch !== c.ch) continue;
             list.push({ x0, y0, x1: Math.min(x0 + fw - 1, box.x1), y1: Math.min(y0 + fh - 1, box.y1), name, cell: c, ok });
           }
         }

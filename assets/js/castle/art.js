@@ -48,12 +48,18 @@ export const SPRITE_ART = {
   wall_emblem: { src: `${DIR}wall_emblem.webp`, w: 1.5, h: 1.5 }, // 掛在布幕中間（布幕的 behind）
   window_arch: { src: `${DIR}window_arch.webp`, w: 1, h: 2 },
   wall_lamp: { src: `${DIR}wall_lamp.webp`, w: 1, h: 1 },
+  // 外庭
+  hedge: { src: `${DIR}hedge.webp`, w: 1, h: 1 },
+  fence: { src: `${DIR}fence.webp`, w: 1, h: 1 },
+  tree: { src: `${DIR}tree.webp`, w: 2, h: 3 },
+  spinning_wheel: { src: `${DIR}spinning_wheel.webp`, w: 1, h: 1.5 },
+  well: { src: `${DIR}well.webp`, foot: 2, w: 2, h: 2 },
 };
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
 export const WANTED_ART = [
   // 外庭（第三批 A）
-  'fountain', 'sheep', 'well', 'spinning_wheel', 'tree', 'fence', 'hedge',
+  'fountain', 'sheep',
   'sheep_shed', 'haystack', 'laundry_line', 'workbench', 'crop', 'flower_bed', 'lamp_post', 'banner_pole', 'gate_outer',
   // 2F／3F（第三批 B～D）
   'bed', 'nightstand', 'wardrobe', 'desk', 'stairs_down', 'door_double', 'bookshelf', 'history_case', 'table_long', 'globe',
