@@ -149,7 +149,7 @@ export class RoomScene extends Phaser.Scene {
     this.target = target;
     for (const npc of this.npcs) npc.avatar.setNameVisible(npc === this.hovered || target?.npc === npc);
     if (target && !dialog.isOpen) {
-      this.prompt.setPosition(target.x, target.y - (target.npc ? 54 : target.critter ? 34 : 18)).setVisible(true);
+      this.prompt.setPosition(target.x, target.y - (target.npc ? target.npc.avatar.top + 6 : target.critter ? 34 : 18)).setVisible(true);
     } else {
       this.prompt.setVisible(false);
     }

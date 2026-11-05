@@ -103,6 +103,19 @@ export const SPRITE_ART = {
   coal_pile: { src: `${DIR}coal_pile.webp`, w: 1, h: 1 },
 };
 
+/**
+ * 角色圖（Codex 依成員外觀生成，一人一張）：原圖 docs/素材/城堡原圖/members/<id>.png
+ * （正面、背面、朝右側面排成一列，透明背景）。成品是三格一列的 WebP，每格 CHAR_CELL 像素，
+ * 腳底對齊每格下緣中央。名稱是成員 id；visitor 是訪客。沒有圖的人畫幾何色塊。
+ */
+export const CHAR_H = 1.25; // 角色在畫面上的高度（格）
+export const CHAR_CELL = { w: 72, h: 120 }; // 成品每格像素（一格 96 像素，手機放大 3 倍也清楚）
+export const CHAR_ART = {
+  m01: { src: `${DIR}members/m01.webp` },
+  m02: { src: `${DIR}members/m02.webp` },
+  visitor: { src: `${DIR}members/visitor.webp` },
+};
+
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
 export const WANTED_ART = [];
 
@@ -122,6 +135,17 @@ export function queueArt(scene) {
   for (const [name, art] of Object.entries({ ...TILE_ART, ...SPRITE_ART })) {
     if (!scene.textures.exists(artKey(name))) scene.load.image(artKey(name), art.src);
   }
+  for (const [id, art] of Object.entries(CHAR_ART)) {
+    const key = charKey(id);
+    if (!scene.textures.exists(key)) scene.load.spritesheet(key, art.src, { frameWidth: CHAR_CELL.w, frameHeight: CHAR_CELL.h });
+  }
+}
+
+export const charKey = (id) => `${PREFIX}char:${id}`;
+
+/** 這個人有沒有角色圖（有登記、而且載入成功） */
+export function hasCharArt(scene, id) {
+  return Boolean(id) && !scene.registry.get('noArt') && Boolean(CHAR_ART[id]) && scene.textures.exists(charKey(id));
 }
 
 /** 這張圖能不能用（有登記、而且載入成功） */

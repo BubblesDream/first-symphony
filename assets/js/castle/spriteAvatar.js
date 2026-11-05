@@ -3,6 +3,8 @@
 import { FONT } from './config.js';
 import { avatarTexture, SCALE, CELL, FOOT_ROW } from './pixelAvatar.js';
 
+const SEAT_DEPTH = 14; // 坐著時往前排多少（椅子圖以格子下緣排前後）
+
 const WALK_MS = 150; // 走路換腳的間隔
 const SIT_DROP = 4; // 坐下時往下移幾像素
 
@@ -49,15 +51,22 @@ export class SpriteAvatar {
 
   get x() { return this.root.x; }
   get y() { return this.root.y; }
+  get top() { return this.seated ? 44 : 48; }
 
   setPosition(x, y) {
     this.root.setPosition(x, y);
-    this.root.setDepth(y); // 腳底越下面的越前面
+    this.updateDepth();
+  }
+
+  /** 腳底越下面的越前面；坐著（不是背對）時畫在椅子前面，不然會被椅子蓋住 */
+  updateDepth() {
+    this.root.setDepth(this.root.y + (this.seated && this.facing !== 'up' ? SEAT_DEPTH : 0));
   }
 
   setFacing(dir, force = false) {
     if (!dir || (dir === this.facing && !force)) return;
     this.facing = dir;
+    this.updateDepth();
     this.sprite.setFlipX(dir === 'left');
     const side = dir === 'left' ? -1 : 1;
     this.tool.x = 9 * side;
@@ -77,6 +86,7 @@ export class SpriteAvatar {
     if (pose === this.pose && seated === this.seated) return;
     this.pose = pose;
     this.seated = seated;
+    this.updateDepth();
     for (const t of this.tweens) t.remove();
     this.tweens = [];
     if (this.walkTimer) {

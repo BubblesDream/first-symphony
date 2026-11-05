@@ -6,12 +6,18 @@
 
 import { FONT } from './config.js';
 import { SpriteAvatar } from './spriteAvatar.js';
+import { ImageAvatar } from './imageAvatar.js';
+import { hasCharArt } from './art.js';
+
+const SEAT_DEPTH = 14; // 坐著時往前排多少（椅子圖以格子下緣排前後）
 
 const hex = (color) => Number.parseInt(String(color).slice(1), 16);
 const DARK = 0x2e2420;
 
+/** options.artId：角色圖的名稱（成員 id 或 visitor）；有圖就用圖 */
 export function createAvatar(scene, look, options = {}) {
   if (scene.registry.get('pixel')) return new SpriteAvatar(scene, look, options);
+  if (hasCharArt(scene, options.artId)) return new ImageAvatar(scene, options.artId, options);
   return new GeometricAvatar(scene, look, options);
 }
 
@@ -68,15 +74,23 @@ class GeometricAvatar {
 
   get x() { return this.root.x; }
   get y() { return this.root.y; }
+  /** 頭頂離腳底多高（放互動提示用） */
+  get top() { return this.seated ? 35 : 40; }
 
   setPosition(x, y) {
     this.root.setPosition(x, y);
-    this.root.setDepth(y); // 腳底越下面的越前面
+    this.updateDepth();
+  }
+
+  /** 腳底越下面的越前面；坐著（不是背對）時畫在椅子前面，不然會被椅子蓋住 */
+  updateDepth() {
+    this.root.setDepth(this.root.y + (this.seated && this.facing !== 'up' ? SEAT_DEPTH : 0));
   }
 
   setFacing(dir) {
     if (!dir || dir === this.facing) return;
     this.facing = dir;
+    this.updateDepth();
     const [left, right] = this.eyes;
     const up = dir === 'up';
     this.hairBack.setVisible(up);
@@ -93,6 +107,7 @@ class GeometricAvatar {
     if (pose === this.pose && seated === this.seated) return;
     this.pose = pose;
     this.seated = seated;
+    this.updateDepth();
     for (const t of this.tweens) t.remove();
     this.tweens = [];
     this.rig.setPosition(0, seated ? 5 : 0).setAngle(0);
