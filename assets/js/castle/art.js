@@ -62,12 +62,27 @@ export const SPRITE_ART = {
   laundry_line: { src: `${DIR}laundry_line.webp`, w: 3, h: 2 },
   workbench: { src: `${DIR}workbench.webp`, w: 3, h: 1.5 },
   crop: { src: `${DIR}crop.webp`, w: 1, h: 1 },
+  flower_bed: { src: `${DIR}flower_bed.webp`, w: 2, h: 1 },
+  lamp_post: { src: `${DIR}lamp_post.webp`, w: 1, h: 2 },
+  banner_pole: { src: `${DIR}banner_pole.webp`, w: 1, h: 2.5 },
+  gate_outer: { src: `${DIR}gate_outer.webp`, foot: 2, w: 4, h: 2 },
+  fence_side: { src: `${DIR}fence_side.webp`, w: 1, h: 1 },
   // 第三批：2F／3F
   bed: { src: `${DIR}bed.webp`, w: 2, h: 1.5 },
   bookshelf: { src: `${DIR}bookshelf.webp`, w: 2, h: 2 },
   history_case: { src: `${DIR}history_case.webp`, w: 2, h: 1.5 },
   telescope: { src: `${DIR}telescope.webp`, foot: 2, w: 2, h: 2.5 },
   window_stars: { src: `${DIR}window_stars.webp`, w: 4, h: 2 },
+  nightstand: { src: `${DIR}nightstand.webp`, w: 1, h: 1 },
+  wardrobe: { src: `${DIR}wardrobe.webp`, w: 2, h: 2 },
+  desk: { src: `${DIR}desk.webp`, w: 2, h: 1.5 },
+  stairs_down: { src: `${DIR}stairs_down.webp`, foot: 2, w: 4, h: 2 },
+  door_double: { src: `${DIR}door_double.webp`, w: 2, h: 2 },
+  table_long: { src: `${DIR}table_long.webp`, w: 3, h: 1.5 },
+  globe: { src: `${DIR}globe.webp`, w: 1, h: 1.5 },
+  star_table: { src: `${DIR}star_table.webp`, w: 2, h: 1.5 },
+  bench: { src: `${DIR}bench.webp`, w: 2, h: 1 },
+  armillary: { src: `${DIR}armillary.webp`, w: 1, h: 1.5 },
   // 第三批：1F 酒館、練習室、鍛造工坊
   bar_counter: { src: `${DIR}bar_counter.webp`, w: 3, h: 1.5 },
   barrel: { src: `${DIR}barrel.webp`, w: 1, h: 1.2 },
@@ -76,18 +91,20 @@ export const SPRITE_ART = {
   archery_target: { src: `${DIR}archery_target.webp`, w: 1, h: 2 },
   forge_furnace: { src: `${DIR}forge_furnace.webp`, foot: 2, w: 2, h: 2.5 },
   anvil: { src: `${DIR}anvil.webp`, w: 1, h: 1 },
+  bottle_shelf: { src: `${DIR}bottle_shelf.webp`, w: 2, h: 1.5 },
+  menu_board: { src: `${DIR}menu_board.webp`, w: 2, h: 1.5 },
+  long_table: { src: `${DIR}long_table.webp`, w: 2, h: 1.5 },
+  weapon_rack: { src: `${DIR}weapon_rack.webp`, w: 2, h: 2 },
+  rope_fence: { src: `${DIR}rope_fence.webp`, w: 1, h: 1 },
+  tool_rack: { src: `${DIR}tool_rack.webp`, w: 2, h: 1.5 },
+  water_bucket: { src: `${DIR}water_bucket.webp`, w: 1, h: 1 },
+  grindstone: { src: `${DIR}grindstone.webp`, w: 1, h: 1.2 },
+  ore_crate: { src: `${DIR}ore_crate.webp`, w: 1, h: 1 },
+  coal_pile: { src: `${DIR}coal_pile.webp`, w: 1, h: 1 },
 };
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
-export const WANTED_ART = [
-  // 外庭（第三批 A）
-  'flower_bed', 'lamp_post', 'banner_pole', 'gate_outer',
-  // 2F／3F（第三批 B～D）
-  'nightstand', 'wardrobe', 'desk', 'stairs_down', 'door_double', 'table_long', 'globe', 'star_table', 'bench', 'armillary',
-  // 1F 酒館、練習室、鍛造工坊（第三批 E～G；bench 與上面共用）
-  'bottle_shelf', 'menu_board', 'long_table', 'weapon_rack', 'rope_fence',
-  'tool_rack', 'water_bucket', 'ore_crate', 'grindstone', 'coal_pile',
-];
+export const WANTED_ART = [];
 
 /** 地圖的基本種類預設用哪張拼貼圖 */
 export const KIND_TILES = {
