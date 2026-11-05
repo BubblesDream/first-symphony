@@ -20,11 +20,11 @@ export class RoomView {
     this.drawFallback();
     this.drawTiles();
     for (const s of this.sprites) if (s.ok) this.placeSprite(s);
-    // 文字標籤（網站自己寫的固定文字）
+    // 文字標籤（網站自己寫的固定文字）：畫在最上層，才不會被家具蓋住
     for (const label of this.room.labels || []) {
       this.scene.add.text((label.x + 0.5) * TILE, (label.y + 0.5) * TILE, label.text, {
         fontFamily: FONT, fontSize: '9px', color: '#fffaf0', backgroundColor: 'rgba(43,33,25,0.6)', padding: { x: 2, y: 0 },
-      }).setOrigin(0.5).setResolution(3).setDepth(-2);
+      }).setOrigin(0.5).setResolution(3).setDepth(5000);
     }
     this.artReport = { used: [...this.artReport.used].sort(), missing: [...this.artReport.missing].sort() };
     return this.artReport;
