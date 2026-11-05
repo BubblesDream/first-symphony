@@ -104,17 +104,39 @@ export const SPRITE_ART = {
 };
 
 /**
- * 角色圖（Codex 依成員外觀生成，一人一張）：原圖 docs/素材/城堡原圖/members/<id>.png
+ * 個人角色圖（Codex 依外觀生成，一人一張；目前只有訪客，成員改用下面的紙娃娃，想要特別造型的成員也可以放這裡）：原圖 docs/素材/城堡原圖/members/<id>.png
  * （正面、背面、朝右側面排成一列，透明背景）。成品是三格一列的 WebP，每格 CHAR_CELL 像素，
  * 腳底對齊每格下緣中央。名稱是成員 id；visitor 是訪客。沒有圖的人畫幾何色塊。
  */
 export const CHAR_H = 1.25; // 角色在畫面上的高度（格）
 export const CHAR_CELL = { w: 72, h: 120 }; // 成品每格像素（一格 96 像素，手機放大 3 倍也清楚）
 export const CHAR_ART = {
-  m01: { src: `${DIR}members/m01.webp` },
-  m02: { src: `${DIR}members/m02.webp` },
   visitor: { src: `${DIR}members/visitor.webp` },
 };
+
+/**
+ * 紙娃娃部件（成員沒有個人角色圖時用）：原圖 docs/素材/城堡原圖/紙娃娃/<名稱>.png（Codex 用鍵色畫），
+ * tools/castle_paperdoll.py 產生 assets/images/castle/doll/<名稱>.webp：三個方向一列、七層由上往下
+ * （固定色、頭髮、皮膚、上衣、下身、鞋子、配件）。paperdoll.js 依每個人的款式與顏色組合染色。
+ * DOLL_CELL：每格 w×h 像素，母版角色身高 body 像素（上面留空給帽子、包包頭）。
+ * 做法見 docs/研究-城堡紙娃娃.md；提示詞見 docs/提示詞-城堡紙娃娃.md。
+ */
+export const DOLL_CELL = { w: 80, h: 136, body: 120 };
+export const DOLL_PARTS = [
+  'head_short_none', 'head_short_hat', 'head_short_ribbon', 'head_short_headband',
+  'head_medium_none', 'head_medium_hat', 'head_medium_ribbon', 'head_medium_headband',
+  'head_long_none', 'head_long_hat', 'head_long_ribbon', 'head_long_headband',
+  'head_ponytail_none', 'head_ponytail_hat', 'head_ponytail_ribbon', 'head_ponytail_headband',
+  'head_twintails_none', 'head_twintails_hat', 'head_twintails_ribbon', 'head_twintails_headband',
+  'head_bun_none', 'head_bun_hat', 'head_bun_ribbon', 'head_bun_headband',
+  'outfit_shirt_pants', 'outfit_shirt_shorts', 'outfit_shirt_longskirt', 'outfit_shirt_skirt',
+  'outfit_jacket_pants', 'outfit_jacket_shorts', 'outfit_jacket_longskirt', 'outfit_jacket_skirt',
+  'outfit_armor_pants', 'outfit_armor_shorts', 'outfit_armor_longskirt', 'outfit_armor_skirt',
+  'outfit_robe', 'outfit_dress',
+  'over_glasses', 'over_cape',
+];
+export const dollPartKey = (name) => `${PREFIX}doll:${name}`;
+const dollSrc = (name) => `${DIR}doll/${name}.webp`;
 
 /** 房間已經指定、但還沒有成品的圖（先畫色塊）。有圖後移到上面的清單。 */
 export const WANTED_ART = [];
@@ -138,6 +160,10 @@ export function queueArt(scene) {
   for (const [id, art] of Object.entries(CHAR_ART)) {
     const key = charKey(id);
     if (!scene.textures.exists(key)) scene.load.spritesheet(key, art.src, { frameWidth: CHAR_CELL.w, frameHeight: CHAR_CELL.h });
+  }
+  if (scene.registry.get('noArt')) return;
+  for (const name of DOLL_PARTS) {
+    if (!scene.textures.exists(dollPartKey(name))) scene.load.image(dollPartKey(name), dollSrc(name));
   }
 }
 

@@ -149,7 +149,7 @@ docs/
 | `albums.json` | `album`（必須與雲端硬碟相簿資料夾名稱完全相同）, `title`（選填，空白時用資料夾名稱去掉日期）, `caption`, `game`, `featured`, `is_demo`。一本相簿一列 |
 | `gallery.json` | `id`（＝雲端硬碟檔案 id）, `album`（相簿資料夾名稱，例如 `2010-08 夏日合奏`）, `category`（團體合照／副本／節日活動／演奏／日常／紀念日）, `date`（取自資料夾名稱開頭的 `YYYY-MM`）, `image`, `thumb`, `sort_order`。一張照片一列，由同步程式產生，不走試算表（見第八節） |
 | `quotes.json` | `id`, `text`, `speaker`, `date`（選填）, `context`（選填）, `is_demo` |
-| `castle_looks.json` | 城堡用成員外觀：`member_id`, `hair`, `outfit`, `skin`（選填）, `accent`（選填）, `mark`（`none`／`hat`／`ribbon`／`glasses`／`cape`，選填）, `is_demo`。顏色格式 `#rrggbb`；沒有列的成員依 id 自動配色。目前只讀本地檔 |
+| `castle_looks.json` | 城堡用成員外觀（紙娃娃）：`member_id`, `hair_style`, `hair`, `skin`, `top_style`, `top`, `bottom_style`, `bottom`, `shoes`, `accessory`, `accent`, `instrument`, `favorite_room`, `is_demo`（欄位說明見 `docs/問卷-城堡成員外觀.md`）。顏色格式 `#rrggbb`；沒有列或沒填的欄位依 id 自動挑。目前只讀本地檔 |
 | `castle_lines.json` | 城堡用台詞：`id`, `member_id`（空白＝通用）, `room`（空白＝任何房間）, `text`, `is_demo`。目前只讀本地檔 |
 
 試算表分頁與資料表的對應：成員→`members`、造型→`outfits`、相簿→`albums`、影片→`videos`、歷史→`history`、歷任會長→`leaders`、語錄→`quotes`、公會設定→`site`（「填寫說明」分頁網站不讀）。

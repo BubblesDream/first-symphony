@@ -1,7 +1,8 @@
-// 角色圖外觀：Codex 依成員外觀生成的圖（正面、背面、朝右側面三格，朝左左右翻轉）。
+// 角色圖外觀：三格貼圖（正面、背面、朝右側面，朝左左右翻轉）。來源是每人一張的角色圖（CHAR_ART），
+// 或紙娃娃組出來的貼圖（paperdoll.js）。
 // 方法和 avatar.js 的 GeometricAvatar 相同。走路不換腳，改成整個人輕晃；坐下時只露出上半身。
 import { FONT, TILE } from './config.js';
-import { CHAR_H, CHAR_CELL, charKey } from './art.js';
+import { CHAR_H } from './art.js';
 
 const SEAT_DEPTH = 14; // 坐著時往前排多少（椅子圖以格子下緣排前後）
 
@@ -11,7 +12,9 @@ const SIT_SHOW = 0.68; // 坐下時露出上面幾成
 const SIT_DROP = 6; // 坐下時往下移幾單位（臀部落在椅面）
 
 export class ImageAvatar {
-  constructor(scene, artId, { name = '', nameColor = '#fffaf0' } = {}) {
+  /** art：{ key: 貼圖名稱, cell: { w, h, body } }（每格像素；body＝角色身高的像素，上面可以留空給帽子） */
+  constructor(scene, art, { name = '', nameColor = '#fffaf0' } = {}) {
+    this.cell = art.cell;
     this.scene = scene;
     this.facing = 'down';
     this.pose = null;
@@ -22,7 +25,7 @@ export class ImageAvatar {
     this.root = add.container(0, 0);
     this.rig = add.container(0, 0);
     const shadow = add.ellipse(0, 0, 18, 6, 0x000000, 0.2);
-    this.sprite = add.image(0, 1, charKey(artId), 0).setOrigin(0.5, 1).setScale(HEIGHT / CHAR_CELL.h);
+    this.sprite = add.image(0, 1, art.key, 0).setOrigin(0.5, 1).setScale(HEIGHT / art.cell.body);
     // 道具：樂器、指揮棒、書（需要時才顯示）
     this.tool = add.rectangle(8, -10, 4, 12, 0x8a5a2b).setOrigin(0.5, 1).setVisible(false);
     this.book = add.rectangle(0, -12, 10, 7, 0xe8dcc4).setStrokeStyle(1, 0x7a5236).setVisible(false);
@@ -72,7 +75,8 @@ export class ImageAvatar {
     this.rig.setPosition(0, seated ? SIT_DROP : 0).setAngle(0);
     this.sprite.setAngle(0);
     // 坐下：只畫上半身（下半身在椅子裡）
-    if (seated) this.sprite.setCrop(0, 0, CHAR_CELL.w, CHAR_CELL.h * SIT_SHOW);
+    const { w, h, body } = this.cell;
+    if (seated) this.sprite.setCrop(0, 0, w, h - body * (1 - SIT_SHOW));
     else this.sprite.setCrop();
     this.sprite.y = 1; // 坐下時裁掉的下半身留空，露出的部分剛好落在椅面
     this.tool.setVisible(false).setAngle(0).setSize(4, 12).setFillStyle(0x8a5a2b);

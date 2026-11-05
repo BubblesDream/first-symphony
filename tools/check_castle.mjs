@@ -4,7 +4,7 @@
 // 檢查的都是「要記得同步兩個地方」的規則：
 //   1. 房間定義：每列等寬、字元有定義、演出點與出生點合理、門有接好（和遊戲 ?debug=1 用同一支 checkRoom）
 //   2. 房間之間：門通往的房間存在、到達的出生點存在，每個房間都登記在 OPEN_ROOMS
-//   3. 圖片：art.js 登記的圖都有成品與原圖；房間用到的名稱不是已登記就是在 WANTED_ART；
+//   3. 圖片：art.js 登記的圖（含角色圖、紙娃娃部件）都有成品與原圖；房間用到的名稱不是已登記就是在 WANTED_ART；
 //      WANTED_ART 沒有和已登記重複、也沒有房間已經不用的名稱
 //   4. 資料：data/castle_*.json 是平面表、member_id 對得到成員、顏色是 #rrggbb
 //   5. 網站規則：城堡程式沒有以 / 開頭的路徑、沒有 innerHTML
@@ -19,7 +19,8 @@ const load = (p) => import(new URL(`file:///${at(p).replace(/\\/g, '/')}`).href)
 const { ROOMS, OPEN_ROOMS } = await load('assets/js/castle/rooms/index.js');
 const { buildGrid } = await load('assets/js/castle/grid.js');
 const { checkRoom } = await load('assets/js/castle/debug.js');
-const { TILE_ART, SPRITE_ART, WANTED_ART, CHAR_ART } = await load('assets/js/castle/art.js');
+const { TILE_ART, SPRITE_ART, WANTED_ART, CHAR_ART, DOLL_PARTS } = await load('assets/js/castle/art.js');
+const { dollParts } = await load('assets/js/castle/paperdoll.js');
 
 const problems = [];
 const fail = (msg) => problems.push(msg);
@@ -93,6 +94,28 @@ for (const [id, art] of Object.entries(CHAR_ART)) {
   if (id !== 'visitor' && !memberIds.has(id)) fail(`角色圖 ${id}：不是成員 id（也不是 visitor）`);
   if (!existsSync(at(art.src))) fail(`角色圖 ${id}：成品 ${art.src} 不存在（執行 python tools/castle_images.py）`);
   if (!existsSync(at('docs/素材/城堡原圖/members', `${id}.png`))) fail(`角色圖 ${id}：原圖 docs/素材/城堡原圖/members/${id}.png 不存在`);
+}
+// 3-2. 紙娃娃：部件有原圖與成品、doll/ 沒有多餘檔案；問卷每種款式組合用到的部件都有登記
+for (const name of DOLL_PARTS) {
+  if (!existsSync(at('assets/images/castle/doll', `${name}.webp`))) fail(`紙娃娃 ${name}：成品不存在（執行 python tools/castle_paperdoll.py ${name}）`);
+  if (name !== 'head_short_none' && !existsSync(at('docs/素材/城堡原圖/紙娃娃', `${name}.png`))) fail(`紙娃娃 ${name}：原圖 docs/素材/城堡原圖/紙娃娃/${name}.png 不存在`);
+}
+const dollDir = at('assets/images/castle/doll');
+if (existsSync(dollDir)) {
+  for (const f of readdirSync(dollDir)) {
+    if (!DOLL_PARTS.includes(f.replace(/\.webp$/, ''))) fail(`成品 assets/images/castle/doll/${f} 沒有在 art.js 的 DOLL_PARTS 登記`);
+  }
+}
+for (const hairStyle of ['short', 'medium', 'long', 'ponytail', 'twintails', 'bun']) {
+  for (const mark of ['none', 'hat', 'ribbon', 'glasses', 'cape', 'headband']) {
+    for (const topStyle of ['shirt', 'jacket', 'armor', 'robe', 'dress']) {
+      for (const bottomStyle of ['pants', 'shorts', 'longskirt', 'skirt', '']) {
+        for (const part of dollParts({ hairStyle, mark, topStyle, bottomStyle })) {
+          if (!DOLL_PARTS.includes(part)) fail(`紙娃娃：${hairStyle}／${mark}／${topStyle}／${bottomStyle || '（無）'} 要用的部件 ${part} 沒有登記`);
+        }
+      }
+    }
+  }
 }
 const charDir = at('assets/images/castle/members');
 if (existsSync(charDir)) {
