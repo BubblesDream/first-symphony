@@ -45,15 +45,18 @@ export default {
   // sprite：門的圖片（預設：能走的門 door_open、整修中 door_locked）；under：門底下鋪什麼
   doors: {
     M: { to: 'music', spawn: 'from_hall', label: '演奏室' },
-    T: { locked: '交流廳（酒館）還在整修中，敬請期待。', label: '交流廳' },
-    K: { locked: '戰鬥練習室還在整修中，敬請期待。', label: '練習室' },
-    F: { locked: '鍛造工坊還在規劃中。', label: '鍛造工坊' },
+    T: { to: 'tavern', spawn: 'from_hall', label: '交流廳' },
+    K: { to: 'training', spawn: 'from_hall', label: '練習室' },
+    F: { to: 'forge', spawn: 'from_hall', label: '鍛造工坊' },
     U: { locked: '2F 公會客房還在整修中，樓梯暫時封起來了。', label: '往 2F', sprite: 'stairs_up', under: 'wall' },
     O: { locked: '城堡外庭還在整理中，先在城堡裡逛逛吧。', label: '往外庭', sprite: 'gate_main', under: 'wall' },
   },
   spawns: {
     start: [13, 16],
     from_music: [26, 4],
+    from_tavern: [1, 4],
+    from_forge: [1, 14],
+    from_training: [26, 14],
   },
   // 演出點：x、y 是格子座標，facing 是演出時面向的方向
   spots: [

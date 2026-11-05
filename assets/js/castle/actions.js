@@ -15,4 +15,17 @@ export const ACTIONS = {
   play_harp:   { pose: 'play',    seated: true, instrument: 'harp', bubbles: ['♫', '♪'], duration: [14, 26] },
   conduct:     { pose: 'conduct', seated: false, bubbles: ['1、2、3…', '♪'], duration: [12, 22] },
   // 後續：shear_sheep、spin_wool、hammer、hit_dummy、shoot_arrow、sleep_bed…
+  // 1F：酒館／練習室／鍛造工坊
+  drink:       { pose: 'idle',    seated: true, bubbles: ['咕嘟', '好喝！', '再來一杯'], duration: [10, 20] },
+  cheers:      { pose: 'cheer',   seated: true, bubbles: ['乾杯！', '哈哈哈', '敬大家！'], duration: [10, 20] },
+  serve_drink: { pose: 'work',    seated: false, bubbles: ['來了～', '請慢用', '…'], duration: [8, 16] },
+  warm_hands:  { pose: 'idle',    seated: false, bubbles: ['好暖…', '呼～'], duration: [6, 12] },
+  hit_dummy:   { pose: 'work',    seated: false, bubbles: ['喝！', '哈！', '再一下！'], duration: [8, 16] },
+  shoot_arrow: { pose: 'play',    seated: false, bubbles: ['咻—', '中了！', '差一點…'], duration: [8, 16] },
+  pick_weapon: { pose: 'idle',    seated: false, bubbles: ['用哪把好呢', '嗯…'], duration: [4, 8] },
+  sit_rest:    { pose: 'idle',    seated: true, bubbles: ['呼…', '累了', '…'], duration: [8, 16] },
+  hammer:      { pose: 'work',    seated: false, bubbles: ['鏗！', '鏗鏗！', '…'], duration: [10, 20] },
+  stoke_fire:  { pose: 'idle',    seated: false, bubbles: ['好熱…', '火要再大一點'], duration: [6, 12] },
+  craft:       { pose: 'work',    seated: false, bubbles: ['嗯…', '快好了', '…'], duration: [8, 16] },
+  sharpen:     { pose: 'work',    seated: false, bubbles: ['唰—唰—', '…'], duration: [6, 12] },
 };
