@@ -11,6 +11,24 @@ export const SONGS = [
   { title: '第一交響樂團-公會抽卡祈禱歌', src: `${DIR}guild_song_2.mp3` },
 ];
 
+export const ENSEMBLE_SONGS = [
+  { title: '第一交響樂團-公會主題歌', dir: `${DIR}ensemble/guild_song_1/`, parts: ['魯特琴（主旋律）', '曼陀林', '大提琴', '長笛', '小提琴', '定音鼓'] },
+  { title: '第一交響樂團-公會抽卡祈禱歌', dir: `${DIR}ensemble/guild_song_2/`, parts: ['魯特琴（主旋律）', '曼陀林', '蕭姆管', '木琴', '魯特琴', '小提琴'] },
+];
+
+let backgroundPlayer = null;
+let backgroundPaused = false;
+export function pauseBackgroundMusic() {
+  backgroundPaused = true;
+  const playing = backgroundPlayer && !backgroundPlayer.audio.paused;
+  backgroundPlayer?.audio.pause();
+  return Boolean(playing);
+}
+export function resumeBackgroundMusic(playing = false) {
+  backgroundPaused = false;
+  if (playing) backgroundPlayer?.start();
+}
+
 const VOLUME = 0.6;
 
 /** 在 container 裡建立播放按鈕。文字一律用 textContent。 */
@@ -48,6 +66,7 @@ export function createMusicPlayer(container, songs = SONGS) {
   };
 
   const start = () => {
+    if (backgroundPaused) return;
     if (!audio.src) load(index);
     audio.play().then(() => render()).catch(() => render('音樂無法播放，請稍後再試。'));
   };
@@ -71,6 +90,8 @@ export function createMusicPlayer(container, songs = SONGS) {
     if (audio.src) render('音樂載入失敗，請稍後再試。');
   });
 
+  audio.addEventListener('pause', () => render());
   render();
-  return { audio, songs };
+  backgroundPlayer = { audio, songs, start };
+  return backgroundPlayer;
 }

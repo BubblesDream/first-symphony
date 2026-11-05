@@ -12,6 +12,7 @@ import { queueArt } from './art.js';
 import { RoomView } from './roomView.js';
 import { Critter } from './critter.js';
 import { Groups } from './groups.js';
+import { Ensemble } from './ensemble.js';
 import { drawAmbience } from './ambience.js';
 
 
@@ -83,6 +84,9 @@ export class RoomScene extends Phaser.Scene {
       return zone;
     });
     this.physics.add.collider(this.player.feet, this.npcBodies);
+    this.ensemble = this.room.ensemble ? new Ensemble(this) : null;
+    this.onPlayerAct = (spot) => this.ensemble?.start(spot);
+    this.onPlayerActEnd = (spot) => { if (this.ensemble?.isSpot(spot)) this.ensemble.stop(); };
     this.groups = new Groups(this); // 多人演出（合奏、乾杯…）
 
     // 時間氛圍：依訪客電腦的時間（?hour= 可測試）
@@ -109,12 +113,16 @@ export class RoomScene extends Phaser.Scene {
     this.keySpace = this.input.keyboard.addKey('SPACE');
     this.keyEsc = this.input.keyboard.addKey('ESC');
 
+    const unlockAudio = () => this.ensemble?.unlock();
+    this.input.keyboard.on('keydown', unlockAudio);
     this.input.on('pointerdown', (pointer) => this.onPointerDown(pointer));
     this.input.on('pointermove', (pointer) => {
       this.hovered = this.npcAt(pointer.worldX, pointer.worldY);
     });
 
     this.events.once('shutdown', () => {
+      this.input.keyboard.off('keydown', unlockAudio);
+      this.ensemble?.destroy();
       this.ctx.ui.dialog.close();
       for (const npc of this.npcs) npc.destroy();
       for (const critter of this.critters) critter.destroy();
@@ -133,6 +141,7 @@ export class RoomScene extends Phaser.Scene {
     this.npcBodies.forEach((zone) => zone.setPosition(zone.npc.x, zone.npc.y));
     for (const critter of this.critters) critter.update(dt);
     this.critterBodies.forEach((zone) => zone.setPosition(zone.critter.x, zone.critter.y - 6));
+    this.ensemble?.update(dt);
     this.groups.update(dt);
 
     // 最近的互動對象
@@ -277,7 +286,8 @@ export class RoomScene extends Phaser.Scene {
    * source: 'history' 接網站的公會歷史資料，一筆一頁（展示櫃翻頁）。
    */
   objectLines(obj) {
-    const lines = obj.text.map((text) => ({ text, is_demo: obj.demo }));
+    const instrument = this.spots.find((s) => s.object === obj)?.instrument;
+    const lines = (instrument ? [`${instrument}：坐下來就會召集大家一起合奏`] : obj.text).map((text) => ({ text, is_demo: obj.demo }));
     if (obj.random?.length) lines.push({ text: this.rng.pick(obj.random), is_demo: obj.demo });
     if (obj.source === 'history') {
       const items = this.ctx.history || [];
@@ -319,6 +329,7 @@ export class RoomScene extends Phaser.Scene {
   }
 
   onPointerDown(pointer) {
+    this.ensemble?.unlock();
     if (this.ctx.ui.dialog.isOpen || this.leaving) return;
     const wx = pointer.worldX;
     const wy = pointer.worldY;
