@@ -9,7 +9,7 @@ import { createDialog, createToast } from './dialog.js';
 /**
  * stage：放遊戲畫布的元素（要能取得焦點，鍵盤只在它取得焦點時作用）
  * data：{ members, looks, lines }
- * options：{ seed, npcs, debug, onRoomChange }
+ * options：{ seed, npcs, debug, noArt, onRoomChange }
  */
 export function startCastle(stage, data, options = {}) {
   const rng = createRng(options.seed);
@@ -50,7 +50,12 @@ export function startCastle(stage, data, options = {}) {
     physics: { default: 'arcade', arcade: { debug: false } },
     scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
     input: { keyboard: { target: stage } },
-    callbacks: { preBoot: (game) => game.registry.set('ctx', ctx) },
+    callbacks: {
+      preBoot: (game) => {
+        game.registry.set('ctx', ctx);
+        game.registry.set('noArt', Boolean(options.noArt)); // 測試色塊備案用
+      },
+    },
     scene: [RoomScene],
   });
   if (ctx.debug) window.__castleGame = game; // 除錯用

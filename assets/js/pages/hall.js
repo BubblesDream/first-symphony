@@ -1,5 +1,5 @@
 // 虛擬公會城堡頁：讀資料 → 啟動遊戲。
-// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層
+// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
 import { startCastle } from '../castle/main.js';
@@ -48,6 +48,7 @@ async function main() {
     seed: num('seed'),
     npcs: num('npcs'),
     debug: params.get('debug') === '1',
+    noArt: params.get('noart') === '1',
     onRoomChange: (name) => { roomName.textContent = `目前位置：${name}`; },
   });
 }
