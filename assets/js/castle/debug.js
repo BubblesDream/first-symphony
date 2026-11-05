@@ -55,6 +55,10 @@ export function checkRoom(scene) {
     if (!c || (c.rule !== 'walk' && c.rule !== 'seat')) problems.push(`演出點 (${s.x},${s.y}) 不在地板或椅子上`);
     else if (!reach(s.x, s.y)) problems.push(`演出點 (${s.x},${s.y}) 走不到`);
   }
+  // 物件的 play：要有同動作的演出點
+  for (const obj of room.objects || []) {
+    if (obj.play && !room.spots.some((s) => s.action === obj.play)) problems.push(`物件「${obj.name}」的 play「${obj.play}」沒有演出點`);
+  }
   for (const [id, [x, y]] of Object.entries(room.spawns)) {
     if (!grid.npcWalkable(x, y)) problems.push(`出生點 ${id} (${x},${y}) 不是地板`);
   }

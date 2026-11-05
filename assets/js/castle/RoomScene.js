@@ -218,8 +218,45 @@ export class RoomScene extends Phaser.Scene {
       });
     } else if (target.obj) {
       const { obj } = target;
-      dialog.open({ title: obj.name, lines: obj.text.map((text) => ({ text, is_demo: obj.demo })) });
+      if (this.player.act) {
+        // 演出中再按 E：離開演出
+        this.player.stopAct();
+        return;
+      }
+      dialog.open({
+        title: obj.name,
+        lines: obj.text.map((text) => ({ text, is_demo: obj.demo })),
+        onClose: obj.play ? () => this.playAt(obj) : null,
+      });
     }
+  }
+
+  /** 物件的 play：訪客走到最近、沒人用的同動作演出點，自己演出 */
+  playAt(obj) {
+    const { grid } = this;
+    const ox = Math.floor(obj.x);
+    const oy = Math.floor(obj.y);
+    const options = [];
+    for (const spot of this.spots) {
+      if (spot.action !== obj.play || spot.user || grid.occupant(spot.x, spot.y)) continue;
+      const approach = this.approachOf(spot);
+      if (approach) options.push({ spot, approach, d: Math.abs(spot.x - ox) + Math.abs(spot.y - oy) });
+    }
+    options.sort((a, b) => a.d - b.d);
+    for (const { spot, approach } of options) {
+      if (this.player.startAct(spot, approach)) return;
+    }
+    this.ctx.ui.toast(`${obj.name}現在有人在用，等一下再來吧。`);
+  }
+
+  /** 演出點本身能走就直接走上去；否則找旁邊能走、沒人的格子 */
+  approachOf(spot) {
+    const { grid } = this;
+    if (grid.playerWalkable(spot.x, spot.y)) return [spot.x, spot.y];
+    const near = [[0, 1], [0, -1], [-1, 0], [1, 0]]
+      .map(([dx, dy]) => [spot.x + dx, spot.y + dy])
+      .filter(([x, y]) => grid.npcWalkable(x, y) && !grid.occupant(x, y));
+    return near[0] || null;
   }
 
   onPointerDown(pointer) {

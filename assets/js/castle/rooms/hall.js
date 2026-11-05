@@ -80,7 +80,10 @@ export default {
   ],
   // 訪客可以按 E 查看的物件（文字是網站自己寫的固定內容）
   objects: [
-    { x: 3.5, y: 2, name: '公告板', text: ['【公告】歡迎來到第一交響樂團的公會城堡！', '城堡還在整修中，目前開放公會大廳與演奏室。'], demo: true },
+    { x: 3.5, y: 2, name: '公告板', text: ['【公告】歡迎來到第一交響樂團的公會城堡！', '城堡還在整修中，目前開放公會大廳與演奏室。'], demo: true, play: 'read_notice' },
+    // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
+    { x: 3, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
+    { x: 22, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
     { x: 5, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
     { x: 22, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
   ],
