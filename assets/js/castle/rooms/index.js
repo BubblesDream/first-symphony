@@ -2,10 +2,13 @@
 import hall from './hall.js';
 import music from './music.js';
 import courtyard from './courtyard.js';
+import guest from './guest.js';
+import library from './library.js';
+import observatory from './observatory.js';
 
-export const ROOMS = { hall, music, courtyard };
+export const ROOMS = { hall, music, courtyard, guest, library, observatory };
 
 /** 目前開放、會分配 NPC 的房間（依序） */
-export const OPEN_ROOMS = ['hall', 'music', 'courtyard'];
+export const OPEN_ROOMS = ['hall', 'music', 'courtyard', 'guest', 'library', 'observatory'];
 
 export const START_ROOM = 'hall';

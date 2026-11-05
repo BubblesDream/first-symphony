@@ -21,5 +21,17 @@ export const ACTIONS = {
   draw_water:   { pose: 'work',  seated: false, bubbles: ['嘿咻', '好重', '水好冰'], duration: [6, 12] },
   water_plants: { pose: 'work',  seated: false, bubbles: ['長大吧～', '♪', '開花了'], duration: [8, 14] },
   sit_fountain: { pose: 'idle',  seated: true, bubbles: ['…', '好涼', '天氣真好'], duration: [12, 22] },
-  // 後續：hammer、hit_dummy、shoot_arrow、sleep_bed…
+  // 2F／3F
+  sleep_bed:      { pose: 'sleep', seated: true, bubbles: ['Zzz…', 'zz…', '…'], duration: [16, 30] },
+  sit_bed:        { pose: 'idle',  seated: true, bubbles: ['呼～', '…', '今天好累'], duration: [10, 20] },
+  write_desk:     { pose: 'read',  seated: true, bubbles: ['…', '嗯…', '寫好了'], duration: [12, 22] },
+  look_window:    { pose: 'idle',  seated: false, bubbles: ['…', '天氣真好'], duration: [6, 12] },
+  read_book:      { pose: 'read',  seated: true, bubbles: ['…', '原來如此', '？'], duration: [14, 26] },
+  tidy_shelf:     { pose: 'read',  seated: false, bubbles: ['這本放這裡', '…', '咦？'], duration: [6, 12] },
+  view_history:   { pose: 'idle',  seated: false, bubbles: ['好懷念', '…', '！'], duration: [6, 12] },
+  spin_globe:     { pose: 'idle',  seated: false, bubbles: ['轉～', '在這裡！'], duration: [4, 8] },
+  look_telescope: { pose: 'idle',  seated: false, bubbles: ['☆', '看到了！', '…'], duration: [10, 20] },
+  read_starmap:   { pose: 'read',  seated: true, bubbles: ['…', '這顆星是…'], duration: [10, 20] },
+  stargaze:       { pose: 'idle',  seated: true, bubbles: ['☆', '…', '好美'], duration: [12, 24] },
+  // 後續：hammer、hit_dummy、shoot_arrow…
 };

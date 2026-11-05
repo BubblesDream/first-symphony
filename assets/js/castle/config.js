@@ -55,5 +55,15 @@ export const COLORS = {
   crop: 0x6f9a3a,
   flower: 0xd77fa1,
   water: 0x6fa8c8,
+  // 2F／3F
+  bed: 0xb5524a,
+  wardrobe: 0x6b4429,
+  bookshelf: 0x5c3a24,
+  display: 0x9fc4c9,
+  globe: 0x4f86a8,
+  telescope: 0xb08d4a,
+  starMap: 0x3c4f7a,
+  starWindow: 0x24305e,
+  windowGlass: 0x8fb3d1,
   label: '#3a2a1f',
 };

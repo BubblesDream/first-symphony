@@ -38,7 +38,7 @@
     "id": "l006",
     "member_id": "",
     "room": "",
-    "text": "聽說樓上的客房還在整修。",
+    "text": "客房的床好軟，一躺下就不想起來了。",
     "is_demo": true
   },
   {
@@ -242,6 +242,83 @@
     "member_id": "",
     "room": "courtyard",
     "text": "工作台上那個小東西是誰做到一半的？",
+    "is_demo": true
+  },
+  {
+    "id": "l701",
+    "member_id": "",
+    "room": "guest",
+    "text": "樓下好熱鬧，我先上來躺一下。",
+    "is_demo": true
+  },
+  {
+    "id": "l702",
+    "member_id": "",
+    "room": "guest",
+    "text": "這張床好軟，差點就睡著了。",
+    "is_demo": true
+  },
+  {
+    "id": "l703",
+    "member_id": "",
+    "room": "guest",
+    "text": "我把今天的團練寫進日記了。",
+    "is_demo": true
+  },
+  {
+    "id": "l704",
+    "member_id": "",
+    "room": "guest",
+    "text": "隔壁床的鼾聲也太有節奏感了吧。",
+    "is_demo": true
+  },
+  {
+    "id": "l705",
+    "member_id": "",
+    "room": "library",
+    "text": "這裡的書好多，看不完啦。",
+    "is_demo": true
+  },
+  {
+    "id": "l706",
+    "member_id": "",
+    "room": "library",
+    "text": "我在找以前的合奏譜，你有看到嗎？",
+    "is_demo": true
+  },
+  {
+    "id": "l707",
+    "member_id": "",
+    "room": "library",
+    "text": "展示櫃裡的照片，好多都是當年的回憶。",
+    "is_demo": true
+  },
+  {
+    "id": "l708",
+    "member_id": "",
+    "room": "library",
+    "text": "圖書館要保持安靜喔……（小聲）",
+    "is_demo": true
+  },
+  {
+    "id": "l709",
+    "member_id": "",
+    "room": "observatory",
+    "text": "今晚的星星特別亮。",
+    "is_demo": true
+  },
+  {
+    "id": "l710",
+    "member_id": "",
+    "room": "observatory",
+    "text": "剛剛好像看到流星了！",
+    "is_demo": true
+  },
+  {
+    "id": "l711",
+    "member_id": "",
+    "room": "observatory",
+    "text": "聽說對著星星許願，抽卡會比較順。",
     "is_demo": true
   }
 ]
