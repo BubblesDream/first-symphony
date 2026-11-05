@@ -18,7 +18,7 @@ export class Npc {
     this.grid = scene.grid;
     this.rng = scene.rng;
     this.data = data;
-    this.avatar = createAvatar(scene, data.look, { name: data.nickname });
+    this.avatar = createAvatar(scene, data.look, { name: data.nickname, artId: data.id });
     this.tx = tx;
     this.ty = ty;
     const p = tileFeet(tx, ty);

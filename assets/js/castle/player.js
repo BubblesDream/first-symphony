@@ -17,7 +17,7 @@ export class Player {
     this.feet = scene.add.zone(x, y, 18, 10);
     scene.physics.add.existing(this.feet);
     this.feet.body.setCollideWorldBounds(true);
-    this.avatar = createAvatar(scene, VISITOR_LOOK, { name: '你', nameColor: '#ffe08a' });
+    this.avatar = createAvatar(scene, VISITOR_LOOK, { name: '你', nameColor: '#ffe08a', artId: 'visitor' });
     this.avatar.setPosition(x, y);
     this.avatar.setNameVisible(true);
     this.route = []; // 點地板移動時的路線（格子）

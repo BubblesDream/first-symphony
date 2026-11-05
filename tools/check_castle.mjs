@@ -19,7 +19,7 @@ const load = (p) => import(new URL(`file:///${at(p).replace(/\\/g, '/')}`).href)
 const { ROOMS, OPEN_ROOMS } = await load('assets/js/castle/rooms/index.js');
 const { buildGrid } = await load('assets/js/castle/grid.js');
 const { checkRoom } = await load('assets/js/castle/debug.js');
-const { TILE_ART, SPRITE_ART, WANTED_ART } = await load('assets/js/castle/art.js');
+const { TILE_ART, SPRITE_ART, WANTED_ART, CHAR_ART } = await load('assets/js/castle/art.js');
 
 const problems = [];
 const fail = (msg) => problems.push(msg);
@@ -78,14 +78,28 @@ for (const n of WANTED_ART) {
 }
 if (new Set(WANTED_ART).size !== WANTED_ART.length) fail('WANTED_ART 有重複的名稱');
 const outDir = at('assets/images/castle');
-for (const f of readdirSync(outDir)) {
-  const name = f.replace(/\.webp$/, '');
-  if (!registered[name]) fail(`成品 assets/images/castle/${f} 沒有在 art.js 登記（多餘的檔案？）`);
+for (const f of readdirSync(outDir, { withFileTypes: true })) {
+  if (f.isDirectory()) continue;
+  const name = f.name.replace(/\.webp$/, '');
+  if (!registered[name]) fail(`成品 assets/images/castle/${f.name} 沒有在 art.js 登記（多餘的檔案？）`);
 }
 
 // 4. 資料
 const readJson = (p) => JSON.parse(readFileSync(at(p), 'utf8'));
 const memberIds = new Set(readJson('data/members.json').map((m) => m.id));
+
+// 3-1. 角色圖：成品、原圖都在；名稱是成員 id 或 visitor；members/ 底下沒有多餘的檔案
+for (const [id, art] of Object.entries(CHAR_ART)) {
+  if (id !== 'visitor' && !memberIds.has(id)) fail(`角色圖 ${id}：不是成員 id（也不是 visitor）`);
+  if (!existsSync(at(art.src))) fail(`角色圖 ${id}：成品 ${art.src} 不存在（執行 python tools/castle_images.py）`);
+  if (!existsSync(at('docs/素材/城堡原圖/members', `${id}.png`))) fail(`角色圖 ${id}：原圖 docs/素材/城堡原圖/members/${id}.png 不存在`);
+}
+const charDir = at('assets/images/castle/members');
+if (existsSync(charDir)) {
+  for (const f of readdirSync(charDir)) {
+    if (!CHAR_ART[f.replace(/\.webp$/, '')]) fail(`成品 assets/images/castle/members/${f} 沒有在 art.js 的 CHAR_ART 登記`);
+  }
+}
 for (const table of ['castle_looks', 'castle_lines']) {
   const rows = readJson(`data/${table}.json`);
   if (!Array.isArray(rows)) { fail(`${table}：不是陣列`); continue; }
