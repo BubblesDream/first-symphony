@@ -7,7 +7,7 @@ const NAV = [
   { page: 'members', href: 'members.html', label: '成員' },
   { page: 'videos', href: 'videos.html', label: '影片' },
   { page: 'gallery', href: 'gallery.html', label: '紀念館' },
-  { page: 'hall', href: 'hall.html', label: '大廳' },
+  { page: 'hall', href: 'hall.html', label: '城堡' },
 ];
 
 const DEFAULTS = {

@@ -1,0 +1,56 @@
+[
+  {
+    "member_id": "m01",
+    "hair": "#c9a46a",
+    "outfit": "#7a2f5a",
+    "skin": "#f3d6bd",
+    "accent": "#e8c14a",
+    "mark": "hat",
+    "is_demo": true
+  },
+  {
+    "member_id": "m02",
+    "hair": "#2e2420",
+    "outfit": "#3d5a99",
+    "skin": "#eac4a0",
+    "accent": "#c9a227",
+    "mark": "glasses",
+    "is_demo": true
+  },
+  {
+    "member_id": "m03",
+    "hair": "#d7839b",
+    "outfit": "#f0e6f0",
+    "skin": "#f6e0cc",
+    "accent": "#7a5a9c",
+    "mark": "ribbon",
+    "is_demo": true
+  },
+  {
+    "member_id": "m04",
+    "hair": "#e8d9b5",
+    "outfit": "#ffffff",
+    "skin": "#f3d6bd",
+    "accent": "#9ac0e0",
+    "mark": "cape",
+    "is_demo": true
+  },
+  {
+    "member_id": "m05",
+    "hair": "#3b4a6b",
+    "outfit": "#2f2f3f",
+    "skin": "#d9a77f",
+    "accent": "#8c3b3b",
+    "mark": "none",
+    "is_demo": true
+  },
+  {
+    "member_id": "m06",
+    "hair": "#7a2f2f",
+    "outfit": "#4f7a4a",
+    "skin": "#eac4a0",
+    "accent": "#c08a2e",
+    "mark": "none",
+    "is_demo": true
+  }
+]

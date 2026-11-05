@@ -82,3 +82,8 @@ export function youTubeWatch(id) {
 export function isValidId(id) {
   return typeof id === 'string' && /^[a-z0-9-]+$/.test(id);
 }
+
+/** 顏色只允許 #rrggbb */
+export function isColor(value) {
+  return typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value);
+}
