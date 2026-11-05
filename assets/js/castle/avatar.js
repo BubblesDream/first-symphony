@@ -1,16 +1,17 @@
-// 角色外觀：第一版是幾何色塊。
-// NPC 行為與訪客只會呼叫下面這幾個方法，日後換成像素素材時，
-// 另寫一個 SpriteAvatar 實作同樣的方法即可，行為程式不用改：
+// 角色外觀。目前預設是第一版的幾何色塊；網址加 ?pixel=1 改用像素小人（spriteAvatar.js，示範中，管理員確認後改成預設）。
+// NPC 行為與訪客只會呼叫下面這幾個方法，兩種外觀都實作同樣的方法，行為程式不用改：
 //   setPosition(x, y)  setFacing(dir)  setPose(pose, seated)  say(text)
 //   setNameVisible(bool)  setTag(text)  destroy()
 // 姿勢：idle、walk、play、conduct、read、work、sleep、cheer
 
 import { FONT } from './config.js';
+import { SpriteAvatar } from './spriteAvatar.js';
 
 const hex = (color) => Number.parseInt(String(color).slice(1), 16);
 const DARK = 0x2e2420;
 
 export function createAvatar(scene, look, options = {}) {
+  if (scene.registry.get('pixel')) return new SpriteAvatar(scene, look, options);
   return new GeometricAvatar(scene, look, options);
 }
 

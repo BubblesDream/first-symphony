@@ -6,7 +6,10 @@ import { createAvatar } from './avatar.js';
 import { toTile, tileFeet } from './grid.js';
 import { playEffect } from './effects.js';
 
-const VISITOR_LOOK = { skin: '#f3d6bd', hair: '#4a3426', outfit: '#f5efe2', accent: '#c9a227', mark: 'visitor' };
+const VISITOR_LOOK = {
+  skin: '#f3d6bd', hair: '#4a3426', outfit: '#f5efe2', accent: '#c9a227', mark: 'visitor',
+  hairStyle: 'short', topStyle: 'jacket', bottomStyle: 'pants', bottom: '#4a3426',
+};
 
 export class Player {
   constructor(scene, x, y) {

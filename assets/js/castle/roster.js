@@ -5,8 +5,17 @@ import { isColor } from '../validate.js';
 const SKINS = ['#f3d6bd', '#eac4a0', '#d9a77f', '#f6e0cc', '#c98f68'];
 const HAIRS = ['#2e2420', '#5b3a29', '#8a5a36', '#c9a46a', '#e8d9b5', '#7a2f2f', '#3b4a6b', '#c7c7d1', '#d7839b', '#4f6b45'];
 const OUTFITS = ['#3d5a99', '#8c3b3b', '#4f7a4a', '#7a5a9c', '#c08a2e', '#2f6f73', '#a35d7a', '#5c5c5c', '#b5603a', '#3f3f6e'];
-const MARKS = ['none', 'none', 'none', 'hat', 'ribbon', 'glasses', 'cape'];
-const VALID_MARKS = new Set(['none', 'hat', 'ribbon', 'glasses', 'cape']);
+const BOTTOMS = ['#2e2420', '#4a3426', '#8a8580', '#2f4a86', '#6a2a3a', '#8a5a3a', '#f5efe2'];
+const MARKS = ['none', 'none', 'none', 'hat', 'ribbon', 'glasses', 'cape', 'headband'];
+const VALID_MARKS = new Set(['none', 'hat', 'ribbon', 'glasses', 'cape', 'headband']);
+const HAIR_STYLES = ['short', 'medium', 'long', 'ponytail', 'twintails', 'bun'];
+const TOP_STYLES = ['shirt', 'shirt', 'jacket', 'jacket', 'armor', 'robe', 'dress'];
+const BOTTOM_STYLES = ['pants', 'pants', 'shorts', 'longskirt', 'skirt'];
+
+// 問卷的款式（中文）→ 像素小人的部件名稱（pixelParts.js）
+const HAIR_STYLE = { 短髮: 'short', 中長髮: 'medium', 長髮: 'long', 馬尾: 'ponytail', 雙馬尾: 'twintails', 包包頭: 'bun' };
+const TOP_STYLE = { 襯衫: 'shirt', 外套: 'jacket', 輕鎧甲: 'armor', 長袍: 'robe', 洋裝: 'dress' };
+const BOTTOM_STYLE = { 長褲: 'pants', 短褲: 'shorts', 長裙: 'longskirt', 短裙: 'skirt' };
 
 /** 沒有填外觀的成員：依 id 產生固定的顏色組合 */
 export function autoLook(id) {
@@ -17,11 +26,23 @@ export function autoLook(id) {
     outfit: OUTFITS[(h >>> 9) % OUTFITS.length],
     accent: OUTFITS[(h >>> 14) % OUTFITS.length],
     mark: MARKS[(h >>> 19) % MARKS.length],
+    ...autoStyle(id),
+  };
+}
+
+/** 沒填款式時依 id 固定挑一組（用另一個雜湊，和顏色互不影響） */
+function autoStyle(id) {
+  const h = hashString(`${id}:style`);
+  return {
+    hairStyle: HAIR_STYLES[h % HAIR_STYLES.length],
+    topStyle: TOP_STYLES[(h >>> 4) % TOP_STYLES.length],
+    bottomStyle: BOTTOM_STYLES[(h >>> 9) % BOTTOM_STYLES.length],
+    bottom: BOTTOMS[(h >>> 14) % BOTTOMS.length],
   };
 }
 
 // 問卷的配件（中文）→ 目前色塊小人的記號
-const ACCESSORY_MARK = { 無: 'none', 帽子: 'hat', 蝴蝶結: 'ribbon', 眼鏡: 'glasses', 披風: 'cape', 髮箍: 'none' };
+const ACCESSORY_MARK = { 無: 'none', 帽子: 'hat', 蝴蝶結: 'ribbon', 眼鏡: 'glasses', 披風: 'cape', 髮箍: 'headband' };
 
 // 問卷「最喜歡待的房間」→ 房間 id
 export const FAVORITE_ROOM = {
@@ -33,7 +54,7 @@ const FAVORITE_CHANCE = 0.6; // 有填喜歡的房間時，分到那裡的機率
 /**
  * 資料表的外觀＋自動外觀合併；格式不對的欄位改用自動值。
  * 欄位見 docs/問卷-城堡成員外觀.md（top＝上衣色、bottom＝下身色、accessory＝配件）；
- * 舊欄位 outfit、mark 仍可用。其餘款式欄位（hair_style 等）留給之後的圖片小人。
+ * 舊欄位 outfit、mark 仍可用。款式（hair_style、top_style、bottom_style）沒填或不認得時用自動款式。
  */
 export function resolveLook(id, row) {
   const look = autoLook(id);
@@ -42,7 +63,13 @@ export function resolveLook(id, row) {
     if (isColor(row[k])) look[k] = row[k];
   }
   if (isColor(row.top)) look.outfit = row.top;
-  if (['長袍', '洋裝'].includes(row.top_style)) look.bottom = look.outfit; // 連身：下身和上衣同色
+  if (HAIR_STYLE[row.hair_style]) look.hairStyle = HAIR_STYLE[row.hair_style];
+  if (TOP_STYLE[row.top_style]) look.topStyle = TOP_STYLE[row.top_style];
+  if (BOTTOM_STYLE[row.bottom_style]) look.bottomStyle = BOTTOM_STYLE[row.bottom_style];
+  if (['長袍', '洋裝'].includes(row.top_style)) {
+    look.bottom = look.outfit; // 連身：下身和上衣同色
+    if (!BOTTOM_STYLE[row.bottom_style]) look.bottomStyle = '';
+  }
   const mark = ACCESSORY_MARK[row.accessory] || row.mark;
   if (VALID_MARKS.has(mark)) look.mark = mark;
   return look;
