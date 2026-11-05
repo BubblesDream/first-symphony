@@ -12,6 +12,9 @@ createMusicPlayer(document.getElementById('castle-music'));
 const stage = document.getElementById('castle-stage');
 const loading = document.getElementById('castle-loading');
 const roomName = document.getElementById('castle-room');
+const barRoom = document.getElementById('castle-bar-room');
+const actButton = document.getElementById('castle-act');
+const enterButton = document.getElementById('castle-enter');
 
 function fail(message, error) {
   if (error) console.error(error);
@@ -26,7 +29,10 @@ async function main() {
     return;
   }
   // 遊戲程式要等 Phaser 確定載入後才讀（它一讀進來就會用到 Phaser）
-  const { startCastle } = await import('../castle/main.js');
+  const [{ startCastle }, { setupGameMode }] = await Promise.all([
+    import('../castle/main.js'),
+    import('../castle/gameMode.js'),
+  ]);
   let members;
   let looks = [];
   let lines = [];
@@ -51,14 +57,37 @@ async function main() {
   const params = new URLSearchParams(location.search);
   const num = (key) => (params.has(key) && /^\d+$/.test(params.get(key)) ? Number(params.get(key)) : undefined);
   loading.hidden = true;
-  startCastle(stage, { members, looks, lines, history }, {
+  let gameMode = null;
+  const castle = startCastle(stage, { members, looks, lines, history }, {
     seed: num('seed'),
     npcs: num('npcs'),
     hour: num('hour'),
     debug: params.get('debug') === '1',
     noArt: params.get('noart') === '1',
-    onRoomChange: (name) => { roomName.textContent = `目前位置：${name}`; },
+    onRoomChange: (name) => {
+      roomName.textContent = `目前位置：${name}`;
+      barRoom.textContent = name;
+    },
+    onAction: ({ label, enabled }) => {
+      actButton.textContent = label;
+      actButton.disabled = !enabled;
+    },
+    isGameMode: () => Boolean(gameMode?.active),
   });
+  // 遊戲模式（全螢幕遊玩）
+  gameMode = setupGameMode({
+    root: document.getElementById('castle-play'),
+    stage,
+    bar: document.getElementById('castle-bar'),
+    enter: enterButton,
+    exit: document.getElementById('castle-exit'),
+    talk: document.getElementById('castle-bar-talk'),
+    buttons: document.getElementById('castle-bar-buttons'),
+    music: document.getElementById('castle-music'),
+    dialog: castle.dialog,
+  });
+  actButton.addEventListener('click', () => castle.pressInteract());
+  enterButton.hidden = false;
 }
 
 main().catch((error) => fail('城堡啟動失敗，請重新整理頁面再試一次。', error));

@@ -28,19 +28,44 @@
 
     <section class="castle" aria-label="虛擬公會城堡遊戲">
       <p class="castle__notice">城堡整修中：各房間已經可以逛，還沒有圖片的家具先用色塊表示。角色外觀與台詞多為<strong>示範資料</strong>，之後會換成成員提供的內容。</p>
-      <div class="castle__music" id="castle-music" aria-label="公會歌"></div>
-      <div id="castle-stage" class="castle__stage" tabindex="0" aria-label="遊戲畫面。點一下或按 Tab 選取後，可用鍵盤操作。" aria-describedby="castle-help">
-        <p class="castle__loading" id="castle-loading">城堡載入中…</p>
-        <p class="castle__focus-hint" aria-hidden="true">點一下畫面開始操作</p>
+      <div class="castle__controls">
+        <div class="castle__music" id="castle-music" aria-label="公會歌"></div>
+        <button type="button" class="btn castle__enter" id="castle-enter" hidden>全螢幕遊玩</button>
+      </div>
+      <!-- 遊戲區：按「全螢幕遊玩」後整塊蓋滿螢幕（遊戲模式），下方或右側出現操作列 -->
+      <div class="castle__play" id="castle-play">
+        <div id="castle-stage" class="castle__stage" tabindex="0" aria-label="遊戲畫面。點一下或按 Tab 選取後，可用鍵盤操作。" aria-describedby="castle-help">
+          <p class="castle__loading" id="castle-loading">城堡載入中…</p>
+          <p class="castle__focus-hint" aria-hidden="true">點一下畫面開始操作</p>
+        </div>
+        <div class="castle-bar" id="castle-bar" hidden>
+          <p class="castle-bar__room" id="castle-bar-room"></p>
+          <div class="castle-bar__talk" id="castle-bar-talk">
+            <p class="castle-bar__hint">點地板：走過去。點成員或物品：走過去聊天、查看。</p>
+          </div>
+          <div class="castle-bar__buttons" id="castle-bar-buttons">
+            <button type="button" class="castle-bar__act" id="castle-act" disabled>互動</button>
+          </div>
+        </div>
+        <button type="button" class="castle__exit" id="castle-exit" hidden>✕ 離開</button>
       </div>
       <div class="castle__help" id="castle-help">
         <h2 class="castle__help-title">怎麼玩</h2>
-        <ul>
+        <ul class="castle__help-touch">
+          <li>手機建議先按「全螢幕遊玩」：畫面變大，下方會出現操作列（橫拿、直拿都可以）</li>
+          <li>點地板：走過去；點到牆或家具，會走到旁邊最近的空地</li>
+          <li>點成員、物品或羊：自動走過去聊天、查看；有些物品（鋼琴、指揮台、討論桌…）看完還能自己坐下來玩</li>
+          <li>操作列的大按鈕：和最近的對象互動（會顯示名稱）；演出中按它離開演出</li>
+          <li>對話：點對話框看下一句</li>
+          <li>走進門口或樓梯：換房間；按右上角「✕ 離開」回到網頁</li>
+        </ul>
+        <ul class="castle__help-keys">
           <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 或方向鍵：移動</li>
           <li><kbd>E</kbd> 或空白鍵：和附近的成員聊天、查看物品；有些物品（鋼琴、討論桌…）看完還能自己坐下來玩，按方向鍵離開</li>
-          <li>滑鼠點地板：走過去；點成員：聊天（手機用手指點）</li>
+          <li>滑鼠點地板：走過去；點成員或物品：走過去聊天、查看</li>
           <li><kbd>Esc</kbd>：關閉對話</li>
           <li>「播放公會歌」：聽公會歌（預設不出聲，可隨時暫停）</li>
+          <li>「全螢幕遊玩」：遊戲蓋滿整個畫面</li>
           <li>走進門口或樓梯：換房間</li>
         </ul>
         <p>每次重新整理頁面，城堡裡的成員都會重新抽選。</p>

@@ -113,7 +113,7 @@ export class Player {
       act.phase = 'do';
       this.avatar.setFacing(act.spot.facing || 'down');
       this.avatar.setPose(act.action.pose, act.action.seated);
-      this.scene.ctx.ui.toast('按方向鍵或點地板就會離開。');
+      this.scene.ctx.ui.toast(this.scene.ctx.touch ? '點地板或按「離開演出」就會離開。' : '按方向鍵或點地板就會離開。');
       this.scene.onPlayerAct?.(act.spot);
       return;
     }
@@ -132,6 +132,7 @@ export class Player {
     let vx = (k.right.isDown || k.right2.isDown ? 1 : 0) - (k.left.isDown || k.left2.isDown ? 1 : 0);
     let vy = (k.down.isDown || k.down2.isDown ? 1 : 0) - (k.up.isDown || k.up2.isDown ? 1 : 0);
     let speed = PLAYER_SPEED;
+    this.keyMoved = Boolean(vx || vy);
 
     if (this.act && !frozen) {
       this.updateAct(dt, Boolean(vx || vy));

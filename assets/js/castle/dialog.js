@@ -2,7 +2,8 @@
 // 名字與台詞都是外部資料，一律用 textContent 顯示。
 import { el } from '../render.js';
 
-export function createDialog(stage) {
+/** touch：觸控裝置（提示文字不提鍵盤） */
+export function createDialog(stage, { touch = false } = {}) {
   const name = el('p', { className: 'castle-dialog__name' });
   const role = el('span', { className: 'castle-dialog__role' });
   const demo = el('span', { className: 'demo-badge castle-dialog__demo', text: '示範資料' });
@@ -23,10 +24,12 @@ export function createDialog(stage) {
     const line = lines[index];
     text.textContent = line.text;
     demo.hidden = !line.is_demo;
-    hint.textContent = index < lines.length - 1 ? '按 E、空白鍵或點這裡：下一句' : '按 E、空白鍵或點這裡：結束';
+    const how = touch ? '點這裡' : '按 E、空白鍵或點這裡';
+    hint.textContent = `${how}：${index < lines.length - 1 ? '下一句' : '結束'}`;
   }
 
   const api = {
+    element: box, // 遊戲模式會把對話框搬進操作列
     get isOpen() { return !box.hidden; },
     /** 開啟對話。lines：[{ text, is_demo }] */
     open({ title, subtitle = '', lines: list, onClose: done }) {
