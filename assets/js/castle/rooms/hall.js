@@ -6,11 +6,11 @@
 export default {
   id: 'hall',
   name: '公會大廳',
-  capacity: 8,
+  capacity: 10, // 大廳最大，人少會顯得空
   map: [
-    '############UUUU############', // 0  牆頂；UUUU 往 2F 的樓梯（整修中）
+    '############UUUU############', // 0  牆頂；UUUU 往 2F 的樓梯
     '##n##f##n#w#UUUU#w#n##f##n##', // 1  牆面，f 公會旗幟  n 窗戶  w 壁燈
-    '#p.NN....L.rrrrrr.L.......p#', // 2  NN 公告板  L 燭台
+    '#p.NN....L.rrrrrr.L....NN.p#', // 2  NN 公告板（左）、活動預告（右）  L 燭台
     '#..........rrrrrr..........#', // 3
     'T.........IrrrrrrI.........M', // 4  T 交流廳（整修中）  M 演奏室  I 石柱
     '#.......rr.rrrrrr.rr.......#', // 5  兩側細地毯
@@ -19,7 +19,7 @@ export default {
     '#.hRRj..rr.rrrrrr.rr.hRRj..#', // 8  討論桌（RR）與椅子（h 朝右、j 朝左）
     '#.hRRj..rr.rrrrrr.rr.hRRj..#', // 9
     '#.......rrIrrrrrrIrr.......#', // 10
-    '#.......rr.rrrrrr.rr.......#', // 11
+    '#p......rr.rrrrrr.rr......p#', // 11 兩側盆栽，讓空地不那麼空
     '#.......rr.rrrrrr.rr.......#', // 12
     '#.hRRj..rrLrrrrrrLrr.hRRj..#', // 13 下方也有討論桌
     'F.hRRj..rr.rrrrrr.rr.hRRj..K', // 14 F 鍛造工坊（候選）  K 練習室
@@ -80,6 +80,8 @@ export default {
     ]),
     { action: 'read_notice', x: 3, y: 3, facing: 'up' },
     { action: 'read_notice', x: 4, y: 3, facing: 'up' },
+    { action: 'read_notice', x: 23, y: 3, facing: 'up' },
+    { action: 'read_notice', x: 24, y: 3, facing: 'up' },
     { action: 'stand_guard', x: 10, y: 17, facing: 'down' },
     { action: 'stand_guard', x: 17, y: 17, facing: 'down' },
   ],
@@ -89,11 +91,14 @@ export default {
     // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
     { x: 3, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
     { x: 22, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
+    { x: 3, y: 13.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
+    { x: 22, y: 13.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
+    { x: 23.5, y: 2, name: '活動預告', text: ['【活動預告】這裡會貼出公會接下來的活動。', '目前還沒有新的活動，敬請期待！'], demo: true, play: 'read_notice' },
     { x: 5, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
     { x: 22, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
   ],
   labels: [
-    { x: 13.5, y: 2.2, text: '往 2F（整修中）' },
+    { x: 13.5, y: 1.2, text: '往 2F' }, // 寫在樓梯上，不擋住剛上來的訪客
     { x: 13.5, y: 17.2, text: '正門（往外庭）' },
     { x: 1.6, y: 3.3, text: '交流廳' },
     { x: 25.4, y: 3.3, text: '演奏室' },

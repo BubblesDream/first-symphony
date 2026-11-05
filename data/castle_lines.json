@@ -390,5 +390,33 @@
     "room": "observatory",
     "text": "聽說對著星星許願，抽卡會比較順。",
     "is_demo": true
+  },
+  {
+    "id": "l712",
+    "member_id": "",
+    "room": "hall",
+    "text": "樓梯上去就是客房，累了可以上去休息。",
+    "is_demo": true
+  },
+  {
+    "id": "l713",
+    "member_id": "",
+    "room": "hall",
+    "text": "右邊的活動預告板還是空的，好期待。",
+    "is_demo": true
+  },
+  {
+    "id": "l714",
+    "member_id": "",
+    "room": "music",
+    "text": "豎琴的聲音好溫柔。",
+    "is_demo": true
+  },
+  {
+    "id": "l715",
+    "member_id": "",
+    "room": "music",
+    "text": "鋼琴剛調過音，彈起來很舒服。",
+    "is_demo": true
   }
 ]
