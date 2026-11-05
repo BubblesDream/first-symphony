@@ -149,7 +149,7 @@ export class RoomScene extends Phaser.Scene {
     this.target = target;
     for (const npc of this.npcs) npc.avatar.setNameVisible(npc === this.hovered || target?.npc === npc);
     if (target && !dialog.isOpen) {
-      this.prompt.setPosition(target.x, target.y - (target.npc ? 46 : target.critter ? 34 : 18)).setVisible(true);
+      this.prompt.setPosition(target.x, target.y - (target.npc ? 54 : target.critter ? 34 : 18)).setVisible(true);
     } else {
       this.prompt.setVisible(false);
     }
@@ -232,7 +232,7 @@ export class RoomScene extends Phaser.Scene {
 
   /** loose：手指點的，範圍放大 */
   npcAt(wx, wy, loose = false) {
-    const [half, below, above] = loose ? [16, 10, 46] : [11, 3, 40];
+    const [half, below, above] = loose ? [16, 10, 52] : [11, 3, 46];
     const hits = this.npcs.filter((npc) => Math.abs(wx - npc.x) <= half && wy <= npc.y + below && wy >= npc.y - above);
     return closest(hits, wx, wy + 18);
   }

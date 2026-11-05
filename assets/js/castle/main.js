@@ -9,7 +9,7 @@ import { createDialog, createToast } from './dialog.js';
 /**
  * stage：放遊戲畫布的元素（要能取得焦點，鍵盤只在它取得焦點時作用）
  * data：{ members, looks, lines, history }
- * options：{ seed, npcs, hour, debug, noArt, onRoomChange, onAction, isGameMode }
+ * options：{ seed, npcs, hour, debug, noArt, pixel, onRoomChange, onAction, isGameMode }
  *   onAction({ label, enabled })：操作列的「互動」按鈕要顯示什麼（有變才呼叫）
  *   isGameMode()：是否在遊戲模式（遊戲畫面改成依螢幕比例）
  * 回傳 { game, fit(), pressInteract() }
@@ -63,6 +63,7 @@ export function startCastle(stage, data, options = {}) {
       preBoot: (game) => {
         game.registry.set('ctx', ctx);
         game.registry.set('noArt', Boolean(options.noArt)); // 測試色塊備案用
+        game.registry.set('pixel', Boolean(options.pixel)); // 角色用像素小人（示範中）
       },
     },
     scene: [RoomScene],

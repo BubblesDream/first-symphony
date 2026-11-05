@@ -1,5 +1,5 @@
 // 虛擬公會城堡頁：讀資料 → 啟動遊戲。
-// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）、
+// 網址參數（測試用）：?seed=123 固定抽選結果、?npcs=40 指定人數、?debug=1 顯示除錯圖層、?noart=1 不用圖片（只畫色塊）、?pixel=1 角色用像素小人（示範中）、
 //   ?hour=21 假裝現在是幾點（測試時間氛圍）
 import { initLayout } from '../layout.js';
 import { loadTable } from '../data.js';
@@ -64,6 +64,7 @@ async function main() {
     hour: num('hour'),
     debug: params.get('debug') === '1',
     noArt: params.get('noart') === '1',
+    pixel: params.get('pixel') === '1',
     onRoomChange: (name) => {
       roomName.textContent = `目前位置：${name}`;
       barRoom.textContent = name;
