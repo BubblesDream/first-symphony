@@ -5,6 +5,7 @@ import { drawRoster } from './roster.js';
 import { ROOMS, OPEN_ROOMS } from './rooms/index.js';
 import { RoomScene } from './RoomScene.js';
 import { createDialog, createToast } from './dialog.js';
+import { createCardPanel } from './card.js';
 
 /**
  * stage：放遊戲畫布的元素（要能取得焦點，鍵盤只在它取得焦點時作用）
@@ -30,6 +31,7 @@ export function startCastle(stage, data, options = {}) {
   const ctx = {
     touch,
     roster,
+    members: data.members,
     lines: data.lines,
     history: data.history || [], // 圖書館的公會歷史展示櫃
     updates: data.updates || [], // 大廳公告板
@@ -38,6 +40,7 @@ export function startCastle(stage, data, options = {}) {
     debug: Boolean(options.debug),
     ui: {
       dialog: createDialog(stage, { touch }),
+      card: createCardPanel(stage),
       toast: createToast(stage),
       setRoomName: options.onRoomChange || (() => {}),
       setAction: options.onAction || (() => {}),
