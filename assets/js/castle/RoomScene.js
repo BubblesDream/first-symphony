@@ -15,6 +15,8 @@ import { Groups } from './groups.js';
 import { Ensemble } from './ensemble.js';
 import { drawAmbience } from './ambience.js';
 import { renderCard } from './card.js';
+import { createRng } from './rng.js';
+import { forgeWeapon, drawWeapon, forgeFilename } from './forge.js';
 import { moonPhase, drawMoon, dailyFortune, todayKey, visitorId } from './fortune.js';
 
 
@@ -383,13 +385,20 @@ export class RoomScene extends Phaser.Scene {
         return;
       }
       const fortune = obj.source === 'fortune' ? this.fortuneToday() : null;
+      const lines = this.objectLines(obj, fortune);
+      const card = this.objectCard(obj, fortune);
       dialog.open({
         title: obj.name,
-        lines: this.objectLines(obj, fortune),
+        lines,
         onClose: () => {
           if (this.leaving) return;
-          if (fortune) this.openFortune(obj, fortune);
-          else if (obj.play) this.playAt(obj);
+          const play = () => { if (!this.leaving && obj.play) this.playAt(obj); };
+          if (card) this.ctx.ui.card.open({
+            filename: card.filename,
+            build: (name) => renderCard({ ...card.spec, name }),
+            onClose: play,
+          });
+          else play();
         },
       });
     }
@@ -417,6 +426,12 @@ export class RoomScene extends Phaser.Scene {
       for (const text of [`今天的月亮：${phase.name}`, `總運：${result.overall}`, result.advice,
         '（卡片可以存成圖片，留作紀念）']) lines.push({ text });
     }
+    if (obj.source === 'forge') {
+      this.forged = forgeWeapon(createRng());
+      const weapon = this.forged;
+      for (const text of [`打造完成！${weapon.stars} ${weapon.rarityName}`, weapon.name, weapon.skill,
+        `鐵匠：「${weapon.comment}」`, '（卡片可以存成圖片，留作紀念）']) lines.push({ text });
+    }
     if (obj.source === 'history') {
       const items = this.ctx.history || [];
       if (!items.length) lines.push({ text: '展示櫃裡還是空的，公會歷史整理中。' });
@@ -443,21 +458,37 @@ export class RoomScene extends Phaser.Scene {
     return { date: todayKey(date), phase: moonPhase(date), result: dailyFortune({ visitorId: visitorId(), date, nicknames }) };
   }
 
-  openFortune(obj, { date, phase, result }) {
+  objectCard(obj, fortune) {
+    if (obj.source === 'forge') {
+      const weapon = this.forged;
+      const date = new Date();
+      return {
+        filename: forgeFilename(date),
+        spec: {
+          kicker: '鍛造工坊｜隨機打造', title: weapon.name, subtitle: `${weapon.stars} ${weapon.rarityName}`,
+          art: (ctx, x, y, w, h) => drawWeapon(ctx, x, y, w, h, weapon),
+          rows: [['種類', weapon.type], ['材料', weapon.material], ['攻擊力', weapon.attack],
+            ['音感', weapon.music], ['可愛度', weapon.cute], ['特殊效果', weapon.skill]]
+            .map(([label, value]) => ({ label, value })),
+          note: `鐵匠：「${weapon.comment}」`, date: todayKey(date),
+        },
+      };
+    }
+    if (obj.source !== 'fortune') return null;
+    const { date, phase, result } = fortune;
     const rows = Object.entries(result.stars).map(([label, value]) => ({ label, value }));
     rows.push({ label: '幸運樂器', value: result.instrument }, { label: '幸運房間', value: result.room },
-      { label: '幸運色', value: result.color.name });
+      { label: '幸運色', value: result.color.name, color: result.color.hex });
     if (result.partner) rows.push({ label: '合奏夥伴', value: result.partner });
-    this.ctx.ui.card.open({
+    return {
       filename: `fortune-${date}.png`,
-      build: (name) => renderCard({
+      spec: {
         kicker: '觀星台｜今日運勢', title: `今日運勢：${result.overall}`,
         subtitle: `${phase.name} · 月齡約 ${Math.round(phase.age)} 天`,
         art: (ctx, x, y, w, h) => drawMoon(ctx, x + w / 2, y + h / 2, 145, phase),
-        rows, note: result.advice, name, date,
-      }),
-      onClose: () => { if (!this.leaving && obj.play) this.playAt(obj); },
-    });
+        rows, note: result.advice, date,
+      },
+    };
   }
 
   /** 物件的 play：訪客走到最近、沒人用的同動作演出點，自己演出 */
