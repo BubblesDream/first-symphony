@@ -17,8 +17,13 @@ import { drawAmbience } from './ambience.js';
 import { renderCard } from './card.js';
 import { createRng } from './rng.js';
 import { forgeWeapon, drawWeapon, forgeFilename } from './forge.js';
-import { moonPhase, drawMoon, dailyFortune, todayKey, visitorId } from './fortune.js';
+import { MONTH, moonPhase, drawNightMoon, drawTarot, dailyCard, nextPhaseDate, roman, todayKey, visitorId } from './fortune.js';
 
+
+const MOON_DESCRIPTIONS = { 新月: '幾乎看不到亮面', 眉月: '右邊有一彎細細的亮面', 上弦月: '右半邊亮',
+  盈凸月: '大部分都亮，左邊還留著暗面', 滿月: '整個圓都亮', 虧凸月: '大部分都亮，右邊開始變暗',
+  下弦月: '左半邊亮', 殘月: '左邊有一彎細細的亮面' };
+const moonDescription = (phase) => `從北半球看，${MOON_DESCRIPTIONS[phase.name]}。`;
 
 export class RoomScene extends Phaser.Scene {
   constructor() {
@@ -384,7 +389,7 @@ export class RoomScene extends Phaser.Scene {
         this.player.stopAct();
         return;
       }
-      const fortune = obj.source === 'fortune' ? this.fortuneToday() : null;
+      const fortune = ['moon', 'fortune'].includes(obj.source) ? this.fortuneToday() : null;
       const lines = this.objectLines(obj, fortune);
       const card = this.objectCard(obj, fortune);
       dialog.open({
@@ -414,16 +419,13 @@ export class RoomScene extends Phaser.Scene {
     const lines = (instrument ? [`${instrument}：坐下來就會召集大家一起合奏`] : obj.text).map((text) => ({ text, is_demo: obj.demo }));
     if (obj.random?.length) lines.push({ text: this.rng.pick(obj.random), is_demo: obj.demo });
     if (obj.source === 'moon') {
-      const phase = moonPhase();
-      const descriptions = { 新月: '幾乎看不到亮面', 眉月: '右邊有一彎細細的亮面', 上弦月: '右半邊亮',
-        盈凸月: '大部分都亮，左邊還留著暗面', 滿月: '整個圓都亮', 虧凸月: '大部分都亮，右邊開始變暗',
-        下弦月: '左半邊亮', 殘月: '左邊有一彎細細的亮面' };
+      const { phase } = fortune || this.fortuneToday();
       lines.push({ text: `今天的月亮是${phase.name}，月齡約 ${Math.round(phase.age)} 天。` },
-        { text: `從北半球看，${descriptions[phase.name]}。` });
+        { text: moonDescription(phase) }, { text: '（卡片可以存成圖片，留作紀念）' });
     }
     if (obj.source === 'fortune') {
-      const { phase, result } = fortune || this.fortuneToday();
-      for (const text of [`今天的月亮：${phase.name}`, `總運：${result.overall}`, result.advice,
+      const { draw: { card, message } } = fortune || this.fortuneToday();
+      for (const text of [`你抽到了：${roman(card.no)}．${card.name}`, card.keyword, message,
         '（卡片可以存成圖片，留作紀念）']) lines.push({ text });
     }
     if (obj.source === 'forge') {
@@ -454,8 +456,7 @@ export class RoomScene extends Phaser.Scene {
 
   fortuneToday() {
     const date = new Date();
-    const nicknames = (this.ctx.members || []).map((member) => member.nickname).filter(Boolean);
-    return { date: todayKey(date), phase: moonPhase(date), result: dailyFortune({ visitorId: visitorId(), date, nicknames }) };
+    return { now: date, date: todayKey(date), phase: moonPhase(date), draw: dailyCard({ visitorId: visitorId(), date }) };
   }
 
   objectCard(obj, fortune) {
@@ -474,19 +475,31 @@ export class RoomScene extends Phaser.Scene {
         },
       };
     }
-    if (obj.source !== 'fortune') return null;
-    const { date, phase, result } = fortune;
-    const rows = Object.entries(result.stars).map(([label, value]) => ({ label, value }));
-    rows.push({ label: '幸運樂器', value: result.instrument }, { label: '幸運房間', value: result.room },
-      { label: '幸運色', value: result.color.name, color: result.color.hex });
-    if (result.partner) rows.push({ label: '合奏夥伴', value: result.partner });
+    if (!['moon', 'fortune'].includes(obj.source)) return null;
+    const { now, date, phase, draw } = fortune || this.fortuneToday();
+    if (obj.source === 'moon') {
+      const phaseDate = (age) => {
+        const next = nextPhaseDate(now, age);
+        return `${next.getMonth() + 1} 月 ${next.getDate()} 日`;
+      };
+      return {
+        filename: `moon-${date}.png`,
+        spec: {
+          kicker: '觀星台｜今天的月亮', title: `今天的月亮：${phase.name}`,
+          subtitle: `月齡約 ${Math.round(phase.age)} 天 · 亮面約 ${Math.round(phase.fraction * 100)}%`,
+          art: (ctx, x, y, w, h) => drawNightMoon(ctx, x, y, w, h, phase), artHeight: 540,
+          rows: [{ label: '下一次滿月', value: phaseDate(MONTH / 2) }, { label: '下一次新月', value: phaseDate(0) }],
+          note: moonDescription(phase), date,
+        },
+      };
+    }
+    const { card, message } = draw;
     return {
-      filename: `fortune-${date}.png`,
+      filename: `card-${date}.png`,
       spec: {
-        kicker: '觀星台｜今日運勢', title: `今日運勢：${result.overall}`,
-        subtitle: `${phase.name} · 月齡約 ${Math.round(phase.age)} 天`,
-        art: (ctx, x, y, w, h) => drawMoon(ctx, x + w / 2, y + h / 2, 145, phase),
-        rows, note: result.advice, date,
+        kicker: '觀星台｜今日之牌', title: card.name, subtitle: `${roman(card.no)} · ${card.keyword}`,
+        art: (ctx, x, y, w, h) => drawTarot(ctx, x, y, w, h, card), artHeight: 600,
+        rows: [], note: message, date,
       },
     };
   }

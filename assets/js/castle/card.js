@@ -40,7 +40,12 @@ export function drawCard(spec) {
   text(spec.title, 60, '#8a4528');
   if (spec.subtitle) text(spec.subtitle, 32, '#5c4a3c');
   y += 12;
-  if (spec.art) { spec.art(ctx, 100, y, 880, 360); y += 375; }
+  // 圖區：預設高 360，spec.artHeight 可以加大（月亮、抽牌）；下面留空間給文字（文字是從基線往上畫）
+  if (spec.art) {
+    const artHeight = spec.artHeight || 360;
+    spec.art(ctx, 100, y, 880, artHeight);
+    y += artHeight + 60;
+  }
 
   // 列資料與備註共用剩餘空間，長暱稱也逐字換行。
   const start = y;
@@ -87,9 +92,14 @@ export function drawCard(spec) {
 }
 
 export async function renderCard(spec) {
+  // 先等網頁字型下載好再畫；手機網路慢或 Safari 卡住時最多等 2.5 秒，之後用系統字型照畫
+  const text = ['第一交響樂團｜虛擬公會城堡 今日的紀念卡 的卡片 bubblesdream.github.io/first-symphony', spec.date, spec.kicker,
+    spec.title, spec.subtitle, spec.note, spec.name, ...(spec.rows || []).flatMap((row) => [row.label, row.value])].filter(Boolean).join('');
   try {
-    await document.fonts?.load(`32px ${FONT}`, ['第一交響樂團｜虛擬公會城堡 今日的紀念卡 的卡片 bubblesdream.github.io/first-symphony', spec.date, spec.kicker, spec.title, spec.subtitle, spec.note, spec.name,
-      ...(spec.rows || []).flatMap((row) => [row.label, row.value])].filter(Boolean).join(''));
+    await Promise.race([
+      document.fonts?.load(`32px ${FONT}`, text),
+      new Promise((resolve) => setTimeout(resolve, 2500)),
+    ]);
   } catch { /* 字型載入失敗仍使用系統字型 */ }
   return drawCard(spec);
 }
@@ -119,10 +129,14 @@ export function createCardPanel(stage) {
     status.textContent = '卡片製作中…';
     try {
       const canvas = await options.build(input.value.trim());
-      const blob = await new Promise((resolve, reject) => canvas.toBlob((value) => value ? resolve(value) : reject(new Error('圖片轉換失敗')), 'image/png'));
+      // 先轉成 data URL 顯示預覽，再由它轉成檔案（不用 toBlob：少數手機瀏覽器的 toBlob 會一直不回應）
+      const url = canvas.toDataURL('image/png');
+      if (box.hidden || current !== version) return;
+      preview.src = url;
+      preview.hidden = false;
+      const blob = await (await fetch(url)).blob();
       if (box.hidden || current !== version) return;
       const nextFile = new File([blob], options.filename, { type: 'image/png' });
-      preview.src = canvas.toDataURL('image/png');
       preview.hidden = false;
       file = nextFile;
       download.setAttribute('aria-disabled', 'false');
@@ -139,6 +153,7 @@ export function createCardPanel(stage) {
       options = next;
       box.hidden = false;
       preview.hidden = true;
+      preview.removeAttribute('src');
       download.setAttribute('aria-disabled', 'false');
       download.focus({ preventScroll: true });
       queueMicrotask(() => { if (!box.hidden) redraw(); });
