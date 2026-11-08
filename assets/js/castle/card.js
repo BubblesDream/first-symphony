@@ -40,7 +40,12 @@ export function drawCard(spec) {
   text(spec.title, 60, '#8a4528');
   if (spec.subtitle) text(spec.subtitle, 32, '#5c4a3c');
   y += 12;
-  if (spec.art) { spec.art(ctx, 100, y, 880, 360); y += 375; }
+  // 圖區：預設高 360，spec.artHeight 可以加大（月亮、抽牌）；下面留空間給文字（文字是從基線往上畫）
+  if (spec.art) {
+    const artHeight = spec.artHeight || 360;
+    spec.art(ctx, 100, y, 880, artHeight);
+    y += artHeight + 60;
+  }
 
   // 列資料與備註共用剩餘空間，長暱稱也逐字換行。
   const start = y;

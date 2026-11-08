@@ -48,7 +48,7 @@ export default {
   ],
   objects: [
     { x: 8.5, y: 3, name: '望遠鏡', source: 'moon', text: ['黃銅望遠鏡對著北方的天空。', '鏡筒上貼著一張紙：「看完記得蓋鏡頭蓋。」'], demo: true, play: 'look_telescope' },
-    { x: 3.5, y: 6, name: '星圖', source: 'fortune', text: ['你攤開星圖，對照今晚的星星排一排……'], demo: true, play: 'read_starmap' },
+    { x: 3.5, y: 6, name: '星圖', source: 'fortune', text: ['星圖旁邊放著一疊畫著星座的牌，閉上眼睛抽一張……'], demo: true, play: 'read_starmap' },
     { x: 14, y: 6, name: '天球儀', text: ['一圈一圈的金屬環，輕輕一碰就慢慢轉起來。'], demo: true },
     { x: 2.5, y: 2, name: '窗邊長椅', text: ['坐在這裡抬頭，就能從小窗看到星星。'], demo: true, play: 'stargaze' },
     { x: 8.5, y: 1, name: '星空大窗', text: ['窗外是滿天星斗，今晚很適合許願。'], demo: true },
