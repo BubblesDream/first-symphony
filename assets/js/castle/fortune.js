@@ -33,6 +33,12 @@ export function drawMoon(ctx, cx, cy, r, phase) {
   ctx.beginPath();
   ctx.ellipse(cx, cy, Math.abs(terminator) * r, r, 0, 0, Math.PI * 2);
   ctx.fill();
+  // 外框：新月前後幾乎全暗時，還看得出是一個月亮
+  ctx.strokeStyle = '#8f98a3';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.stroke();
   ctx.restore();
 }
 

@@ -35,23 +35,23 @@ export function drawCard(spec) {
     ctx.fillStyle = color;
     for (const line of wrap(ctx, value, width)) { ctx.fillText(line, x, y); y += lineHeight; }
   };
-  text(spec.kicker, 28, '#725f4e');
+  text(spec.kicker, 30, '#725f4e');
   y += 12;
-  text(spec.title, 52, '#8a4528');
-  if (spec.subtitle) text(spec.subtitle, 28, '#5c4a3c');
+  text(spec.title, 60, '#8a4528');
+  if (spec.subtitle) text(spec.subtitle, 32, '#5c4a3c');
   y += 12;
   if (spec.art) { spec.art(ctx, 100, y, 880, 360); y += 375; }
 
   // 列資料與備註共用剩餘空間，長暱稱也逐字換行。
   const start = y;
-  let size = 32;
+  let size = 40; // 放不下時逐步縮小
   let layouts;
   let notes;
   let height;
   do {
     ctx.font = `${size}px ${FONT}`;
-    layouts = (spec.rows || []).map(({ label, value }) => ({
-      labels: wrap(ctx, label, 235), values: wrap(ctx, value, 620),
+    layouts = (spec.rows || []).map(({ label, value, color }) => ({
+      color, labels: wrap(ctx, label, 235), values: wrap(ctx, value, color ? 570 : 620),
     }));
     notes = spec.note ? wrap(ctx, spec.note, 880) : [];
     height = layouts.reduce((sum, row) => sum + Math.max(row.labels.length, row.values.length) * size * 1.35 + 10, 0)
@@ -63,8 +63,14 @@ export function drawCard(spec) {
   for (const row of layouts) {
     ctx.fillStyle = '#725f4e';
     row.labels.forEach((line, i) => ctx.fillText(line, 100, y + i * size * 1.35));
+    // color：值的前面畫一個小色塊（例如幸運色）
+    if (row.color) {
+      ctx.fillStyle = row.color;
+      ctx.fillRect(360, y - size * 0.8, size * 0.85, size * 0.85);
+      ctx.strokeRect(360, y - size * 0.8, size * 0.85, size * 0.85);
+    }
     ctx.fillStyle = '#3a2a1f';
-    row.values.forEach((line, i) => ctx.fillText(line, 360, y + i * size * 1.35));
+    row.values.forEach((line, i) => ctx.fillText(line, row.color ? 360 + size * 1.25 : 360, y + i * size * 1.35));
     y += Math.max(row.labels.length, row.values.length) * size * 1.35 + 10;
   }
   if (notes.length) { y += 20; text(spec.note, size, '#5c4a3c'); }
