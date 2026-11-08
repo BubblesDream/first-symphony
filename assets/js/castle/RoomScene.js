@@ -378,7 +378,8 @@ export class RoomScene extends Phaser.Scene {
 
   /**
    * 物件的文字：text 依序顯示；random 從裡面隨機抽一句接在後面（例如噴泉許願）；
-   * source: 'history' 接網站的公會歷史資料，一筆一頁（展示櫃翻頁）。
+   * source: 'history' 接網站的公會歷史資料，一筆一頁（展示櫃翻頁）；
+   * source: 'updates' 接最新 5 筆網站更新，由新到舊，一筆一頁（大廳公告板）。
    */
   objectLines(obj) {
     const instrument = this.spots.find((s) => s.object === obj)?.instrument;
@@ -390,6 +391,15 @@ export class RoomScene extends Phaser.Scene {
       for (const item of [...items].sort((p, q) => String(p.date).localeCompare(String(q.date)))) {
         const body = String(item.body || '').split(/\n/).map((s) => s.trim()).filter(Boolean).join(' ');
         lines.push({ text: `【${item.date}】${item.title}${body ? `｜${body}` : ''}`, is_demo: item.is_demo });
+      }
+    }
+    if (obj.source === 'updates') {
+      const items = [...(this.ctx.updates || [])].sort((p, q) => String(q.date).localeCompare(String(p.date))).slice(0, 5);
+      if (!items.length) lines.push({ text: '公告板上還沒有新消息。' });
+      for (const item of items) {
+        const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(item.date);
+        const date = match ? `${Number(match[2])}/${Number(match[3])}` : item.date;
+        lines.push({ text: `【${date}】${item.text}`, is_demo: item.is_demo });
       }
     }
     return lines;

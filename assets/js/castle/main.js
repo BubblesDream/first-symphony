@@ -8,7 +8,7 @@ import { createDialog, createToast } from './dialog.js';
 
 /**
  * stage：放遊戲畫布的元素（要能取得焦點，鍵盤只在它取得焦點時作用）
- * data：{ members, looks, lines, history }
+ * data：{ members, looks, lines, history, updates }
  * options：{ seed, npcs, hour, debug, noArt, pixel, onRoomChange, onAction, isGameMode }
  *   onAction({ label, enabled })：操作列的「互動」按鈕要顯示什麼（有變才呼叫）
  *   isGameMode()：是否在遊戲模式（遊戲畫面改成依螢幕比例）
@@ -32,6 +32,7 @@ export function startCastle(stage, data, options = {}) {
     roster,
     lines: data.lines,
     history: data.history || [], // 圖書館的公會歷史展示櫃
+    updates: data.updates || [], // 大廳公告板
     hour: Number.isInteger(options.hour) ? options.hour : undefined, // 測試時間氛圍用
     rng,
     debug: Boolean(options.debug),

@@ -37,17 +37,19 @@ async function main() {
   let looks = [];
   let lines = [];
   let history = [];
+  let updates = [];
   try {
     members = await loadTable('members');
   } catch (error) {
     fail('成員資料讀取失敗，請稍後再試。', error);
     return;
   }
-  // 外觀、台詞、公會歷史讀不到也能玩（改用自動配色與預設台詞；圖書館展示櫃顯示「整理中」）
-  [looks, lines, history] = await Promise.all([
+  // 外觀、台詞、公會歷史與更新紀錄讀不到也能玩（改用預設內容或空資料提示）
+  [looks, lines, history, updates] = await Promise.all([
     loadTable('castle_looks').catch((e) => (console.warn(e), [])),
     loadTable('castle_lines').catch((e) => (console.warn(e), [])),
     loadTable('history').catch((e) => (console.warn(e), [])),
+    loadTable('updates').catch((e) => (console.warn(e), [])),
   ]);
   if (!members.length) {
     fail('還沒有成員資料。');
@@ -58,7 +60,7 @@ async function main() {
   const num = (key) => (params.has(key) && /^\d+$/.test(params.get(key)) ? Number(params.get(key)) : undefined);
   loading.hidden = true;
   let gameMode = null;
-  const castle = startCastle(stage, { members, looks, lines, history }, {
+  const castle = startCastle(stage, { members, looks, lines, history, updates }, {
     seed: num('seed'),
     npcs: num('npcs'),
     hour: num('hour'),

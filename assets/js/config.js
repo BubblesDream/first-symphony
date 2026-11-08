@@ -26,6 +26,8 @@ export const TABLES = {
   // 虛擬公會城堡（hall.html）專用：成員外觀與台詞。第一版只讀本地檔，日後可改成試算表分頁。
   castle_looks: { source: 'json', url: 'data/castle_looks.json' },
   castle_lines: { source: 'json', url: 'data/castle_lines.json' },
+  // 網站更新紀錄（城堡大廳公告板）
+  updates: { source: 'json', url: 'data/updates.json' },
 };
 
 // 各表欄位型別：沒列出的欄位一律當作字串。
@@ -41,6 +43,7 @@ export const FIELD_TYPES = {
   quotes:  { is_demo: 'boolean' },
   castle_looks: { is_demo: 'boolean' },
   castle_lines: { is_demo: 'boolean' },
+  updates: { is_demo: 'boolean' },
 };
 
 // game 欄位的顯示名稱（全站只在這裡定義）
