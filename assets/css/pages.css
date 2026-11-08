@@ -918,6 +918,65 @@
   display: none;
 }
 
+/* 卡片留在遊戲區內；小螢幕可捲動到名字與下載按鈕。 */
+.castle-card {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  overflow: auto;
+  padding: var(--sp-3);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: var(--c-card);
+  color: var(--c-ink);
+  text-align: center;
+  touch-action: pan-y;
+}
+
+.castle-card[hidden] { display: none; }
+
+.castle-card__preview {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 78%;
+  object-fit: contain;
+  margin: 0 auto var(--sp-2);
+}
+
+.castle-card__preview[hidden] { display: none; }
+
+.castle-card__name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+.castle-card__name input {
+  width: 12em;
+  max-width: 100%;
+  padding: var(--sp-1) var(--sp-2);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-sm);
+  background: var(--c-paper);
+  color: var(--c-ink);
+  font: inherit;
+}
+
+.castle-card__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-2);
+}
+
+.castle-card__buttons button { min-height: 2.75rem; }
+.castle-card__status { margin: var(--sp-1) 0 0; color: var(--c-ink-soft); }
+
 .castle-dialog {
   position: absolute;
   left: var(--sp-3);

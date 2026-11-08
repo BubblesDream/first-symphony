@@ -6,7 +6,8 @@
 //   2. 房間之間：門通往的房間存在、到達的出生點存在，每個房間都登記在 OPEN_ROOMS
 //   3. 圖片：art.js 登記的圖（含角色圖、紙娃娃部件）都有成品與原圖；房間用到的名稱不是已登記就是在 WANTED_ART；
 //      WANTED_ART 沒有和已登記重複、也沒有房間已經不用的名稱
-//   4. 資料：data/castle_*.json 是平面表、member_id 對得到成員、顏色是 #rrggbb
+//   4. 資料：data/castle_*.json 是平面表、member_id 對得到成員、顏色是 #rrggbb；
+//      data/updates.json 是平面表、id 不重複、日期是 YYYY-MM-DD、文字不空白
 //   5. 網站規則：城堡程式沒有以 / 開頭的路徑、沒有 innerHTML
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -143,6 +144,24 @@ for (const table of ['castle_looks', 'castle_lines']) {
     if (row.member_id && !memberIds.has(row.member_id)) fail(`${table} 第 ${i + 1} 列：member_id ${row.member_id} 不在成員名單`);
     if (row.face && !FACE_STYLE[row.face]) fail(`${table} 第 ${i + 1} 列：臉「${row.face}」不是問卷的選項（${Object.keys(FACE_STYLE).join('／')}）`);
     if (row.height && !['矮', '中', '高'].includes(row.height)) fail(`${table} 第 ${i + 1} 列：身高「${row.height}」不是 矮／中／高`);
+  });
+}
+
+const updates = readJson('data/updates.json');
+if (!Array.isArray(updates)) fail('updates：不是陣列');
+else {
+  const ids = new Set();
+  updates.forEach((row, i) => {
+    const label = `updates 第 ${i + 1} 列`;
+    if (!row || typeof row !== 'object' || Array.isArray(row)) { fail(`${label}：不是資料列物件`); return; }
+    for (const [k, v] of Object.entries(row)) {
+      if (v !== null && typeof v === 'object') fail(`${label}：欄位 ${k} 是巢狀值`);
+    }
+    if (typeof row.id !== 'string' || !row.id.trim()) fail(`${label}：缺少 id`);
+    else if (ids.has(row.id)) fail(`${label}：id ${row.id} 重複`);
+    else ids.add(row.id);
+    if (typeof row.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(row.date)) fail(`${label}：date 不是 YYYY-MM-DD`);
+    if (typeof row.text !== 'string' || !row.text.trim()) fail(`${label}：text 不是非空白字串`);
   });
 }
 

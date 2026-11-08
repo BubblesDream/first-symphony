@@ -14,6 +14,10 @@ import { Critter } from './critter.js';
 import { Groups } from './groups.js';
 import { Ensemble } from './ensemble.js';
 import { drawAmbience } from './ambience.js';
+import { renderCard } from './card.js';
+import { createRng } from './rng.js';
+import { forgeWeapon, drawWeapon, forgeFilename } from './forge.js';
+import { moonPhase, drawMoon, dailyFortune, todayKey, visitorId } from './fortune.js';
 
 
 export class RoomScene extends Phaser.Scene {
@@ -120,9 +124,11 @@ export class RoomScene extends Phaser.Scene {
     this.blobs = new Map(); // 物件所在家具的格子（點家具任何一格都算點到物件）
 
     this.events.once('shutdown', () => {
+      this.leaving = true;
       this.input.keyboard.off('keydown', unlockAudio);
       this.ensemble?.destroy();
       this.ctx.ui.dialog.close();
+      this.ctx.ui.card.close();
       for (const npc of this.npcs) npc.destroy();
       for (const critter of this.critters) critter.destroy();
     });
@@ -136,7 +142,7 @@ export class RoomScene extends Phaser.Scene {
     const dt = Math.min(deltaMs / 1000, 0.1);
     const { dialog } = this.ctx.ui;
 
-    this.player.update(dt, dialog.isOpen || this.leaving);
+    this.player.update(dt, this.uiBusy() || this.leaving);
     for (const npc of this.npcs) npc.update(dt);
     this.npcBodies.forEach((zone) => zone.setPosition(zone.npc.x, zone.npc.y));
     for (const critter of this.critters) critter.update(dt);
@@ -148,7 +154,7 @@ export class RoomScene extends Phaser.Scene {
     const target = this.nearestTarget();
     this.target = target;
     for (const npc of this.npcs) npc.avatar.setNameVisible(npc === this.hovered || target?.npc === npc);
-    if (target && !dialog.isOpen) {
+    if (target && !this.uiBusy()) {
       this.prompt.setPosition(target.x, target.y - (target.npc ? target.npc.avatar.top + 6 : target.critter ? 34 : 18)).setVisible(true);
     } else {
       this.prompt.setVisible(false);
@@ -157,7 +163,10 @@ export class RoomScene extends Phaser.Scene {
     this.updatePending();
     const pressed = Phaser.Input.Keyboard.JustDown(this.keyE) || Phaser.Input.Keyboard.JustDown(this.keySpace);
     if (pressed) this.pressInteract();
-    if (Phaser.Input.Keyboard.JustDown(this.keyEsc)) dialog.close();
+    if (Phaser.Input.Keyboard.JustDown(this.keyEsc)) {
+      if (this.ctx.ui.card.isOpen) this.ctx.ui.card.close();
+      else dialog.close();
+    }
     this.updateActionButton();
 
     this.checkDoor();
@@ -318,11 +327,16 @@ export class RoomScene extends Phaser.Scene {
     return best;
   }
 
+  uiBusy() {
+    return this.ctx.ui.dialog.isOpen || this.ctx.ui.card.isOpen;
+  }
+
   /** 按 E、空白鍵或操作列的互動按鈕 */
   pressInteract() {
     const { dialog } = this.ctx.ui;
     if (this.leaving) return;
-    if (dialog.isOpen) dialog.next();
+    if (this.ctx.ui.card.isOpen) this.ctx.ui.card.close();
+    else if (dialog.isOpen) dialog.next();
     else if (this.player.act) this.player.stopAct(); // 演出中：離開演出（附近沒有物件也可以）
     else if (this.target) this.interact(this.target);
   }
@@ -332,7 +346,8 @@ export class RoomScene extends Phaser.Scene {
     const { dialog } = this.ctx.ui;
     const t = this.target;
     let state;
-    if (dialog.isOpen) state = { label: '繼續', enabled: true };
+    if (this.ctx.ui.card.isOpen) state = { label: '關閉卡片', enabled: true };
+    else if (dialog.isOpen) state = { label: '繼續', enabled: true };
     else if (this.player.act) state = { label: '離開演出', enabled: true };
     else if (t?.npc) state = { label: `聊天：${t.npc.data.nickname}`, enabled: true };
     else if (t?.critter) state = { label: `摸摸${t.critter.def.name || '牠'}`, enabled: true };
@@ -345,6 +360,7 @@ export class RoomScene extends Phaser.Scene {
   }
 
   interact(target) {
+    if (this.uiBusy() || this.leaving) return;
     this.pending = null;
     const { dialog } = this.ctx.ui;
     this.player.faceToward(target.x, target.y);
@@ -368,22 +384,54 @@ export class RoomScene extends Phaser.Scene {
         this.player.stopAct();
         return;
       }
+      const fortune = obj.source === 'fortune' ? this.fortuneToday() : null;
+      const lines = this.objectLines(obj, fortune);
+      const card = this.objectCard(obj, fortune);
       dialog.open({
         title: obj.name,
-        lines: this.objectLines(obj),
-        onClose: obj.play ? () => this.playAt(obj) : null,
+        lines,
+        onClose: () => {
+          if (this.leaving) return;
+          const play = () => { if (!this.leaving && obj.play) this.playAt(obj); };
+          if (card) this.ctx.ui.card.open({
+            filename: card.filename,
+            build: (name) => renderCard({ ...card.spec, name }),
+            onClose: play,
+          });
+          else play();
+        },
       });
     }
   }
 
   /**
    * 物件的文字：text 依序顯示；random 從裡面隨機抽一句接在後面（例如噴泉許願）；
-   * source: 'history' 接網站的公會歷史資料，一筆一頁（展示櫃翻頁）。
+   * source: 'history' 接網站的公會歷史資料，一筆一頁（展示櫃翻頁）；
+   * source: 'updates' 接最新 5 筆網站更新，由新到舊，一筆一頁（大廳公告板）。
    */
-  objectLines(obj) {
+  objectLines(obj, fortune = null) {
     const instrument = this.spots.find((s) => s.object === obj)?.instrument;
     const lines = (instrument ? [`${instrument}：坐下來就會召集大家一起合奏`] : obj.text).map((text) => ({ text, is_demo: obj.demo }));
     if (obj.random?.length) lines.push({ text: this.rng.pick(obj.random), is_demo: obj.demo });
+    if (obj.source === 'moon') {
+      const phase = moonPhase();
+      const descriptions = { 新月: '幾乎看不到亮面', 眉月: '右邊有一彎細細的亮面', 上弦月: '右半邊亮',
+        盈凸月: '大部分都亮，左邊還留著暗面', 滿月: '整個圓都亮', 虧凸月: '大部分都亮，右邊開始變暗',
+        下弦月: '左半邊亮', 殘月: '左邊有一彎細細的亮面' };
+      lines.push({ text: `今天的月亮是${phase.name}，月齡約 ${Math.round(phase.age)} 天。` },
+        { text: `從北半球看，${descriptions[phase.name]}。` });
+    }
+    if (obj.source === 'fortune') {
+      const { phase, result } = fortune || this.fortuneToday();
+      for (const text of [`今天的月亮：${phase.name}`, `總運：${result.overall}`, result.advice,
+        '（卡片可以存成圖片，留作紀念）']) lines.push({ text });
+    }
+    if (obj.source === 'forge') {
+      this.forged = forgeWeapon(createRng());
+      const weapon = this.forged;
+      for (const text of [`打造完成！${weapon.stars} ${weapon.rarityName}`, weapon.name, weapon.skill,
+        `鐵匠：「${weapon.comment}」`, '（卡片可以存成圖片，留作紀念）']) lines.push({ text });
+    }
     if (obj.source === 'history') {
       const items = this.ctx.history || [];
       if (!items.length) lines.push({ text: '展示櫃裡還是空的，公會歷史整理中。' });
@@ -392,7 +440,55 @@ export class RoomScene extends Phaser.Scene {
         lines.push({ text: `【${item.date}】${item.title}${body ? `｜${body}` : ''}`, is_demo: item.is_demo });
       }
     }
+    if (obj.source === 'updates') {
+      const items = [...(this.ctx.updates || [])].sort((p, q) => String(q.date).localeCompare(String(p.date))).slice(0, 5);
+      if (!items.length) lines.push({ text: '公告板上還沒有新消息。' });
+      for (const item of items) {
+        const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(item.date);
+        const date = match ? `${Number(match[2])}/${Number(match[3])}` : item.date;
+        lines.push({ text: `【${date}】${item.text}`, is_demo: item.is_demo });
+      }
+    }
     return lines;
+  }
+
+  fortuneToday() {
+    const date = new Date();
+    const nicknames = (this.ctx.members || []).map((member) => member.nickname).filter(Boolean);
+    return { date: todayKey(date), phase: moonPhase(date), result: dailyFortune({ visitorId: visitorId(), date, nicknames }) };
+  }
+
+  objectCard(obj, fortune) {
+    if (obj.source === 'forge') {
+      const weapon = this.forged;
+      const date = new Date();
+      return {
+        filename: forgeFilename(date),
+        spec: {
+          kicker: '鍛造工坊｜隨機打造', title: weapon.name, subtitle: `${weapon.stars} ${weapon.rarityName}`,
+          art: (ctx, x, y, w, h) => drawWeapon(ctx, x, y, w, h, weapon),
+          rows: [['種類', weapon.type], ['材料', weapon.material], ['攻擊力', weapon.attack],
+            ['音感', weapon.music], ['可愛度', weapon.cute], ['特殊效果', weapon.skill]]
+            .map(([label, value]) => ({ label, value })),
+          note: `鐵匠：「${weapon.comment}」`, date: todayKey(date),
+        },
+      };
+    }
+    if (obj.source !== 'fortune') return null;
+    const { date, phase, result } = fortune;
+    const rows = Object.entries(result.stars).map(([label, value]) => ({ label, value }));
+    rows.push({ label: '幸運樂器', value: result.instrument }, { label: '幸運房間', value: result.room },
+      { label: '幸運色', value: result.color.name, color: result.color.hex });
+    if (result.partner) rows.push({ label: '合奏夥伴', value: result.partner });
+    return {
+      filename: `fortune-${date}.png`,
+      spec: {
+        kicker: '觀星台｜今日運勢', title: `今日運勢：${result.overall}`,
+        subtitle: `${phase.name} · 月齡約 ${Math.round(phase.age)} 天`,
+        art: (ctx, x, y, w, h) => drawMoon(ctx, x + w / 2, y + h / 2, 145, phase),
+        rows, note: result.advice, date,
+      },
+    };
   }
 
   /** 物件的 play：訪客走到最近、沒人用的同動作演出點，自己演出 */
@@ -431,7 +527,7 @@ export class RoomScene extends Phaser.Scene {
    */
   onPointerDown(pointer) {
     this.ensemble?.unlock();
-    if (this.ctx.ui.dialog.isOpen || this.leaving) return;
+    if (this.uiBusy() || this.leaving) return;
     const wx = pointer.worldX;
     const wy = pointer.worldY;
     const loose = Boolean(pointer.wasTouch || this.ctx.touch);
@@ -481,7 +577,7 @@ export class RoomScene extends Phaser.Scene {
   updatePending() {
     const target = this.pending;
     if (!target) return;
-    if (this.player.keyMoved || this.ctx.ui.dialog.isOpen || this.player.act) {
+    if (this.player.keyMoved || this.uiBusy() || this.player.act) {
       this.pending = null;
       return;
     }
@@ -533,7 +629,7 @@ export class RoomScene extends Phaser.Scene {
   // ---------- 門 ----------
 
   checkDoor() {
-    if (this.leaving) return;
+    if (this.leaving || this.uiBusy()) return;
     const { x, y } = this.player.tile;
     const c = this.grid.cell(x, y);
     if (c?.kind !== 'door') return;

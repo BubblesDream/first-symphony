@@ -83,14 +83,14 @@ export default {
     { action: 'stand_guard', x: 10, y: 17, facing: 'down' },
     { action: 'stand_guard', x: 17, y: 17, facing: 'down' },
   ],
-  // 訪客可以按 E 查看的物件（文字是網站自己寫的固定內容）
+  // 訪客可以按 E 查看的物件（固定文字或網站資料）
   // 多人演出（groups.js）：同一張討論桌湊到 2 位以上就一起聊天
   groups: [[2, 8], [21, 8], [2, 13], [21, 13]].map(([x, y]) => ({
     name: '聊天', spots: [[x, y], [x + 3, y], [x, y + 1], [x + 3, y + 1]], min: 2, every: [30, 60], duration: [14, 22],
     bubbles: ['你聽說了嗎？', '真的假的！', '哈哈哈', '然後呢？', '下次一起去吧'],
   })),
   objects: [
-    { x: 3.5, y: 2, name: '公告板', text: ['【公告】歡迎來到第一交響樂團的公會城堡！', '城堡還在整修中，家具會陸續換新。到處走走看吧！'], demo: true, play: 'read_notice' },
+    { x: 3.5, y: 2, name: '公告板', text: ['公告板上貼著最近的更新：'], source: 'updates', demo: false, play: 'read_notice' },
     // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
     { x: 3, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
     { x: 22, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },

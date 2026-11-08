@@ -152,6 +152,7 @@ docs/
 | `quotes.json` | `id`, `text`, `speaker`, `date`（選填）, `context`（選填）, `is_demo` |
 | `castle_looks.json` | 城堡用成員外觀（紙娃娃）：`member_id`, `hair_style`, `hair`, `skin`, `face`, `eyes`, `height`, `top_style`, `top`, `bottom_style`, `bottom`, `shoes`, `accessory`, `accent`, `instrument`, `favorite_room`, `is_demo`（欄位說明見 `docs/問卷-城堡成員外觀.md`）。顏色格式 `#rrggbb`；沒有列或沒填的欄位依 id 自動挑。目前只讀本地檔 |
 | `castle_lines.json` | 城堡用台詞：`id`, `member_id`（空白＝通用）, `room`（空白＝任何房間）, `text`, `is_demo`。目前只讀本地檔 |
+| `updates.json` | 網站更新紀錄（城堡大廳公告板顯示最新 5 筆）：`id`, `date`（YYYY-MM-DD）, `text`（一句白話）, `is_demo`。目前只讀本地檔；每次合併新功能時補一列 |
 
 試算表分頁與資料表的對應：成員→`members`、造型→`outfits`、相簿→`albums`、影片→`videos`、歷史→`history`、歷任會長→`leaders`、語錄→`quotes`、公會設定→`site`（「填寫說明」分頁網站不讀）。
 
