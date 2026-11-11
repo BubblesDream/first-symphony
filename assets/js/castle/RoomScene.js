@@ -1,7 +1,7 @@
 // 唯一的房間場景：所有房間都用這一個場景，差別只在房間定義檔（rooms/*.js）。
 // 進入房間時：畫地圖（roomView.js）→ 放牆壁碰撞 → 放訪客 → 只建立這個房間的 NPC。
 // 走進門 → 淡出 → 用新的房間 id 重新啟動這個場景。
-import { TILE, ZOOM, COLORS, FONT, INTERACT_RANGE, CLICK_RANGE } from './config.js';
+import { TILE, ZOOM, COLORS, FONT, INTERACT_RANGE } from './config.js';
 import { ROOMS, START_ROOM } from './rooms/index.js';
 import { buildGrid, tileFeet, toTile } from './grid.js';
 import { Npc } from './npc.js';
@@ -15,15 +15,10 @@ import { Groups } from './groups.js';
 import { Ensemble } from './ensemble.js';
 import { drawAmbience } from './ambience.js';
 import { renderCard } from './card.js';
-import { createRng } from './rng.js';
-import { forgeWeapon, drawWeapon, forgeFilename } from './forge.js';
-import { MONTH, moonPhase, drawNightMoon, drawTarot, dailyCard, nextPhaseDate, roman, todayKey, visitorId } from './fortune.js';
+import * as sources from './sources/index.js';
+import { TapMove } from './tapMove.js';
 
-
-const MOON_DESCRIPTIONS = { 新月: '幾乎看不到亮面', 眉月: '右邊有一彎細細的亮面', 上弦月: '右半邊亮',
-  盈凸月: '大部分都亮，左邊還留著暗面', 滿月: '整個圓都亮', 虧凸月: '大部分都亮，右邊開始變暗',
-  下弦月: '左半邊亮', 殘月: '左邊有一彎細細的亮面' };
-const moonDescription = (phase) => `從北半球看，${MOON_DESCRIPTIONS[phase.name]}。`;
+const unknownSources = new Set();
 
 export class RoomScene extends Phaser.Scene {
   constructor() {
@@ -124,6 +119,7 @@ export class RoomScene extends Phaser.Scene {
     this.input.on('pointermove', (pointer) => {
       this.hovered = this.npcAt(pointer.worldX, pointer.worldY);
     });
+    this.tapMove = new TapMove(this);
     this.pending = null; // 點了成員或物品、正走過去：到了就互動
     this.actionLabel = null;
     this.blobs = new Map(); // 物件所在家具的格子（點家具任何一格都算點到物件）
@@ -389,9 +385,9 @@ export class RoomScene extends Phaser.Scene {
         this.player.stopAct();
         return;
       }
-      const fortune = ['moon', 'fortune'].includes(obj.source) ? this.fortuneToday() : null;
-      const lines = this.objectLines(obj, fortune);
-      const card = this.objectCard(obj, fortune);
+      const state = {};
+      const lines = this.objectLines(obj, state);
+      const card = this.objectCard(obj, state);
       dialog.open({
         title: obj.name,
         lines,
@@ -409,99 +405,28 @@ export class RoomScene extends Phaser.Scene {
     }
   }
 
-  /**
-   * 物件的文字：text 依序顯示；random 從裡面隨機抽一句接在後面（例如噴泉許願）；
-   * source: 'history' 接網站的公會歷史資料，一筆一頁（展示櫃翻頁）；
-   * source: 'updates' 接最新 5 筆網站更新，由新到舊，一筆一頁（大廳公告板）。
-   */
-  objectLines(obj, fortune = null) {
+  /** 文字與隨機句、樂器提示由場景處理，其他內容交給來源。 */
+  objectLines(obj, state = {}) {
     const instrument = this.spots.find((s) => s.object === obj)?.instrument;
     const lines = (instrument ? [`${instrument}：坐下來就會召集大家一起合奏`] : obj.text).map((text) => ({ text, is_demo: obj.demo }));
     if (obj.random?.length) lines.push({ text: this.rng.pick(obj.random), is_demo: obj.demo });
-    if (obj.source === 'moon') {
-      const { phase } = fortune || this.fortuneToday();
-      lines.push({ text: `今天的月亮是${phase.name}，月齡約 ${Math.round(phase.age)} 天。` },
-        { text: moonDescription(phase) }, { text: '（卡片可以存成圖片，留作紀念）' });
-    }
-    if (obj.source === 'fortune') {
-      const { draw: { card, message } } = fortune || this.fortuneToday();
-      for (const text of [`你抽到了：${roman(card.no)}．${card.name}`, card.keyword, message,
-        '（卡片可以存成圖片，留作紀念）']) lines.push({ text });
-    }
-    if (obj.source === 'forge') {
-      this.forged = forgeWeapon(createRng());
-      const weapon = this.forged;
-      for (const text of [`打造完成！${weapon.stars} ${weapon.rarityName}`, weapon.name, weapon.skill,
-        `鐵匠：「${weapon.comment}」`, '（卡片可以存成圖片，留作紀念）']) lines.push({ text });
-    }
-    if (obj.source === 'history') {
-      const items = this.ctx.history || [];
-      if (!items.length) lines.push({ text: '展示櫃裡還是空的，公會歷史整理中。' });
-      for (const item of [...items].sort((p, q) => String(p.date).localeCompare(String(q.date)))) {
-        const body = String(item.body || '').split(/\n/).map((s) => s.trim()).filter(Boolean).join(' ');
-        lines.push({ text: `【${item.date}】${item.title}${body ? `｜${body}` : ''}`, is_demo: item.is_demo });
-      }
-    }
-    if (obj.source === 'updates') {
-      const items = [...(this.ctx.updates || [])].sort((p, q) => String(q.date).localeCompare(String(p.date))).slice(0, 5);
-      if (!items.length) lines.push({ text: '公告板上還沒有新消息。' });
-      for (const item of items) {
-        const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(item.date);
-        const date = match ? `${Number(match[2])}/${Number(match[3])}` : item.date;
-        lines.push({ text: `【${date}】${item.text}`, is_demo: item.is_demo });
-      }
-    }
+    const source = this.objectSource(obj);
+    if (source) lines.push(...source.lines(this, obj, state));
     return lines;
   }
 
-  fortuneToday() {
-    const date = new Date();
-    return { now: date, date: todayKey(date), phase: moonPhase(date), draw: dailyCard({ visitorId: visitorId(), date }) };
+  objectCard(obj, state = {}) {
+    return this.objectSource(obj)?.card?.(this, obj, state) || null;
   }
 
-  objectCard(obj, fortune) {
-    if (obj.source === 'forge') {
-      const weapon = this.forged;
-      const date = new Date();
-      return {
-        filename: forgeFilename(date),
-        spec: {
-          kicker: '鍛造工坊｜隨機打造', title: weapon.name, subtitle: `${weapon.stars} ${weapon.rarityName}`,
-          art: (ctx, x, y, w, h) => drawWeapon(ctx, x, y, w, h, weapon),
-          rows: [['種類', weapon.type], ['材料', weapon.material], ['攻擊力', weapon.attack],
-            ['音感', weapon.music], ['可愛度', weapon.cute], ['特殊效果', weapon.skill]]
-            .map(([label, value]) => ({ label, value })),
-          note: `鐵匠：「${weapon.comment}」`, date: todayKey(date),
-        },
-      };
+  objectSource(obj) {
+    if (!obj.source) return null;
+    if (Object.hasOwn(sources, obj.source)) return sources[obj.source];
+    if (!unknownSources.has(obj.source)) {
+      unknownSources.add(obj.source);
+      console.warn(`未登記的互動來源：${obj.source}`);
     }
-    if (!['moon', 'fortune'].includes(obj.source)) return null;
-    const { now, date, phase, draw } = fortune || this.fortuneToday();
-    if (obj.source === 'moon') {
-      const phaseDate = (age) => {
-        const next = nextPhaseDate(now, age);
-        return `${next.getMonth() + 1} 月 ${next.getDate()} 日`;
-      };
-      return {
-        filename: `moon-${date}.png`,
-        spec: {
-          kicker: '觀星台｜今天的月亮', title: `今天的月亮：${phase.name}`,
-          subtitle: `月齡約 ${Math.round(phase.age)} 天 · 亮面約 ${Math.round(phase.fraction * 100)}%`,
-          art: (ctx, x, y, w, h) => drawNightMoon(ctx, x, y, w, h, phase), artHeight: 540,
-          rows: [{ label: '下一次滿月', value: phaseDate(MONTH / 2) }, { label: '下一次新月', value: phaseDate(0) }],
-          note: moonDescription(phase), date,
-        },
-      };
-    }
-    const { card, message } = draw;
-    return {
-      filename: `card-${date}.png`,
-      spec: {
-        kicker: '觀星台｜今日之牌', title: card.name, subtitle: `${roman(card.no)} · ${card.keyword}`,
-        art: (ctx, x, y, w, h) => drawTarot(ctx, x, y, w, h, card), artHeight: 600,
-        rows: [], note: message, date,
-      },
-    };
+    return null;
   }
 
   /** 物件的 play：訪客走到最近、沒人用的同動作演出點，自己演出 */
@@ -534,109 +459,12 @@ export class RoomScene extends Phaser.Scene {
 
   // ---------- 點擊（滑鼠、手指） ----------
 
-  /**
-   * 點成員、羊或物品：夠近就直接互動，不然先走到旁邊，到了再互動。
-   * 點地板：走過去；點到牆或家具：走到離點的位置最近、走得到的空格。
-   */
   onPointerDown(pointer) {
-    this.ensemble?.unlock();
-    if (this.uiBusy() || this.leaving) return;
-    const wx = pointer.worldX;
-    const wy = pointer.worldY;
-    const loose = Boolean(pointer.wasTouch || this.ctx.touch);
-    this.pending = null;
-    const npc = this.npcAt(wx, wy, loose);
-    if (npc) return this.reach({ npc, x: npc.x, y: npc.y });
-    const critter = this.critterAt(wx, wy, loose);
-    if (critter) return this.reach({ critter, x: critter.x, y: critter.y });
-    const obj = this.objectAt(wx, wy, loose);
-    if (obj) return this.reach({ obj, x: (obj.x + 0.5) * TILE, y: (obj.y + 0.5) * TILE });
-    const t = toTile(wx, wy);
-    const dest = this.grid.playerWalkable(t.x, t.y) ? t : this.nearestReachable(wx, wy);
-    if (!dest) return;
-    this.player.walkTo(dest.x, dest.y);
-    this.markTap(dest.x, dest.y);
+    return this.tapMove.onPointerDown(pointer);
   }
 
-  /** 互動時要靠近的點與距離（物件用格子下緣，和按 E 的判斷一樣） */
-  reachPoint(target) {
-    if (target.obj) return { x: target.x, y: target.y + TILE / 2, range: INTERACT_RANGE };
-    const who = target.npc || target.critter;
-    return { x: who.x, y: who.y, range: CLICK_RANGE };
-  }
-
-  reach(target) {
-    const p = this.reachPoint(target);
-    if (!this.player.act && Math.hypot(p.x - this.player.x, p.y - this.player.y) <= p.range) {
-      this.interact(target);
-      return;
-    }
-    const dest = this.nearestReachable(p.x, p.y);
-    const here = this.player.tile;
-    if (!this.player.act && dest && dest.x === here.x && dest.y === here.y) {
-      this.interact(target); // 已經站在走得到最近的位置
-      return;
-    }
-    if (dest) this.player.walkTo(dest.x, dest.y);
-    if (!dest || !this.player.route.length) {
-      this.ctx.ui.toast('那裡走不過去。');
-      return;
-    }
-    this.markTap(dest.x, dest.y);
-    this.pending = target;
-  }
-
-  /** 走到了就互動；用鍵盤移動、對話中或對象走遠了就取消 */
   updatePending() {
-    const target = this.pending;
-    if (!target) return;
-    if (this.player.keyMoved || this.uiBusy() || this.player.act) {
-      this.pending = null;
-      return;
-    }
-    if (this.player.route.length) return;
-    this.pending = null;
-    const p = this.reachPoint(target);
-    const d = Math.hypot(p.x - this.player.x, p.y - this.player.y);
-    if (d <= Math.max(p.range, TILE * 2.5)) {
-      this.interact(target);
-    } else if (target.npc) {
-      this.ctx.ui.toast(`${target.npc.data.nickname} 走開了，再點一次吧。`);
-    }
-  }
-
-  /** 從訪客所在位置走得到（不經過門與別人）的格子中，離 (px, py) 最近的一格 */
-  nearestReachable(px, py) {
-    const { grid, player } = this;
-    const start = player.tile;
-    const passable = (x, y) => grid.playerWalkable(x, y) && !grid.isDoor(x, y) && !grid.occupant(x, y);
-    const seen = new Set([`${start.x},${start.y}`]);
-    const queue = [[start.x, start.y]];
-    let best = null;
-    let bestDist = Infinity;
-    while (queue.length && seen.size < 3000) {
-      const [x, y] = queue.shift();
-      const f = tileFeet(x, y);
-      const d = Math.hypot(f.x - px, f.y - py);
-      if (d < bestDist - 0.01) {
-        best = { x, y };
-        bestDist = d;
-      }
-      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-        const k = `${x + dx},${y + dy}`;
-        if (seen.has(k) || !passable(x + dx, y + dy)) continue;
-        seen.add(k);
-        queue.push([x + dx, y + dy]);
-      }
-    }
-    return best;
-  }
-
-  /** 在目的地閃一下圓圈，讓人知道點到了哪裡 */
-  markTap(tx, ty) {
-    const p = tileFeet(tx, ty);
-    const ring = this.add.ellipse(p.x, p.y - 2, 20, 10).setStrokeStyle(2, 0xffe08a, 0.9).setDepth(99999);
-    this.tweens.add({ targets: ring, alpha: 0, scale: 1.6, duration: 600, onComplete: () => ring.destroy() });
+    this.tapMove.updatePending();
   }
 
   // ---------- 門 ----------

@@ -1,12 +1,11 @@
 // 角色外觀，依序選：個人角色圖（CHAR_ART，例如訪客）→ 紙娃娃（paperdoll.js，依問卷款式與顏色組合）
-// → 幾何色塊（沒有圖或 ?noart=1）。網址加 ?pixel=1 改用舊的像素小人（spriteAvatar.js，已不採用，保留比較用）。
+// → 幾何色塊（沒有圖或 ?noart=1）。
 // NPC 行為與訪客只會呼叫下面這幾個方法，每種外觀都實作同樣的方法，行為程式不用改：
 //   setPosition(x, y)  setFacing(dir)  setPose(pose, seated)  say(text)
 //   setNameVisible(bool)  setTag(text)  destroy()
 // 姿勢：idle、walk、play、conduct、read、work、sleep、cheer
 
 import { FONT } from './config.js';
-import { SpriteAvatar } from './spriteAvatar.js';
 import { ImageAvatar } from './imageAvatar.js';
 import { hasCharArt, charKey, CHAR_CELL, DOLL_CELL } from './art.js';
 import { dollTexture } from './paperdoll.js';
@@ -18,7 +17,6 @@ const DARK = 0x2e2420;
 
 /** options.artId：角色圖的名稱（成員 id 或 visitor）；有圖就用圖 */
 export function createAvatar(scene, look, options = {}) {
-  if (scene.registry.get('pixel')) return new SpriteAvatar(scene, look, options);
   if (hasCharArt(scene, options.artId)) {
     return new ImageAvatar(scene, { key: charKey(options.artId), cell: { ...CHAR_CELL, body: CHAR_CELL.h } }, options);
   }

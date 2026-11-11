@@ -4,7 +4,7 @@
 // 只用小色塊與簡單的移動，不做發光特效。
 import { TILE } from './config.js';
 
-const FACING = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+export const FACING = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 
 /** 效果出現的位置（格子中央，世界座標） */
 function targetPoint(spot) {
@@ -55,7 +55,7 @@ function bits(scene, _from, spot, effect) {
   return null;
 }
 
-const EFFECTS = { arrow, bits };
+export const EFFECTS = { arrow, bits };
 
 /**
  * 播放動作的效果。from：演出者的腳底位置；spot：演出點。
