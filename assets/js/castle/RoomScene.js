@@ -418,8 +418,10 @@ export class RoomScene extends Phaser.Scene {
     const ox = Math.floor(obj.x);
     const oy = Math.floor(obj.y);
     const options = [];
+    let hasFreeSpot = false;
     for (const spot of this.spots) {
       if ((obj.seats ? spot.object !== obj : spot.action !== obj.play) || spot.user || grid.occupant(spot.x, spot.y)) continue;
+      hasFreeSpot = true;
       const approach = this.approachOf(spot);
       const feet = tileFeet(spot.x, spot.y);
       const d = obj.seats ? Math.hypot(feet.x - this.player.x, feet.y - this.player.y) : Math.abs(spot.x - ox) + Math.abs(spot.y - oy);
@@ -429,7 +431,7 @@ export class RoomScene extends Phaser.Scene {
     for (const { spot, approach } of options) {
       if (this.player.startAct(spot, approach)) return;
     }
-    this.ctx.ui.toast(obj.seats ? '位子都坐滿了，等一下再來吧。' : `${obj.name}現在有人在用，等一下再來吧。`);
+    this.ctx.ui.toast(hasFreeSpot ? '那裡走不過去，換個位置再試試。' : '位子都坐滿了，等一下再來吧。');
   }
 
   /** 演出點本身能走就直接走上去；否則找旁邊能走、沒人的格子 */
@@ -439,7 +441,9 @@ export class RoomScene extends Phaser.Scene {
     const near = [[0, 1], [0, -1], [-1, 0], [1, 0]]
       .map(([dx, dy]) => [spot.x + dx, spot.y + dy])
       .filter(([x, y]) => grid.npcWalkable(x, y) && !grid.occupant(x, y));
-    return near[0] || null;
+    const from = this.player.tile;
+    return near.find(([x, y]) => grid.findPath(from.x, from.y, x, y,
+      (cx, cy) => grid.playerWalkable(cx, cy) && grid.isFree(cx, cy, this.player))) || null;
   }
 
   // ---------- 點擊（滑鼠、手指） ----------
