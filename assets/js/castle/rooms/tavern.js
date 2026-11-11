@@ -1,5 +1,9 @@
 // 交流廳（酒館，1F 左上）。左上是吧台與酒桶，右邊是圓桌區，左下是長桌與長椅，上方牆上有壁爐。
 // 配置參考 docs/reference/castle-layout.png。家具還沒有圖時自動畫色塊。
+import { row } from './seats.js';
+
+// 多人演出（groups.js）：同一張圓桌湊到 2 位以上就一起乾杯
+const CHEERS = { name: '乾杯', min: 2, every: [25, 55], duration: [12, 20], bubbles: ['來，舉杯！', '乾杯！', '哈哈哈', '敬第一交響樂團！'], finale: '乾——杯！' };
 
 export default {
   id: 'tavern',
@@ -49,31 +53,17 @@ export default {
   spots: [
     { action: 'serve_drink', x: 4, y: 3, facing: 'down' },
     { action: 'serve_drink', x: 6, y: 3, facing: 'down' },
-    ...[2, 4, 6].map((x) => ({ action: 'drink', x, y: 5, facing: 'up' })),
-    ...[3, 4, 5, 6, 7, 8].flatMap((x) => [
-      { action: 'drink', x, y: 9, facing: 'down' },
-      { action: 'drink', x, y: 11, facing: 'up' },
-    ]),
-    ...[6, 7, 11, 12].flatMap((y) => [
-      { action: 'cheers', x: 12, y, facing: 'right' },
-      { action: 'cheers', x: 15, y, facing: 'left' },
-      { action: 'cheers', x: 17, y, facing: 'right' },
-      { action: 'cheers', x: 20, y, facing: 'left' },
-    ]),
-    { action: 'warm_hands', x: 14, y: 2, facing: 'up' },
-    { action: 'warm_hands', x: 15, y: 2, facing: 'up' },
   ],
-  // 多人演出（groups.js）：同一張圓桌湊到 2 位以上就一起乾杯
-  groups: [[12, 6], [17, 6], [12, 11], [17, 11]].map(([x, y]) => ({
-    name: '乾杯', spots: [[x, y], [x + 3, y], [x, y + 1], [x + 3, y + 1]], min: 2, every: [25, 55], duration: [12, 20],
-    bubbles: ['來，舉杯！', '乾杯！', '哈哈哈', '敬第一交響樂團！'], finale: '乾——杯！',
-  })),
   objects: [
-    { x: 4.5, y: 4, name: '吧台', text: ['擦得發亮的木頭吧台，上面留著幾圈杯子的水痕。'], demo: true, play: 'drink' },
+    { x: 4.5, y: 4, name: '吧台', text: ['擦得發亮的木頭吧台，上面留著幾圈杯子的水痕。'], demo: true, play: 'drink', seats: [{ x: 2, y: 5, facing: 'up' }, { x: 4, y: 5, facing: 'up' }, { x: 6, y: 5, facing: 'up' }] },
     { x: 1.5, y: 3, name: '酒桶', text: ['桶子上用粉筆寫著「蘋果酒」。'], demo: true },
-    { x: 14.5, y: 1, name: '壁爐', text: ['柴火劈啪作響，整間酒館都暖暖的。'], demo: true, play: 'warm_hands' },
-    { x: 13.5, y: 6.5, name: '圓桌', text: ['桌上擺著幾杯還在冒泡的飲料。'], demo: true, play: 'cheers' },
+    { x: 14.5, y: 1, name: '壁爐', text: ['柴火劈啪作響，整間酒館都暖暖的。'], demo: true, play: 'warm_hands', seats: [{ x: 14, y: 2, facing: 'up' }, { x: 15, y: 2, facing: 'up' }] },
+    { x: 13.5, y: 6.5, name: '圓桌', text: ['桌上擺著幾杯還在冒泡的飲料。'], demo: true, play: 'cheers', seats: [{ x: 12, y: 6, facing: 'right' }, { x: 15, y: 6, facing: 'left' }, { x: 12, y: 7, facing: 'right' }, { x: 15, y: 7, facing: 'left' }], group: CHEERS },
     { x: 8.5, y: 1, name: '菜單板', text: ['【今日菜單】蘋果酒、熱牛奶、烤麵包。'], demo: true },
+    { x: 18.5, y: 6.5, name: '圓桌', text: ['桌上擺著幾杯還在冒泡的飲料。'], demo: true, play: 'cheers', seats: [{ x: 17, y: 6, facing: 'right' }, { x: 20, y: 6, facing: 'left' }, { x: 17, y: 7, facing: 'right' }, { x: 20, y: 7, facing: 'left' }], group: CHEERS },
+    { x: 13.5, y: 11.5, name: '圓桌', text: ['桌上擺著幾杯還在冒泡的飲料。'], demo: true, play: 'cheers', seats: [{ x: 12, y: 11, facing: 'right' }, { x: 15, y: 11, facing: 'left' }, { x: 12, y: 12, facing: 'right' }, { x: 15, y: 12, facing: 'left' }], group: CHEERS },
+    { x: 18.5, y: 11.5, name: '圓桌', text: ['桌上擺著幾杯還在冒泡的飲料。'], demo: true, play: 'cheers', seats: [{ x: 17, y: 11, facing: 'right' }, { x: 20, y: 11, facing: 'left' }, { x: 17, y: 12, facing: 'right' }, { x: 20, y: 12, facing: 'left' }], group: CHEERS },
+    { x: 5.5, y: 10, name: '長桌', text: ['長桌上擺著麵包和幾杯熱牛奶，誰都可以坐下來。'], demo: true, play: 'drink', seats: [...row(3, 8, 9, 'down'), ...row(3, 8, 11, 'up')] },
   ],
   labels: [
     { x: 21.4, y: 7.2, text: '往大廳' },

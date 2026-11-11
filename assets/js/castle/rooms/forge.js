@@ -38,18 +38,11 @@ export default {
     start: [16, 5],
     from_hall: [16, 5],
   },
-  spots: [
-    { action: 'stoke_fire', x: 3, y: 3, facing: 'left' },
-    { action: 'hammer', x: 5, y: 5, facing: 'up' },
-    { action: 'hammer', x: 6, y: 4, facing: 'left' },
-    { action: 'craft', x: 12, y: 3, facing: 'up' },
-    { action: 'sharpen', x: 11, y: 6, facing: 'left' },
-  ],
   objects: [
-    { x: 1.5, y: 3, name: '火爐', text: ['爐火燒得正旺，靠近就覺得臉頰發燙。'], demo: true, play: 'stoke_fire' },
-    { x: 5, y: 4, name: '鐵砧', text: ['你把材料放上鐵砧，拿起鐵鎚……', '叮、叮、噹！'], source: 'forge', demo: false, play: 'hammer' },
-    { x: 12, y: 2, name: '工作台', text: ['桌上散著鉗子、銼刀和還沒完成的劍柄。'], demo: true },
-    { x: 10, y: 6, name: '磨刀石', text: ['踩著踏板就會轉的磨刀石。'], demo: true, play: 'sharpen' },
+    { x: 1.5, y: 3, name: '火爐', text: ['爐火燒得正旺，靠近就覺得臉頰發燙。'], demo: true, play: 'stoke_fire', seats: [{ x: 3, y: 3, facing: 'left' }] },
+    { x: 5, y: 4, name: '鐵砧', text: ['你把材料放上鐵砧，拿起鐵鎚……', '叮、叮、噹！'], source: 'forge', demo: false, play: 'hammer', seats: [{ x: 5, y: 5, facing: 'up' }, { x: 6, y: 4, facing: 'left' }] },
+    { x: 12, y: 2, name: '工作台', text: ['桌上散著鉗子、銼刀和還沒完成的劍柄。'], demo: true, play: 'craft', seats: [{ x: 12, y: 3, facing: 'up' }] },
+    { x: 10, y: 6, name: '磨刀石', text: ['踩著踏板就會轉的磨刀石。'], demo: true, play: 'sharpen', seats: [{ x: 11, y: 6, facing: 'left' }] },
     { x: 4, y: 2, name: '水桶', text: ['淬火用的水，表面浮著一層薄薄的灰。'], demo: true },
   ],
   labels: [

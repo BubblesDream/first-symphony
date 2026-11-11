@@ -1,5 +1,6 @@
 // 除錯圖層（網址加 ?debug=1）：標出不能走的格子、門、演出點，NPC 頭上顯示狀態，
 // 並把目前狀態放在 window.__castle，讓自動檢查（Playwright）不用看截圖也能判斷。
+import { furnitureReach } from './interaction.js';
 import { TILE, INTERACT_RANGE } from './config.js';
 import { ACTIONS } from './actions.js';
 import { FACING, EFFECTS } from './effects.js';
@@ -75,6 +76,13 @@ export function checkRoom(scene) {
   const strings = (value) => Array.isArray(value) && value.length > 0 && value.every((v) => typeof v === 'string' && v.trim());
   for (const [i, obj] of (room.objects || []).entries()) {
     const field = `objects[${i}]「${obj.name}」`;
+    if (obj.seats !== undefined && (!Array.isArray(obj.seats) || !obj.seats.length)) problems.push(`${field} 的 seats 必須是非空陣列`);
+    for (const seat of obj.seats || []) {
+      if (!Object.hasOwn(FACING, seat.facing)) problems.push(`${field} 的座位必須有有效的 facing`);
+      if (!room.spots.some((s) => s.object === obj && s.x === seat.x && s.y === seat.y && s.action === (seat.action ?? obj.play))) problems.push(`${field} 的座位沒有正規化為 spots`);
+    }
+    if (obj.group && !obj.seats?.length) problems.push(`${field} 的 group 必須搭配 seats`);
+    if (obj.group?.spots) problems.push(`${field} 的 group 請沿用 seats，不要重寫 spots`);
     if (obj.play !== undefined) actionOk(obj.play, `${field} 的 play`);
     if (!strings(obj.text)) problems.push(`${field} 的 text 必須是非空白字串組成的非空陣列`);
     if (obj.random !== undefined && !strings(obj.random)) problems.push(`${field} 的 random 必須是非空白字串組成的非空陣列`);
@@ -109,10 +117,10 @@ export function checkRoom(scene) {
       }
     }
     for (const [i, obj] of (room.objects || []).entries()) {
-      // RoomScene.nearestInteract 與 tapMove 使用物件下緣、tileFeet 腳底位置及 INTERACT_RANGE。
+      // 與 RoomScene、tapMove 共用家具邊緣距離。
       const near = queue.some(([x, y]) => {
         const feet = tileFeet(x, y);
-        return Math.hypot((obj.x + 0.5) * TILE - feet.x, (obj.y + 1) * TILE - feet.y) < INTERACT_RANGE;
+        return furnitureReach(grid, obj, feet.x, feet.y).distance <= INTERACT_RANGE;
       });
       if (!near) problems.push(`出生點 ${spawn} 走不到 objects[${i}]「${obj.name}」旁邊可互動的格子`);
     }
