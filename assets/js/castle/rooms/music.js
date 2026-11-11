@@ -1,5 +1,6 @@
 // 演奏室（1F 右上）。上半部是木頭舞台，下半部是觀眾席（中間留走道）。
 // 配置參考 docs/reference/castle-layout.png。
+import { row } from './seats.js';
 
 export default {
   id: 'music',
@@ -46,28 +47,27 @@ export default {
     start: [1, 8],
     from_hall: [1, 8],
   },
-  spots: [
-    { action: 'play_piano', x: 3, y: 4, facing: 'up' },
-    ...[[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4]].map(([x, y]) => ({ action: 'play_part', x, y, facing: 'down' })),
-    { action: 'play_harp', x: 19, y: 4, facing: 'up' },
-    { action: 'conduct', x: 12, y: 6, facing: 'up' },
-    ...[3, 4, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17, 18].flatMap((x) => [8, 10, 12].map((y) => (
-      { action: 'sit_watch', x, y, facing: 'up' }
-    ))),
-  ],
-  // 自動合奏只用六個聲部座位與指揮台，維持無聲；訪客召集時會取消。
   ensemble: { conductor: [12, 6], parts: [[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4]], entrance: 'from_hall' },
   groups: [
-    { name: '合奏', spots: [[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4], [12, 6]], min: 2, every: [25, 50], duration: [18, 28],
-      bubbles: ['預備——', '♪', '♫', '♬', '♪♫', '♬♪'], finale: '（掌聲）' },
+    { name: '合奏', spots: [[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4], [12, 6]], min: 2, every: [25, 50], duration: [18, 28], bubbles: ['預備——', '♪', '♫', '♬', '♪♫', '♬♪'], finale: '（掌聲）' },
   ],
   objects: [
-    // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
-    { x: 3, y: 2.5, name: '鋼琴', text: ['一架擦得發亮的鋼琴。要坐下來彈一曲嗎？'], demo: false, play: 'play_piano' },
-    { x: 12, y: 5, name: '指揮台', text: ['站上指揮台，就會召集大家來合奏！'], demo: false, play: 'conduct' },
-    ...[[7, 2], [10, 2], [14, 2], [17, 2], [9, 4], [15, 4]].map(([x, y]) => ({ x, y, name: '合奏座位', text: ['坐下來就會召集大家一起合奏'], demo: false, play: 'play_part' })),
-    { x: 3, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
-    { x: 19, y: 3, name: '豎琴', text: ['一架木製豎琴，琴弦調得很準。'], demo: false, play: 'play_harp' },
+    { x: 3, y: 2.5, name: '鋼琴', text: ['一架擦得發亮的鋼琴。要坐下來彈一曲嗎？'], demo: false, play: 'play_piano', seats: [{ x: 3, y: 4, facing: 'up' }] },
+    { x: 12, y: 5, name: '指揮台', text: ['站上指揮台，就會召集大家來合奏！'], demo: false, play: 'conduct', seats: [{ x: 12, y: 6, facing: 'up' }] },
+    { x: 7, y: 2, name: '合奏座位', text: ['坐下來就會召集大家一起合奏'], demo: false, play: 'play_part', seats: [{ x: 7, y: 2, facing: 'down' }] },
+    { x: 10, y: 2, name: '合奏座位', text: ['坐下來就會召集大家一起合奏'], demo: false, play: 'play_part', seats: [{ x: 10, y: 2, facing: 'down' }] },
+    { x: 14, y: 2, name: '合奏座位', text: ['坐下來就會召集大家一起合奏'], demo: false, play: 'play_part', seats: [{ x: 14, y: 2, facing: 'down' }] },
+    { x: 17, y: 2, name: '合奏座位', text: ['坐下來就會召集大家一起合奏'], demo: false, play: 'play_part', seats: [{ x: 17, y: 2, facing: 'down' }] },
+    { x: 9, y: 4, name: '合奏座位', text: ['坐下來就會召集大家一起合奏'], demo: false, play: 'play_part', seats: [{ x: 9, y: 4, facing: 'down' }] },
+    { x: 15, y: 4, name: '合奏座位', text: ['坐下來就會召集大家一起合奏'], demo: false, play: 'play_part', seats: [{ x: 15, y: 4, facing: 'down' }] },
+    { x: 18, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
+    { x: 19, y: 3, name: '豎琴', text: ['一架木製豎琴，琴弦調得很準。'], demo: false, play: 'play_harp', seats: [{ x: 19, y: 4, facing: 'up' }] },
+    { x: 6, y: 8, name: '觀眾席', text: ['找個位子坐下，聽聽台上的演奏。'], demo: true, play: 'sit_watch', seats: row(3, 9, 8, 'up') },
+    { x: 15, y: 8, name: '觀眾席', text: ['找個位子坐下，聽聽台上的演奏。'], demo: true, play: 'sit_watch', seats: row(12, 18, 8, 'up') },
+    { x: 6, y: 10, name: '觀眾席', text: ['找個位子坐下，聽聽台上的演奏。'], demo: true, play: 'sit_watch', seats: row(3, 9, 10, 'up') },
+    { x: 15, y: 10, name: '觀眾席', text: ['找個位子坐下，聽聽台上的演奏。'], demo: true, play: 'sit_watch', seats: row(12, 18, 10, 'up') },
+    { x: 6, y: 12, name: '觀眾席', text: ['找個位子坐下，聽聽台上的演奏。'], demo: true, play: 'sit_watch', seats: row(3, 9, 12, 'up') },
+    { x: 15, y: 12, name: '觀眾席', text: ['找個位子坐下，聽聽台上的演奏。'], demo: true, play: 'sit_watch', seats: row(12, 18, 12, 'up') },
   ],
   labels: [
     { x: 3, y: 2.5, text: '鋼琴' },

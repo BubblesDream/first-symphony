@@ -3,6 +3,9 @@
 // 配置參考 docs/reference/castle-layout.png：上方樓梯往 2F、中央紅地毯、兩側石柱與燭台、下方正門。
 // 左上通交流廳、右上通演奏室、左下通鍛造工坊、右下通練習室。
 
+// 多人演出（groups.js）：同一張討論桌湊到 2 位以上就一起聊天
+const CHAT = { name: '聊天', min: 2, every: [30, 60], duration: [14, 22], bubbles: ['你聽說了嗎？', '真的假的！', '哈哈哈', '然後呢？', '下次一起去吧'] };
+
 export default {
   id: 'hall',
   name: '公會大廳',
@@ -64,38 +67,17 @@ export default {
   },
   // 演出點：x、y 是格子座標，facing 是演出時面向的方向
   spots: [
-    { action: 'sit_chat', x: 2, y: 8, facing: 'right' },
-    { action: 'sit_chat', x: 5, y: 8, facing: 'left' },
-    { action: 'sit_chat', x: 2, y: 9, facing: 'right' },
-    { action: 'sit_chat', x: 5, y: 9, facing: 'left' },
-    { action: 'sit_chat', x: 21, y: 8, facing: 'right' },
-    { action: 'sit_chat', x: 24, y: 8, facing: 'left' },
-    { action: 'sit_chat', x: 21, y: 9, facing: 'right' },
-    { action: 'sit_chat', x: 24, y: 9, facing: 'left' },
-    ...[13, 14].flatMap((y) => [
-      { action: 'sit_chat', x: 2, y, facing: 'right' },
-      { action: 'sit_chat', x: 5, y, facing: 'left' },
-      { action: 'sit_chat', x: 21, y, facing: 'right' },
-      { action: 'sit_chat', x: 24, y, facing: 'left' },
-    ]),
-    { action: 'read_notice', x: 3, y: 3, facing: 'up' },
-    { action: 'read_notice', x: 4, y: 3, facing: 'up' },
     { action: 'stand_guard', x: 10, y: 17, facing: 'down' },
     { action: 'stand_guard', x: 17, y: 17, facing: 'down' },
   ],
-  // 訪客可以按 E 查看的物件（固定文字或網站資料）
-  // 多人演出（groups.js）：同一張討論桌湊到 2 位以上就一起聊天
-  groups: [[2, 8], [21, 8], [2, 13], [21, 13]].map(([x, y]) => ({
-    name: '聊天', spots: [[x, y], [x + 3, y], [x, y + 1], [x + 3, y + 1]], min: 2, every: [30, 60], duration: [14, 22],
-    bubbles: ['你聽說了嗎？', '真的假的！', '哈哈哈', '然後呢？', '下次一起去吧'],
-  })),
   objects: [
-    { x: 3.5, y: 2, name: '公告板', text: ['公告板上貼著最近的更新：'], source: 'updates', demo: false, play: 'read_notice' },
-    // play：訪客按 E 看完文字後，會走過去自己演出（動作見 actions.js）
-    { x: 3, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
-    { x: 22, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat' },
+    { x: 3.5, y: 2, name: '公告板', text: ['公告板上貼著最近的更新：'], source: 'updates', demo: false, play: 'read_notice', seats: [{ x: 3, y: 3, facing: 'up' }, { x: 4, y: 3, facing: 'up' }] },
+    { x: 3, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat', seats: [{ x: 2, y: 8, facing: 'right' }, { x: 5, y: 8, facing: 'left' }, { x: 2, y: 9, facing: 'right' }, { x: 5, y: 9, facing: 'left' }], group: CHAT },
+    { x: 22, y: 8.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: false, play: 'sit_chat', seats: [{ x: 21, y: 8, facing: 'right' }, { x: 24, y: 8, facing: 'left' }, { x: 21, y: 9, facing: 'right' }, { x: 24, y: 9, facing: 'left' }], group: CHAT },
     { x: 5, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
     { x: 22, y: 1, name: '公會旗幟', text: ['深藍色的旗幟上繡著高音譜記號。'], demo: true },
+    { x: 3.5, y: 13.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: true, play: 'sit_chat', seats: [{ x: 2, y: 13, facing: 'right' }, { x: 5, y: 13, facing: 'left' }, { x: 2, y: 14, facing: 'right' }, { x: 5, y: 14, facing: 'left' }], group: CHAT },
+    { x: 22.5, y: 13.5, name: '討論桌', text: ['坐下來和大家聊聊天吧。'], demo: true, play: 'sit_chat', seats: [{ x: 21, y: 13, facing: 'right' }, { x: 24, y: 13, facing: 'left' }, { x: 21, y: 14, facing: 'right' }, { x: 24, y: 14, facing: 'left' }], group: CHAT },
   ],
   labels: [
     { x: 13.5, y: 2.2, text: '往 2F' },

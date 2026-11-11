@@ -16,6 +16,7 @@ import { Ensemble } from './ensemble.js';
 import { drawAmbience } from './ambience.js';
 import { renderCard } from './card.js';
 import * as sources from './sources/index.js';
+import { furnitureTiles, furnitureReach } from './interaction.js';
 import { TapMove } from './tapMove.js';
 
 const unknownSources = new Set();
@@ -274,25 +275,7 @@ export class RoomScene extends Phaser.Scene {
   /** 物件所在家具的格子（同字元相連、最多 16 格；地板、一般的牆或太大片的只算物件那一格） */
   blobOf(obj) {
     if (this.blobs.has(obj)) return this.blobs.get(obj);
-    const { grid } = this;
-    const sx = Math.floor(obj.x);
-    const sy = Math.floor(obj.y);
-    const start = grid.cell(sx, sy);
-    let tiles = new Set([`${sx},${sy}`]);
-    if (start && start.rule !== 'walk' && start.rule !== 'door' && start.ch !== '#') {
-      const queue = [[sx, sy]];
-      while (queue.length && tiles.size <= 16) {
-        const [x, y] = queue.shift();
-        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-          const k = `${x + dx},${y + dy}`;
-          if (!tiles.has(k) && grid.cell(x + dx, y + dy)?.ch === start.ch) {
-            tiles.add(k);
-            queue.push([x + dx, y + dy]);
-          }
-        }
-      }
-      if (tiles.size > 16) tiles = new Set([`${sx},${sy}`]);
-    }
+    const tiles = furnitureTiles(this.grid, obj);
     this.blobs.set(obj, tiles);
     return tiles;
   }
@@ -318,8 +301,8 @@ export class RoomScene extends Phaser.Scene {
     for (const obj of this.room.objects || []) {
       const ox = (obj.x + 0.5) * TILE;
       const oy = (obj.y + 0.5) * TILE;
-      // 物件多半在牆邊或家具上，用物件格子的下緣算距離
-      const d = Math.hypot(ox - x, oy + TILE / 2 - y);
+      // 腳底到家具最近一格邊緣的距離
+      const d = furnitureReach(this.grid, obj, x, y, this.blobOf(obj)).distance;
       if (d < bestDist) {
         best = { obj, x: ox, y: oy };
         bestDist = d;
@@ -436,15 +419,17 @@ export class RoomScene extends Phaser.Scene {
     const oy = Math.floor(obj.y);
     const options = [];
     for (const spot of this.spots) {
-      if (spot.action !== obj.play || spot.user || grid.occupant(spot.x, spot.y)) continue;
+      if ((obj.seats ? spot.object !== obj : spot.action !== obj.play) || spot.user || grid.occupant(spot.x, spot.y)) continue;
       const approach = this.approachOf(spot);
-      if (approach) options.push({ spot, approach, d: Math.abs(spot.x - ox) + Math.abs(spot.y - oy) });
+      const feet = tileFeet(spot.x, spot.y);
+      const d = obj.seats ? Math.hypot(feet.x - this.player.x, feet.y - this.player.y) : Math.abs(spot.x - ox) + Math.abs(spot.y - oy);
+      if (approach) options.push({ spot, approach, d });
     }
     options.sort((a, b) => a.d - b.d);
     for (const { spot, approach } of options) {
       if (this.player.startAct(spot, approach)) return;
     }
-    this.ctx.ui.toast(`${obj.name}現在有人在用，等一下再來吧。`);
+    this.ctx.ui.toast(obj.seats ? '位子都坐滿了，等一下再來吧。' : `${obj.name}現在有人在用，等一下再來吧。`);
   }
 
   /** 演出點本身能走就直接走上去；否則找旁邊能走、沒人的格子 */

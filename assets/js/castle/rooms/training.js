@@ -1,5 +1,6 @@
 // 戰鬥練習室（1F 右下）。上方是武器架，中間一排稻草人，右邊用繩子圍出射箭區，左下是休息長椅。
 // 配置參考 docs/reference/castle-layout.png。家具還沒有圖時自動畫色塊。
+import { row } from './seats.js';
 
 export default {
   id: 'training',
@@ -37,18 +38,15 @@ export default {
     start: [1, 7],
     from_hall: [1, 7],
   },
-  spots: [
-    ...[4, 8, 12].map((x) => ({ action: 'hit_dummy', x, y: 5, facing: 'up', target: [x, 4] })), // target：效果出現的格子
-    { action: 'shoot_arrow', x: 14, y: 9, facing: 'right', target: [20, 9] },
-    { action: 'shoot_arrow', x: 14, y: 11, facing: 'right', target: [20, 11] },
-    { action: 'pick_weapon', x: 5, y: 3, facing: 'up' },
-    { action: 'pick_weapon', x: 13, y: 3, facing: 'up' },
-    ...[2, 3, 4, 5].map((x) => ({ action: 'sit_rest', x, y: 12, facing: 'up' })),
-  ],
   objects: [
-    { x: 8, y: 4, name: '稻草人', text: ['被打得有點歪的稻草人，肚子上補了好幾塊布。'], demo: true, play: 'hit_dummy' },
-    { x: 20, y: 9, name: '箭靶', text: ['靶心附近插滿了箭孔。'], demo: true, play: 'shoot_arrow' },
-    { x: 5.5, y: 2, name: '武器架', text: ['木劍、木盾和練習用的弓，都是給大家練習用的。'], demo: true, play: 'pick_weapon' },
+    { x: 8, y: 4, name: '稻草人', text: ['被打得有點歪的稻草人，肚子上補了好幾塊布。'], demo: true, play: 'hit_dummy', seats: [{ x: 8, y: 5, facing: 'up', target: [8, 4] }] },
+    { x: 20, y: 9, name: '箭靶', text: ['靶心附近插滿了箭孔。'], demo: true, play: 'shoot_arrow', seats: [{ x: 14, y: 9, facing: 'right', target: [20, 9] }] },
+    { x: 5.5, y: 2, name: '武器架', text: ['木劍、木盾和練習用的弓，都是給大家練習用的。'], demo: true, play: 'pick_weapon', seats: [{ x: 5, y: 3, facing: 'up' }] },
+    { x: 4, y: 4, name: '稻草人', text: ['來練練手感吧。'], demo: true, play: 'hit_dummy', seats: [{ x: 4, y: 5, facing: 'up', target: [4, 4] }] },
+    { x: 12, y: 4, name: '稻草人', text: ['來練練手感吧。'], demo: true, play: 'hit_dummy', seats: [{ x: 12, y: 5, facing: 'up', target: [12, 4] }] },
+    { x: 20, y: 11, name: '箭靶', text: ['瞄準，再放箭。'], demo: true, play: 'shoot_arrow', seats: [{ x: 14, y: 11, facing: 'right', target: [20, 11] }] },
+    { x: 13.5, y: 2, name: '武器架', text: ['另一個武器架，練習用的長槍和木盾靠在一起。'], demo: true, play: 'pick_weapon', seats: [{ x: 13, y: 3, facing: 'up' }] },
+    { x: 3.5, y: 12, name: '休息長椅', text: ['練累了就坐下來喝口水。'], demo: true, play: 'sit_rest', seats: row(2, 5, 12, 'up') },
   ],
   labels: [
     { x: 1.6, y: 6.2, text: '往大廳' },

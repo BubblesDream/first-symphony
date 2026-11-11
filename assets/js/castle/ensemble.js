@@ -39,7 +39,7 @@ export class Ensemble {
 
   showInstruments(song) {
     this.parts.forEach((spot, i) => {
-      const label = this.scene.room.objects.find((o) => o.play === 'play_part' && o.x === spot.x && o.y === spot.y);
+      const label = spot.object || this.scene.room.objects.find((o) => o.play === 'play_part' && o.x === spot.x && o.y === spot.y);
       // 房間定義共用，不改寫它；目前樂器另存演出點，互動文字由場景取用。
       spot.instrument = song.parts[i];
       if (label) spot.object = label;

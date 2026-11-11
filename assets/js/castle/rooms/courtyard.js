@@ -76,44 +76,22 @@ export default {
     from_hall: [19, 3],
   },
   spots: [
-    // 羊圈：站在羊旁邊剪羊毛
-    { action: 'shear_sheep', x: 9, y: 6, facing: 'left' },
-    { action: 'shear_sheep', x: 7, y: 8, facing: 'down' },
-    { action: 'shear_sheep', x: 10, y: 9, facing: 'right' },
-    // 紡車（坐在小凳子上）
-    { action: 'spin_wool', x: 32, y: 4, facing: 'right' },
-    { action: 'spin_wool', x: 35, y: 4, facing: 'right' },
-    // 工作台
-    { action: 'craft', x: 26, y: 9, facing: 'up' },
-    { action: 'craft', x: 28, y: 9, facing: 'up' },
-    // 水井
-    { action: 'draw_water', x: 29, y: 13, facing: 'left' },
-    { action: 'draw_water', x: 27, y: 15, facing: 'up' },
-    // 澆花、澆菜
     { action: 'water_plants', x: 32, y: 10, facing: 'up' },
     { action: 'water_plants', x: 35, y: 12, facing: 'down' },
     { action: 'water_plants', x: 33, y: 18, facing: 'up' },
     { action: 'water_plants', x: 13, y: 13, facing: 'up' },
-    // 坐在噴泉邊
-    { action: 'sit_fountain', x: 17, y: 14, facing: 'left' },
-    { action: 'sit_fountain', x: 22, y: 14, facing: 'right' },
-    { action: 'sit_fountain', x: 19, y: 16, facing: 'down' },
-    { action: 'sit_fountain', x: 20, y: 16, facing: 'down' },
   ],
-  // play：訪客按 E 後，自己走到最近、沒人用的同動作演出點做這個動作（核心程式之後實作）
-  // 會走動的羊（critter.js）：只在羊圈裡走
   critters: [
     { name: '羊', sprite: 'sheep', color: 'sheep', at: [[8, 6], [10, 7], [5, 8], [7, 9], [11, 9]], area: [3, 5, 12, 10], bubbles: ['咩～', '咩—', '（嚼嚼）'] },
   ],
   objects: [
-    { x: 19.5, y: 14, name: '噴泉', text: ['石砌的噴泉，中央立著一座豎琴形狀的雕像。', '你丟了一枚硬幣，許了一個願……'], demo: true, play: 'sit_fountain',
-      // 許願結果：隨機抽一句
-      random: ['水面晃了一下，好像有人聽見了。', '硬幣沉到底，旁邊已經有好多枚了。', '一陣風吹過，豎琴雕像好像發出了一個音。', '願望：下次副本掉好東西！', '願望：公會歌練到不走音。'] },
-    { x: 27.5, y: 13, name: '水井', text: ['一口老水井，旁邊放著木桶。', '澆花、澆菜的水都從這裡打。'], demo: true, play: 'draw_water' },
-    { x: 7, y: 7, name: '羊圈', text: ['幾隻羊在吃草，毛看起來很蓬鬆。', '剪下來的羊毛會拿去旁邊的紡車紡成毛線。'], demo: true, play: 'shear_sheep' },
-    { x: 33, y: 4, name: '紡車', text: ['木頭紡車，踏板踩起來喀啦喀啦響。'], demo: true, play: 'spin_wool' },
-    { x: 27, y: 8, name: '工作台', text: ['桌上散著布料、針線和還沒做完的小東西。'], demo: true },
+    { x: 19.5, y: 14, name: '噴泉', text: ['石砌的噴泉，中央立著一座豎琴形狀的雕像。', '你丟了一枚硬幣，許了一個願……'], demo: true, play: 'sit_fountain', random: ['水面晃了一下，好像有人聽見了。', '硬幣沉到底，旁邊已經有好多枚了。', '一陣風吹過，豎琴雕像好像發出了一個音。', '願望：下次副本掉好東西！', '願望：公會歌練到不走音。'], seats: [{ x: 17, y: 14, facing: 'left' }, { x: 22, y: 14, facing: 'right' }, { x: 19, y: 16, facing: 'down' }, { x: 20, y: 16, facing: 'down' }] },
+    { x: 27.5, y: 13, name: '水井', text: ['一口老水井，旁邊放著木桶。', '澆花、澆菜的水都從這裡打。'], demo: true, play: 'draw_water', seats: [{ x: 29, y: 13, facing: 'left' }, { x: 27, y: 15, facing: 'up' }] },
+    { x: 7, y: 7, name: '羊圈', text: ['幾隻羊在吃草，毛看起來很蓬鬆。', '剪下來的羊毛會拿去旁邊的紡車紡成毛線。'], demo: true, play: 'shear_sheep', seats: [{ x: 9, y: 6, facing: 'left' }, { x: 7, y: 8, facing: 'down' }, { x: 10, y: 9, facing: 'right' }] },
+    { x: 33, y: 4, name: '紡車', text: ['木頭紡車，踏板踩起來喀啦喀啦響。'], demo: true, play: 'spin_wool', seats: [{ x: 32, y: 4, facing: 'right' }] },
+    { x: 27, y: 8, name: '工作台', text: ['桌上散著布料、針線和還沒做完的小東西。'], demo: true, play: 'craft', seats: [{ x: 26, y: 9, facing: 'up' }, { x: 28, y: 9, facing: 'up' }] },
     { x: 34, y: 11, name: '農田', text: ['一小塊菜園，種著一排一排的蔬菜。'], demo: true },
+    { x: 36, y: 4, name: '紡車', text: ['另一台紡車，旁邊的籃子裡堆著剛剪下來的羊毛。'], demo: true, play: 'spin_wool', seats: [{ x: 35, y: 4, facing: 'right' }] },
   ],
   labels: [
     { x: 19.5, y: 2.2, text: '正門（回大廳）' },

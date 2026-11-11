@@ -13,6 +13,7 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const at = (...p) => path.join(ROOT, ...p);
@@ -27,17 +28,6 @@ const { FACE_STYLE } = await load('assets/js/castle/roster.js');
 
 const sources = await load('assets/js/castle/sources/index.js');
 
-// 既有資料的互動位置問題，等待管理員調整；只豁免下列房間、出生點與物件。
-// 這四個物件與出生點可到達的地板距離超過 INTERACT_RANGE。
-const knownWarnings = new Set([
-  ...['start', 'from_hall'].flatMap((spawn) => [
-    `房間 music：出生點 ${spawn} 走不到 objects[0]「鋼琴」旁邊可互動的格子`,
-    `房間 music：出生點 ${spawn} 走不到 objects[8]「公會旗幟」旁邊可互動的格子`,
-    `房間 courtyard：出生點 ${spawn} 走不到 objects[0]「噴泉」旁邊可互動的格子`,
-  ]),
-  ...['start', 'from_guest'].map((spawn) => `房間 observatory：出生點 ${spawn} 走不到 objects[4]「星空大窗」旁邊可互動的格子`),
-]);
-const warnings = [];
 const problems = [];
 const fail = (msg) => problems.push(msg);
 
@@ -52,8 +42,7 @@ for (const [id, room] of Object.entries(ROOMS)) {
   const grid = buildGrid(room);
   for (const p of checkRoom({ grid, room })) {
     const message = `房間 ${id}：${p}`;
-    if (knownWarnings.has(message)) warnings.push(message);
-    else fail(message);
+    fail(message);
   }
   for (const [ch, door] of Object.entries(room.doors || {})) {
     if (!door.to) continue;
@@ -180,7 +169,31 @@ for (const table of ['castle_looks', 'castle_lines']) {
   });
 }
 
+// 以路徑限制 git log，只檢查玩家看得到的城堡內容。整段提交說明含「不公告」便略過。
+function checkAnnouncement(updates) {
+  let log;
+  try {
+    log = execFileSync('git', ['log', '--format=%cs%x1f%B%x1e', '--', 'hall.html', 'assets/js/castle/',
+      'assets/js/pages/hall.js', 'data/castle_*.json', 'assets/images/castle/', 'assets/audio/castle/'],
+    { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+  } catch (error) {
+    if (error.code === 'ENOENT' || /not a git repository/i.test(String(error.stderr))) {
+      console.log('（找不到 git 或不在 git repo，跳過城堡公告日期檢查）');
+      return;
+    }
+    fail(`無法讀取城堡提交紀錄：${String(error.stderr || error.message).trim()}`);
+    return;
+  }
+  const dates = log.split('\x1e').map((entry) => entry.trim().split('\x1f'))
+    .filter(([date, message]) => /^\d{4}-\d{2}-\d{2}$/.test(date) && !message?.includes('不公告'))
+    .map(([date]) => date).sort().reverse();
+  if (dates[0] && (!updates?.[0]?.date || dates[0] > updates[0].date)) {
+    fail('在 data/updates.json 最上面補一列；純維護請在提交說明寫『不公告』');
+  }
+}
+
 const updates = readJson('data/updates.json');
+checkAnnouncement(updates);
 if (!Array.isArray(updates)) fail('updates：不是陣列');
 else {
   const ids = new Set();
@@ -212,7 +225,7 @@ for (const f of jsFiles) {
   if (/['"`]\/(?!\/)[\w.]/.test(code)) fail(`${f}：有以 / 開頭的路徑（網站在子路徑下，要用相對路徑）`);
 }
 
-for (const warning of warnings) console.log(`警告：${warning}`);
+
 
 if (problems.length) {
   console.log(`發現 ${problems.length} 個問題：`);
