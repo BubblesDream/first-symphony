@@ -58,13 +58,13 @@ export const PROPS = {
     lines: [[3, 0, 6, 5, 'wood', 2], [6, 5, 6, 19, 'wood', 2], [6, 19, 3, 24, 'wood', 2], [2, 0, 2, 24, 'white', 1]],
     grip: [6, 12], at: [9, -18], motion: 'hold',
   },
-  mug: {
-    rects: [[0, 3, 7, 8, 'woodLight'], [0, 6, 7, 1, 'woodDark'], [0, 0, 7, 3, 'foam'],
-      [7, 4, 2, 1, 'woodLight'], [8, 4, 1, 4, 'woodLight'], [7, 7, 2, 1, 'woodLight']],
-    grip: [8, 6], at: [9, -14], motion: 'sip',
+  mug: { // 把手在靠身體那一側，杯身朝前
+    rects: [[2, 3, 7, 8, 'woodLight'], [2, 6, 7, 1, 'woodDark'], [2, 0, 7, 3, 'foam'],
+      [0, 4, 2, 1, 'woodLight'], [0, 4, 1, 4, 'woodLight'], [0, 7, 2, 1, 'woodLight']],
+    grip: [0, 6], at: [7, -14], motion: 'sip',
   },
-  mugUp: { // 乾杯：舉高
-    same: 'mug', at: [9, -26], angle: -10, motion: 'hold',
+  mugUp: { // 乾杯：手伸直、杯子舉過頭（不要停在臉旁邊）
+    same: 'mug', at: [11, -38], angle: 15, motion: 'toast',
   },
   tray: { // 端酒：拿著杯子
     same: 'mug', at: [9, -16], motion: 'hold',
@@ -136,7 +136,8 @@ const MOTIONS = {
   pull: (img) => [{ targets: img, y: img.y - 6, duration: 520, ease: 'Sine.easeInOut' }],
   rub: (img) => [{ targets: img, x: { from: img.x - 3, to: img.x + 3 }, duration: 220, ease: 'Sine.easeInOut' }],
   poke: (img, base) => [{ targets: img, angle: { from: base, to: base + 15 }, x: img.x + 3, duration: 300, ease: 'Sine.easeInOut', repeatDelay: 300 }],
-  sip: (img, base) => [{ targets: img, angle: { from: base, to: base - 55 }, y: img.y - 9, duration: 450, ease: 'Sine.easeInOut', hold: 900, repeatDelay: 1800 }],
+  sip: (img, base) => [{ targets: img, angle: { from: base, to: base - 40 }, y: img.y - 7, duration: 450, ease: 'Sine.easeInOut', hold: 700, repeatDelay: 1800 }],
+  toast: (img, base) => [{ targets: img, angle: { from: base, to: base + 12 }, duration: 200, ease: 'Sine.easeOut', repeatDelay: 700 }],
   drum: (img, base) => [{ targets: img, angle: { from: base + 60, to: base - 5 }, duration: 160, ease: 'Sine.easeOut', repeatDelay: 90 }],
   strum: (img, base) => [{ targets: img, angle: { from: base - 3, to: base + 3 }, duration: 420, ease: 'Sine.easeInOut' }],
 };
