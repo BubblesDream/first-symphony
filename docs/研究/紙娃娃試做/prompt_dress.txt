@@ -1,3 +1,0 @@
-The FIRST attached image (base.png) is the paper-doll base template. Redraw it as a new image that matches it EXACTLY: same canvas size 1536x1024, the same three views at the same positions and the same size on the canvas, same pose, same face, same short green hair, same body proportions, same style. Change ONLY the clothes.
-
-New outfit: a short open jacket in vivid key magenta (#d946ef) over a plain white shirt with a small white collar, and a knee-length flared skirt in vivid key blue (#2563eb), with white knee socks and the same plain brown shoes. Shade the key colors only with lighter/darker versions of the same hue. Hair stays vivid key green (#22c55e). Thin dark-brown outlines. Transparent background, no shadow, no floor, no text.

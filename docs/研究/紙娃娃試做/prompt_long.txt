@@ -1,5 +1,0 @@
-The FIRST attached image (base.png) is the paper-doll base template. Redraw it as a new image that matches it EXACTLY: same canvas size 1536x1024, the same three views at the same positions and the same size on the canvas, same pose, same face, same body, same clothes, same key colors, same style. Change ONLY the hairstyle.
-
-Keep the hair in the vivid key green (#22c55e) with shading in lighter/darker versions of the same green only. Top stays key magenta (#d946ef), trousers stay key blue (#2563eb). Thin dark-brown outlines. Transparent background, no shadow, no floor, no text.
-
-New hairstyle: long straight hair down to the middle of the back (in the front view it falls behind the shoulders with a few strands in front; in the back view it covers the upper back).

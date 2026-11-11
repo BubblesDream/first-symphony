@@ -3,7 +3,7 @@
 《瑪奇 M》與《瑪奇》（PC）公會「第一交響樂團」的紀念網站。
 網址：<https://bubblesdream.github.io/first-symphony/>
 
-純 HTML／CSS／原生 JavaScript／JSON，不需要安裝任何東西、也沒有建置步驟。完整規格見 `docs/spec.md`。
+純 HTML／CSS／原生 JavaScript／JSON，不需要安裝任何東西、也沒有建置步驟。
 
 > 目前已放入正式的成員名單、公會簡介與影片；照片、造型、語錄與自我介紹整理中。沒有資料的區塊會自動顯示「整理中」。
 
@@ -119,7 +119,7 @@ python3 -m http.server 8000
 - 外觀：一位成員一列，`member_id` 對應成員 id；顏色填 `#rrggbb`（`hair` 髮色、`outfit` 衣服、`skin` 膚色、`accent` 配件色），`mark` 可填 `none`、`hat`、`ribbon`、`glasses`、`cape`。沒有填的成員會依 id 自動配色。
 - 台詞：`member_id` 空白＝所有人都可能說；`room` 填 `hall` 或 `music` 表示只在那個房間說。聊天時會先挑本人的台詞，不夠再補通用台詞，一次 1～3 句。
 - 測試：`hall.html?seed=1` 固定抽選結果，`?debug=1` 顯示不能走的格子、演出點與 NPC 狀態。
-- 房間地圖與演出點在 `assets/js/castle/rooms/`，說明見 `docs/規劃-虛擬城堡.md`。
+- 房間地圖與演出點在 `assets/js/castle/rooms/`。
 
 ## 素材與更新流程
 
@@ -130,7 +130,7 @@ python3 -m http.server 8000
 3. 等每天的自動同步，或到 GitHub 的 Actions 頁面手動執行「同步雲端硬碟圖片」。
 4. 檢查自動開出的 Pull Request，沒問題就合併。
 
-第一次設定（Google Cloud、金鑰、GitHub 設定）與日常操作的完整步驟見 [`docs/指南-圖片同步設定.md`](docs/指南-圖片同步設定.md)。
+第一次設定需要 Google Cloud 服務帳號（金鑰放 GitHub Secrets 的 `GDRIVE_SA_KEY`、資料夾 id 放 Variables 的 `GDRIVE_ROOT_FOLDER_ID`）。
 
 `assets/images/members/`、`assets/images/site/`、`assets/images/gallery/`、`data/gallery.json`、`tools/image-sync-state.json` 都由同步程式產生，不要手動修改。
 

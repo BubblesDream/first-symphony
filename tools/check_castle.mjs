@@ -64,11 +64,13 @@ for (const room of Object.values(ROOMS).filter((r) => r.ensemble)) {
   }
 }
 
-// 3. 圖片
+// 3. 圖片（原圖資料夾 docs/ 只在管理員電腦上、不進 git；找不到 docs/ 時跳過原圖檢查，例如在 Codex 的工作資料夾）
+const HAS_SOURCES = existsSync(at('docs/素材/城堡原圖'));
+if (!HAS_SOURCES) console.log('（找不到 docs/素材/城堡原圖，跳過原圖檢查）');
 const registered = { ...TILE_ART, ...SPRITE_ART };
 for (const [name, art] of Object.entries(registered)) {
   if (!existsSync(at(art.src))) fail(`圖片 ${name}：成品 ${art.src} 不存在（執行 python tools/castle_images.py）`);
-  if (!existsSync(at('docs/素材/城堡原圖', `${name}.png`))) fail(`圖片 ${name}：原圖 docs/素材/城堡原圖/${name}.png 不存在`);
+  if (HAS_SOURCES && !existsSync(at('docs/素材/城堡原圖', `${name}.png`))) fail(`圖片 ${name}：原圖 docs/素材/城堡原圖/${name}.png 不存在`);
 }
 // 預設拼貼圖（地板、牆）不寫在房間裡，另外算「有用到」
 for (const n of ['floor_stone', 'floor_wood', 'carpet_red', 'wall_stone', 'door_open', 'door_locked']) usedNames.add(n);
@@ -95,12 +97,12 @@ const memberIds = new Set(readJson('data/members.json').map((m) => m.id));
 for (const [id, art] of Object.entries(CHAR_ART)) {
   if (id !== 'visitor' && !memberIds.has(id)) fail(`角色圖 ${id}：不是成員 id（也不是 visitor）`);
   if (!existsSync(at(art.src))) fail(`角色圖 ${id}：成品 ${art.src} 不存在（執行 python tools/castle_images.py）`);
-  if (!existsSync(at('docs/素材/城堡原圖/members', `${id}.png`))) fail(`角色圖 ${id}：原圖 docs/素材/城堡原圖/members/${id}.png 不存在`);
+  if (HAS_SOURCES && !existsSync(at('docs/素材/城堡原圖/members', `${id}.png`))) fail(`角色圖 ${id}：原圖 docs/素材/城堡原圖/members/${id}.png 不存在`);
 }
 // 3-2. 紙娃娃：部件有原圖與成品、doll/ 沒有多餘檔案；問卷每種款式組合用到的部件都有登記
 for (const name of DOLL_PARTS) {
   if (!existsSync(at('assets/images/castle/doll', `${name}.webp`))) fail(`紙娃娃 ${name}：成品不存在（執行 python tools/castle_paperdoll.py ${name}）`);
-  if (name !== 'head_short_none' && !existsSync(at('docs/素材/城堡原圖/紙娃娃', `${name}.png`))) fail(`紙娃娃 ${name}：原圖 docs/素材/城堡原圖/紙娃娃/${name}.png 不存在`);
+  if (HAS_SOURCES && name !== 'head_short_none' && !existsSync(at('docs/素材/城堡原圖/紙娃娃', `${name}.png`))) fail(`紙娃娃 ${name}：原圖 docs/素材/城堡原圖/紙娃娃/${name}.png 不存在`);
 }
 const dollDir = at('assets/images/castle/doll');
 if (existsSync(dollDir)) {

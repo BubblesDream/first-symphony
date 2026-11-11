@@ -1,8 +1,0 @@
-The FIRST attached image is a paper-doll template sheet (front, back and right-side views of one chibi character). Redraw it as a new image that matches it EXACTLY: same canvas size 1536x1024, the same three views at exactly the same positions and the same size on the canvas, same pose, same head shape, same hair, same ears, same body, same clothes, same style (warm fantasy 16-bit Japanese RPG pixel art, thin dark-brown outlines, soft shading lit from the upper left). Change ONLY the facial expression (eyes, eyebrows and mouth) in the front view and the side view: a sleepy, gentle look: droopy half-closed eyes (irises still a little visible), relaxed soft eyebrows, a small relaxed smile.
-The eyes stay at the same place and roughly the same size as in the template. The back view does not change.
-
-Flat key colors so a program can recolor them (shade ONLY with lighter/darker versions of the same hue, never mix in other hues):
-- hair and eyebrows stay vivid key green (#22c55e)
-- irises: vivid key blue (#2563eb), darker blue pupils, keep the small white highlights
-- top stays key magenta (#d946ef); trousers stay key blue (#2563eb)
-Skin, ears and shoes stay as in the template. Transparent background, no ground shadow, no floor, no text, no frame.
