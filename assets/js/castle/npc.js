@@ -8,6 +8,7 @@ import { ACTIONS } from './actions.js';
 import { tileFeet } from './grid.js';
 import { createAvatar } from './avatar.js';
 import { playEffect } from './effects.js';
+import { propFor } from './props.js';
 
 const WAIT_STEP = 0.5;   // 前面有人時等幾秒再試
 const MAX_TRIES = 4;     // 試幾次後放棄這次移動
@@ -196,7 +197,7 @@ export class Npc {
     this.action = ACTIONS[this.spot.action] || ACTIONS.stand_guard;
     this.state = 'perform';
     this.avatar.setFacing(this.spot.facing);
-    this.avatar.setPose(this.action.pose, this.action.seated);
+    this.avatar.setPose(this.action.pose, this.action.seated, propFor(this.action, this.spot));
     this.timer = seconds ?? this.rng.range(...this.action.duration);
     this.bubbleTimer = this.rng.range(1, 3);
   }
@@ -230,7 +231,7 @@ export class Npc {
     this.action = ACTIONS[this.spot.action] || ACTIONS.stand_guard;
     this.state = 'ready';
     this.avatar.setFacing(this.spot.facing);
-    this.avatar.setPose('idle', this.action.seated);
+    this.avatar.setPose('idle', this.action.seated, propFor(this.action, this.spot), true); // 先拿著，等開始
   }
 
   /** 多人演出取消（等太久、人數不夠）：已經就位的人離開，走在路上的人改成自己演出 */

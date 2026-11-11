@@ -4,6 +4,7 @@ import { furnitureReach } from './interaction.js';
 import { TILE, INTERACT_RANGE } from './config.js';
 import { ACTIONS } from './actions.js';
 import { FACING, EFFECTS } from './effects.js';
+import { PROPS, PROP_MOTIONS } from './props.js';
 import { tileFeet } from './grid.js';
 import { TILE_ART, SPRITE_ART, WANTED_ART } from './art.js';
 
@@ -72,6 +73,12 @@ export function checkRoom(scene) {
   }
   for (const [name, action] of Object.entries(ACTIONS)) {
     if (action.effect && !Object.hasOwn(EFFECTS, action.effect.type)) problems.push(`動作 ${name} 的 effect.type「${action.effect.type}」在 effects.js 沒有效果實作`);
+    if (action.prop && !Object.hasOwn(PROPS, action.prop)) problems.push(`動作 ${name} 的 prop「${action.prop}」在 props.js 沒有這個道具`);
+  }
+  for (const [name, prop] of Object.entries(PROPS)) {
+    if (prop.same && !PROPS[prop.same]?.grip) problems.push(`道具 ${name} 的 same「${prop.same}」不是有形狀的道具`);
+    if (!prop.same && !prop.grip) problems.push(`道具 ${name} 沒有 grip（握點）`);
+    if (prop.motion && !PROP_MOTIONS.includes(prop.motion)) problems.push(`道具 ${name} 的 motion「${prop.motion}」不存在，請用 ${PROP_MOTIONS.join('／')}`);
   }
   const strings = (value) => Array.isArray(value) && value.length > 0 && value.every((v) => typeof v === 'string' && v.trim());
   for (const [i, obj] of (room.objects || []).entries()) {

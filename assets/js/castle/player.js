@@ -5,6 +5,7 @@ import { ACTIONS } from './actions.js';
 import { createAvatar } from './avatar.js';
 import { toTile, tileFeet } from './grid.js';
 import { playEffect } from './effects.js';
+import { propFor } from './props.js';
 
 const VISITOR_LOOK = {
   skin: '#f3d6bd', hair: '#4a3426', outfit: '#f5efe2', accent: '#c9a227', mark: 'visitor',
@@ -123,7 +124,7 @@ export class Player {
       this.feet.setPosition(p.x, p.y);
       act.phase = 'do';
       this.avatar.setFacing(act.spot.facing || 'down');
-      this.avatar.setPose(act.action.pose, act.action.seated);
+      this.avatar.setPose(act.action.pose, act.action.seated, propFor(act.action, act.spot));
       this.scene.ctx.ui.toast(this.scene.ctx.touch ? '點地板或按「離開演出」就會離開。' : '按方向鍵或點地板就會離開。');
       this.scene.onPlayerAct?.(act.spot);
       return;

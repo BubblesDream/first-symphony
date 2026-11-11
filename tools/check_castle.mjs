@@ -62,6 +62,7 @@ for (const id of OPEN_ROOMS) if (!ROOMS[id]) fail(`OPEN_ROOMS 裡的 ${id} 沒�
 
 // 合奏曲目與座位共用同一份聲部數，檔案必須齊全。
 const { ENSEMBLE_SONGS, SONGS } = await load('assets/js/castle/music.js');
+const { propFor } = await load('assets/js/castle/props.js');
 for (const song of SONGS) if (!existsSync(at(song.src))) fail(`公會歌「${song.title}」的 src 音檔 ${song.src} 不存在`);
 for (const room of Object.values(ROOMS).filter((r) => r.ensemble)) {
   const { parts, conductor } = room.ensemble;
@@ -72,6 +73,7 @@ for (const room of Object.values(ROOMS).filter((r) => r.ensemble)) {
   for (const song of ENSEMBLE_SONGS) {
     if (song.parts.length !== parts.length) fail(`曲目 ${song.title} 的聲部數與座位數不同`);
     for (let i = 1; i <= parts.length; i++) if (!existsSync(at(song.dir, `part${i}.mp3`))) fail(`曲目 ${song.title} 缺少 part${i}.mp3`);
+    for (const part of song.parts) if (!propFor({}, { instrument: part })) fail(`曲目 ${song.title} 的「${part}」在 props.js 的 INSTRUMENT_PROPS 對不到道具`);
   }
 }
 

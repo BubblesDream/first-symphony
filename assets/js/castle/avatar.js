@@ -1,7 +1,7 @@
 // 角色外觀，依序選：個人角色圖（CHAR_ART，例如訪客）→ 紙娃娃（paperdoll.js，依問卷款式與顏色組合）
 // → 幾何色塊（沒有圖或 ?noart=1）。
 // NPC 行為與訪客只會呼叫下面這幾個方法，每種外觀都實作同樣的方法，行為程式不用改：
-//   setPosition(x, y)  setFacing(dir)  setPose(pose, seated)  say(text)
+//   setPosition(x, y)  setFacing(dir)  setPose(pose, seated, prop, propStill)  say(text)
 //   setNameVisible(bool)  setTag(text)  destroy()
 // 姿勢：idle、walk、play、conduct、read、work、sleep、cheer
 
@@ -9,6 +9,7 @@ import { FONT } from './config.js';
 import { ImageAvatar } from './imageAvatar.js';
 import { hasCharArt, charKey, CHAR_CELL, DOLL_CELL } from './art.js';
 import { dollTexture } from './paperdoll.js';
+import { Hand } from './props.js';
 
 const SEAT_DEPTH = 14; // 坐著時往前排多少（椅子圖以格子下緣排前後）
 
@@ -55,12 +56,12 @@ class GeometricAvatar {
     if (look.mark === 'glasses') this.glasses = add.rectangle(0, -27, 12, 3).setStrokeStyle(1, DARK);
     if (look.mark === 'visitor') marks.push(add.triangle(0, -44, -4, -3, 4, -3, 0, 3, 0xf2c94c));
 
-    // 道具：樂器、指揮棒、書（需要時才顯示）
-    this.tool = add.rectangle(8, -12, 4, 12, 0x8a5a2b).setOrigin(0.5, 1).setVisible(false);
+    // 書（讀書時顯示）；手上的道具由 Hand 管（props.js）
     this.book = add.rectangle(0, -10, 10, 7, 0xe8dcc4).setStrokeStyle(1, 0x7a5236).setVisible(false);
 
-    this.rig.add([this.cape, ...this.legs, this.body, this.head, this.hairBack, this.hair, ...this.eyes, this.tool, this.book, ...marks]);
+    this.rig.add([this.cape, ...this.legs, this.body, this.head, this.hairBack, this.hair, ...this.eyes, this.book, ...marks]);
     if (this.glasses) this.rig.add(this.glasses);
+    this.hand = new Hand(scene, this.rig);
 
     this.nameText = add.text(0, 5, name, {
       fontFamily: FONT, fontSize: '10px', color: nameColor,
@@ -103,20 +104,21 @@ class GeometricAvatar {
     left.x = dir === 'left' ? -4 : -3;
     right.x = dir === 'right' ? 4 : 3;
     if (this.glasses) this.glasses.setVisible(!up);
-    const side = dir === 'left' ? -1 : 1;
-    this.tool.x = 8 * side;
+    this.hand.setFacing(dir);
   }
 
-  setPose(pose, seated = false) {
-    if (pose === this.pose && seated === this.seated) return;
+  setPose(pose, seated = false, prop = null, propStill = false) {
+    const propKey = prop && `${prop}${propStill ? ':still' : ''}`;
+    if (pose === this.pose && seated === this.seated && propKey === this.propKey) return;
     this.pose = pose;
+    this.propKey = propKey;
     this.seated = seated;
     this.updateDepth();
     for (const t of this.tweens) t.remove();
     this.tweens = [];
     this.rig.setPosition(0, seated ? 5 : 0).setAngle(0);
-    this.tool.setVisible(false).setAngle(0).setSize(4, 12).setFillStyle(0x8a5a2b);
     this.book.setVisible(false);
+    this.hand.hold(prop, { still: propStill });
     for (const leg of this.legs) leg.setVisible(!seated);
 
     const tween = (config) => this.tweens.push(this.scene.tweens.add({ yoyo: true, repeat: -1, ...config }));
@@ -125,16 +127,10 @@ class GeometricAvatar {
         tween({ targets: this.rig, y: this.rig.y - 2, duration: 140 });
         break;
       case 'play':
-        this.tool.setVisible(true);
         tween({ targets: this.rig, angle: { from: -4, to: 4 }, duration: 520, ease: 'Sine.easeInOut' });
         break;
       case 'conduct':
-        this.tool.setVisible(true).setSize(2, 12).setFillStyle(0xf5f0e6);
-        tween({ targets: this.tool, angle: { from: -40, to: 30 }, duration: 380, ease: 'Sine.easeInOut' });
-        break;
       case 'work':
-        this.tool.setVisible(true).setFillStyle(0x777777);
-        tween({ targets: this.tool, angle: { from: 0, to: -60 }, duration: 260 });
         break;
       case 'read':
         this.book.setVisible(true);
@@ -176,6 +172,7 @@ class GeometricAvatar {
 
   destroy() {
     for (const t of this.tweens) t.remove();
+    this.hand.clear();
     this.root.destroy();
   }
 }

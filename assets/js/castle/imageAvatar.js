@@ -3,6 +3,7 @@
 // 方法和 avatar.js 的 GeometricAvatar 相同。走路不換腳，改成整個人輕晃；坐下時只露出上半身。
 import { FONT, TILE } from './config.js';
 import { CHAR_H } from './art.js';
+import { Hand } from './props.js';
 
 const SEAT_DEPTH = 14; // 坐著時往前排多少（椅子圖以格子下緣排前後）
 
@@ -31,10 +32,10 @@ export class ImageAvatar {
     this.rig = add.container(0, 0);
     const shadow = add.ellipse(0, 0, 18, 6, 0x000000, 0.2);
     this.sprite = add.image(0, 1, art.key, 0).setOrigin(0.5, 1).setScale(this.height / art.cell.body);
-    // 道具：樂器、指揮棒、書（需要時才顯示）
-    this.tool = add.rectangle(8, -10, 4, 12, 0x8a5a2b).setOrigin(0.5, 1).setVisible(false);
+    // 書（讀書時顯示）；手上的道具由 Hand 管（props.js）
     this.book = add.rectangle(0, -12, 10, 7, 0xe8dcc4).setStrokeStyle(1, 0x7a5236).setVisible(false);
-    this.rig.add([this.sprite, this.tool, this.book]);
+    this.rig.add([this.sprite, this.book]);
+    this.hand = new Hand(scene, this.rig);
 
     this.nameText = add.text(0, 5, name, {
       fontFamily: FONT, fontSize: '10px', color: nameColor,
@@ -67,12 +68,15 @@ export class ImageAvatar {
     this.facing = dir;
     this.updateDepth();
     this.sprite.setFrame(FRAME[dir] ?? 0).setFlipX(dir === 'left');
-    this.tool.x = (dir === 'left' ? -1 : 1) * 8;
+    this.hand.setFacing(dir);
   }
 
-  setPose(pose, seated = false) {
-    if (pose === this.pose && seated === this.seated) return;
+  /** prop：手上拿的道具（props.js 的名稱，null＝空手）；propStill：拿著不動 */
+  setPose(pose, seated = false, prop = null, propStill = false) {
+    const propKey = prop && `${prop}${propStill ? ':still' : ''}`;
+    if (pose === this.pose && seated === this.seated && propKey === this.propKey) return;
     this.pose = pose;
+    this.propKey = propKey;
     this.seated = seated;
     this.updateDepth();
     for (const t of this.tweens) t.remove();
@@ -84,8 +88,8 @@ export class ImageAvatar {
     if (seated) this.sprite.setCrop(0, 0, w, h - body * (1 - SIT_SHOW));
     else this.sprite.setCrop();
     this.sprite.y = 1; // 坐下時裁掉的下半身留空，露出的部分剛好落在椅面
-    this.tool.setVisible(false).setAngle(0).setSize(4, 12).setFillStyle(0x8a5a2b);
     this.book.setVisible(false);
+    this.hand.hold(prop, { still: propStill });
 
     const tween = (config) => this.tweens.push(this.scene.tweens.add({ yoyo: true, repeat: -1, ...config }));
     switch (pose) {
@@ -94,16 +98,13 @@ export class ImageAvatar {
         tween({ targets: this.sprite, angle: { from: -3, to: 3 }, duration: 300, ease: 'Sine.easeInOut' });
         break;
       case 'play':
-        this.tool.setVisible(true);
         tween({ targets: this.rig, angle: { from: -3, to: 3 }, duration: 520, ease: 'Sine.easeInOut' });
         break;
       case 'conduct':
-        this.tool.setVisible(true).setSize(2, 12).setFillStyle(0xf5f0e6);
-        tween({ targets: this.tool, angle: { from: -40, to: 30 }, duration: 380, ease: 'Sine.easeInOut' });
+        tween({ targets: this.rig, angle: { from: -2, to: 2 }, duration: 760, ease: 'Sine.easeInOut' });
         break;
       case 'work':
-        this.tool.setVisible(true).setFillStyle(0x777777);
-        tween({ targets: this.tool, angle: { from: 0, to: -60 }, duration: 260 });
+        tween({ targets: this.sprite, y: this.sprite.y + 1, duration: 320, ease: 'Sine.easeInOut' });
         break;
       case 'read':
         this.book.setVisible(true);
@@ -144,6 +145,7 @@ export class ImageAvatar {
 
   destroy() {
     for (const t of this.tweens) t.remove();
+    this.hand.clear();
     this.root.destroy();
   }
 }
