@@ -59,7 +59,7 @@ export class Player {
     const { grid } = this.scene;
     spot.user = this;
     grid.reserve(spot.x, spot.y, this);
-    this.act = { phase: 'go', spot, action: ACTIONS[spot.action] || ACTIONS.stand_guard, approach, bubble: 1 };
+    this.act = { phase: 'go', spot, action: ACTIONS[spot.action] || ACTIONS.stand_guard, approach, bubble: 1, retried: false };
     const { x, y } = this.tile;
     if (x === approach[0] && y === approach[1]) this.route = [approach];
     else this.findRoute(...approach);
@@ -108,7 +108,15 @@ export class Player {
       // 已經踏進目標格就算到了（畫面掉格時不用來回對準）
       if (this.route.length === 1 && x === act.approach[0] && y === act.approach[1]) this.route = [];
       if (this.route.length) return;
-      if (x !== act.approach[0] || y !== act.approach[1]) return this.stopAct(); // 被擋住，沒走到
+      if (x !== act.approach[0] || y !== act.approach[1]) {
+        if (!act.retried) {
+          act.retried = true;
+          this.findRoute(...act.approach);
+          if (this.route.length) return;
+        }
+        this.scene.ctx.ui.toast('路被擋住了，再點一次吧。');
+        return this.stopAct();
+      }
       const p = tileFeet(act.spot.x, act.spot.y);
       this.feet.body.setVelocity(0, 0);
       this.feet.body.enable = false;

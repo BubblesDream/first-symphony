@@ -18,15 +18,18 @@ export const ENSEMBLE_SONGS = [
 
 let backgroundPlayer = null;
 let backgroundPaused = false;
+let backgroundRequested = false;
 export function pauseBackgroundMusic() {
   backgroundPaused = true;
+  backgroundRequested = false;
   const playing = backgroundPlayer && !backgroundPlayer.audio.paused;
   backgroundPlayer?.audio.pause();
   return Boolean(playing);
 }
 export function resumeBackgroundMusic(playing = false) {
   backgroundPaused = false;
-  if (playing) backgroundPlayer?.start();
+  if (playing || backgroundRequested) backgroundPlayer?.start();
+  backgroundRequested = false;
 }
 
 const VOLUME = 0.6;
@@ -53,10 +56,11 @@ export function createMusicPlayer(container, songs = SONGS) {
   status.setAttribute('aria-live', 'polite');
   container.append(play, next, status);
 
-  const render = (message) => {
+  const render = (message, important = false) => {
     const playing = !audio.paused;
     play.textContent = playing ? '暫停音樂' : '播放公會歌';
     play.setAttribute('aria-pressed', String(playing));
+    status.classList.toggle('is-important', important);
     status.textContent = message ?? (playing ? `正在播放：${songs[index].title}` : '');
   };
 
@@ -66,9 +70,13 @@ export function createMusicPlayer(container, songs = SONGS) {
   };
 
   const start = () => {
-    if (backgroundPaused) return;
+    if (backgroundPaused) {
+      backgroundRequested = true;
+      render('合奏中，結束後播放公會歌。', true);
+      return;
+    }
     if (!audio.src) load(index);
-    audio.play().then(() => render()).catch(() => render('音樂無法播放，請稍後再試。'));
+    audio.play().then(() => render()).catch(() => render('無法播放，請稍後再試。', true));
   };
 
   play.addEventListener('click', () => {
@@ -87,7 +95,7 @@ export function createMusicPlayer(container, songs = SONGS) {
     start();
   });
   audio.addEventListener('error', () => {
-    if (audio.src) render('音樂載入失敗，請稍後再試。');
+    if (audio.src) render('載入失敗，請稍後再試。', true);
   });
 
   audio.addEventListener('pause', () => render());

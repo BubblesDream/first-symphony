@@ -1238,7 +1238,9 @@ html.castle-gaming body {
 
 .castle-bar .castle__music {
   flex: 0 0 auto;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .castle-bar .castle__music .btn {
@@ -1247,6 +1249,15 @@ html.castle-gaming body {
 
 .castle-bar .castle__music-status {
   display: none;
+}
+
+.castle-bar .castle__music-status.is-important {
+  display: block;
+  flex-basis: 100%;
+  min-width: 0;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-tight);
+  overflow-wrap: anywhere;
 }
 
 /* 橫拿手機：操作列改放右側 */
