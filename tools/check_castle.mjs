@@ -9,6 +9,7 @@
 //   4. 資料：data/castle_*.json 是平面表、member_id 對得到成員、顏色是 #rrggbb；
 //      data/updates.json 是平面表、id 不重複、日期是 YYYY-MM-DD、文字不空白
 //   5. 網站規則：城堡程式沒有以 / 開頭的路徑、沒有 innerHTML
+//   6. 互動來源：每個房間物件的 source 都有登記在 sources/index.js
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -24,6 +25,8 @@ const { TILE_ART, SPRITE_ART, WANTED_ART, CHAR_ART, DOLL_PARTS } = await load('a
 const { dollParts } = await load('assets/js/castle/paperdoll.js');
 const { FACE_STYLE } = await load('assets/js/castle/roster.js');
 
+const sources = await load('assets/js/castle/sources/index.js');
+
 const problems = [];
 const fail = (msg) => problems.push(msg);
 
@@ -32,6 +35,9 @@ const usedNames = new Set();
 for (const [id, room] of Object.entries(ROOMS)) {
   if (room.id !== id) fail(`房間 ${id}：定義裡的 id 是「${room.id}」`);
   if (!OPEN_ROOMS.includes(id)) fail(`房間 ${id}：沒有登記在 OPEN_ROOMS`);
+  for (const obj of room.objects || []) {
+    if (obj.source !== undefined && !Object.hasOwn(sources, obj.source)) fail(`房間 ${id}：物件「${obj.name}」的 source「${obj.source}」沒有登記在 sources/index.js`);
+  }
   const grid = buildGrid(room);
   for (const p of checkRoom({ grid, room })) fail(`房間 ${id}：${p}`);
   for (const [ch, door] of Object.entries(room.doors || {})) {
@@ -169,6 +175,7 @@ else {
 
 // 5. 網站規則
 const jsFiles = ['assets/js/pages/hall.js', ...readdirSync(at('assets/js/castle')).filter((f) => f.endsWith('.js')).map((f) => `assets/js/castle/${f}`),
+  ...readdirSync(at('assets/js/castle/sources')).map((f) => `assets/js/castle/sources/${f}`),
   ...readdirSync(at('assets/js/castle/rooms')).map((f) => `assets/js/castle/rooms/${f}`)];
 for (const f of jsFiles) {
   const code = readFileSync(at(f), 'utf8').split('\n').filter((l) => !/^\s*(\/\/|\*)/.test(l)).join('\n');
